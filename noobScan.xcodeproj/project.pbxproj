@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4C84553E240C6F2A005B7049 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C84553D240C6F2A005B7049 /* main.cpp */; };
 		4C845546240C8325005B7049 /* scanaddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C845544240C8325005B7049 /* scanaddress.cpp */; };
+		4C9152DE24146E010086BEA6 /* recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C9152DC24146E010086BEA6 /* recorder.cpp */; };
+		4C9152E1241470AA0086BEA6 /* helpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C9152DF241470AA0086BEA6 /* helpModule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +30,10 @@
 		4C84553D240C6F2A005B7049 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4C845544240C8325005B7049 /* scanaddress.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scanaddress.cpp; sourceTree = "<group>"; };
 		4C845545240C8325005B7049 /* scanaddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scanaddress.h; sourceTree = "<group>"; };
+		4C9152DC24146E010086BEA6 /* recorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = recorder.cpp; sourceTree = "<group>"; };
+		4C9152DD24146E010086BEA6 /* recorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = recorder.h; sourceTree = "<group>"; };
+		4C9152DF241470AA0086BEA6 /* helpModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helpModule.cpp; sourceTree = "<group>"; };
+		4C9152E0241470AA0086BEA6 /* helpModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = helpModule.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,10 @@
 				4C84553D240C6F2A005B7049 /* main.cpp */,
 				4C845544240C8325005B7049 /* scanaddress.cpp */,
 				4C845545240C8325005B7049 /* scanaddress.h */,
+				4C9152DC24146E010086BEA6 /* recorder.cpp */,
+				4C9152DD24146E010086BEA6 /* recorder.h */,
+				4C9152DF241470AA0086BEA6 /* helpModule.cpp */,
+				4C9152E0241470AA0086BEA6 /* helpModule.h */,
 			);
 			path = noobScan;
 			sourceTree = "<group>";
@@ -125,6 +135,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C84553E240C6F2A005B7049 /* main.cpp in Sources */,
+				4C9152DE24146E010086BEA6 /* recorder.cpp in Sources */,
+				4C9152E1241470AA0086BEA6 /* helpModule.cpp in Sources */,
 				4C845546240C8325005B7049 /* scanaddress.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,10 +1,9 @@
-//
-//  scanaddress.hpp
-//  noobScan
-//
-//  Created by John Atti on 3/1/20.
-//  Copyright © 2020 John Atti. All rights reserved.
-//
+/**/
+/*
+   scanaddress.h of noobScan, a novice port scanner
+   scanaddress.h
+*/
+/**/
 
 #ifndef scanaddress_hpp
 #define scanaddress_hpp
