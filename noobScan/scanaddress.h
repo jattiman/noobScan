@@ -1,13 +1,13 @@
 /**/
 /*
-   scanaddress.h of noobScan, a novice port scanner
-   scanaddress.h
+   Scanaddress.h of noobScan, a novice port scanner
+   Scanaddress.h
 */
 /**/
 
-#ifndef scanaddress_hpp
-#define scanaddress_hpp
+#ifndef Scanaddress_h
+#define Scanaddress_h
 
 #include <stdio.h>
 
-#endif /* scanaddress_hpp */
+#endif /* Scanaddress_h */

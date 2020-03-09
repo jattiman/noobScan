@@ -17,7 +17,9 @@
 #include <iostream>
 
 
-#include "scanaddress.h"
+#include "Scanaddress.h"
+#include "Recorder.h"
+#include "HelpModule.h"
 
 
 using namespace std;
@@ -34,9 +36,14 @@ string promptUser(){
 
 
 int main(int argc, const char * argv[]) {
+    Recorder userRecorder;
+    
     string ourCommand;
     // retrieve the command from the user
     ourCommand = promptUser();
+    userRecorder.recordRequest(ourCommand);
+    cout << "command was ";
+    userRecorder.showHistory();
     
     // regex interpret ourCommand to see what the user mainly wants
     
