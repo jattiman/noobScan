@@ -24,9 +24,21 @@
 
 using namespace std;
 
+// output logo
+// http://patorjk.com/software/taag/#p=display&f=Ogre&t=NoobScan
+void logoOutput(){
+    cout<< endl
+        << "     __            _     __                 \n"
+        << "  /\\ \\ \\___   ___ | |__ / _\\ ___ __ _ _ __  \n"
+        << " /  \\/ / _ \\ / _ \\| '_ \\\\ \\ / __/ _` | '_ \\  \n"
+        << "/ /\\  / (_) | (_) | |_) |\\ \\ (_| (_| | | | |\n"
+        << "\\_\\ \\/ \\___/ \\___/|_.__/\\__/\\___\\__,_|_| |_|\n"
+        << "                                            \n"
+        << endl;
+}
+
+// prompt user
 string promptUser(){
-    // welcome user
-    cout << "Welcome to Noob Scan!\n";
     // prompt user for their command
     cout << "Type 'help' for directions, 'settings' to adjust settings, 'exit' to exit, or simply enter your scan command.\n";
     string userCommand;
@@ -37,9 +49,13 @@ string promptUser(){
 
 int main(int argc, const char * argv[]) {
     Recorder userRecorder;
-    
     string ourCommand;
+    
+    // welcome user with fancy logo
+    logoOutput();
+    
     // retrieve the command from the user
+    
     ourCommand = promptUser();
     userRecorder.recordRequest(ourCommand);
     cout << "command was ";

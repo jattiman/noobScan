@@ -10,4 +10,14 @@
 
 #include <stdio.h>
 
+class Scanaddress{
+    
+private:
+    
+    
+public:
+    // array of ports
+    unsigned short *portList;
+};
+
 #endif /* Scanaddress_h */
