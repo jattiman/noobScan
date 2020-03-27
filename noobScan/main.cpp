@@ -17,16 +17,16 @@
 #include <iostream>
 
 
-#include "Scanaddress.h"
-#include "Recorder.h"
-#include "HelpModule.h"
+//#include "Scanaddress.h"
+//#include "Recorder.h"
+//#include "HelpModule.h"
 
 
 using namespace std;
 
 // output logo
 // http://patorjk.com/software/taag/#p=display&f=Ogre&t=NoobScan
-void logoOutput(){
+void printLogo(){
     cout<< endl
         << "     __            _     __                 \n"
         << "  /\\ \\ \\___   ___ | |__ / _\\ ___ __ _ _ __  \n"
@@ -48,18 +48,18 @@ string promptUser(){
 
 
 int main(int argc, const char * argv[]) {
-    Recorder userRecorder;
+//    Recorder userRecorder;
     string ourCommand;
     
     // welcome user with fancy logo
-    logoOutput();
+    printLogo();
     
     // retrieve the command from the user
     
     ourCommand = promptUser();
-    userRecorder.recordRequest(ourCommand);
+//    userRecorder.recordRequest(ourCommand);
     cout << "command was ";
-    userRecorder.showHistory();
+ //   userRecorder.showHistory();
     
     // regex interpret ourCommand to see what the user mainly wants
     

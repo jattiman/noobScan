@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4C84553E240C6F2A005B7049 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C84553D240C6F2A005B7049 /* main.cpp */; };
-		4C845546240C8325005B7049 /* Scanaddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C845544240C8325005B7049 /* Scanaddress.cpp */; };
-		4C9152DE24146E010086BEA6 /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C9152DC24146E010086BEA6 /* Recorder.cpp */; };
-		4C9152E1241470AA0086BEA6 /* HelpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C9152DF241470AA0086BEA6 /* HelpModule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,12 +25,6 @@
 /* Begin PBXFileReference section */
 		4C84553A240C6F2A005B7049 /* noobScan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = noobScan; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C84553D240C6F2A005B7049 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4C845544240C8325005B7049 /* Scanaddress.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scanaddress.cpp; sourceTree = "<group>"; };
-		4C845545240C8325005B7049 /* Scanaddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scanaddress.h; sourceTree = "<group>"; };
-		4C9152DC24146E010086BEA6 /* Recorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Recorder.cpp; sourceTree = "<group>"; };
-		4C9152DD24146E010086BEA6 /* Recorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
-		4C9152DF241470AA0086BEA6 /* HelpModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelpModule.cpp; sourceTree = "<group>"; };
-		4C9152E0241470AA0086BEA6 /* HelpModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelpModule.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,12 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				4C84553D240C6F2A005B7049 /* main.cpp */,
-				4C845544240C8325005B7049 /* Scanaddress.cpp */,
-				4C845545240C8325005B7049 /* Scanaddress.h */,
-				4C9152DC24146E010086BEA6 /* Recorder.cpp */,
-				4C9152DD24146E010086BEA6 /* Recorder.h */,
-				4C9152DF241470AA0086BEA6 /* HelpModule.cpp */,
-				4C9152E0241470AA0086BEA6 /* HelpModule.h */,
 			);
 			path = noobScan;
 			sourceTree = "<group>";
@@ -135,9 +120,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C84553E240C6F2A005B7049 /* main.cpp in Sources */,
-				4C9152DE24146E010086BEA6 /* Recorder.cpp in Sources */,
-				4C9152E1241470AA0086BEA6 /* HelpModule.cpp in Sources */,
-				4C845546240C8325005B7049 /* Scanaddress.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
