@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C7D380F242FE0250079E611 /* HelpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7D380D242FE0250079E611 /* HelpModule.cpp */; };
 		4C84553E240C6F2A005B7049 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C84553D240C6F2A005B7049 /* main.cpp */; };
-		4CF1451B242D96A40091FDA3 /* ScanAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF14519242D96A40091FDA3 /* ScanAddress.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,12 +23,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4C7D380D242FE0250079E611 /* HelpModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelpModule.cpp; sourceTree = "<group>"; };
-		4C7D380E242FE0250079E611 /* HelpModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HelpModule.hpp; sourceTree = "<group>"; };
 		4C84553A240C6F2A005B7049 /* noobScan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = noobScan; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C84553D240C6F2A005B7049 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4CF14519242D96A40091FDA3 /* ScanAddress.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScanAddress.cpp; sourceTree = "<group>"; };
-		4CF1451A242D96A40091FDA3 /* ScanAddress.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScanAddress.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,10 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				4C84553D240C6F2A005B7049 /* main.cpp */,
-				4CF14519242D96A40091FDA3 /* ScanAddress.cpp */,
-				4CF1451A242D96A40091FDA3 /* ScanAddress.hpp */,
-				4C7D380D242FE0250079E611 /* HelpModule.cpp */,
-				4C7D380E242FE0250079E611 /* HelpModule.hpp */,
 			);
 			path = noobScan;
 			sourceTree = "<group>";
@@ -130,8 +120,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C84553E240C6F2A005B7049 /* main.cpp in Sources */,
-				4C7D380F242FE0250079E611 /* HelpModule.cpp in Sources */,
-				4CF1451B242D96A40091FDA3 /* ScanAddress.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
