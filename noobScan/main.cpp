@@ -17,7 +17,7 @@
 #include <iostream>
 
 
-#include "Scanaddress.h"
+#include "ScanAddress.h"
 #include "Recorder.h"
 #include "HelpModule.h"
 
