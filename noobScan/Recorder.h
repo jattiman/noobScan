@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <iostream>
 
@@ -47,8 +47,7 @@ public:
     
 private:
     std::vector<std::string> ourRecord;
-    std::map<std::string, char> commandMap;
-    std::map<char, std::vector<std::string>> testMap;
+    std::unordered_map<char, std::vector<std::string>> commandMap;
     
 };
 

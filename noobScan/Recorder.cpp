@@ -13,8 +13,11 @@ Recorder::Recorder(){}
 
 // records requests by type
 void Recorder::categorizeRequest(std::string userRequest, char category){
+    //std::vector<std::string> temp;
+    //temp.push_back(userRequest);
     // add request and category to map
-    commandMap.insert(std::pair<std::string,char>(userRequest, category));
+    commandMap[category].emplace_back(userRequest);
+    //commandMap.insert(std::make_pair(category,temp));
     
     // add request to record
     recordRequest(userRequest);
@@ -41,7 +44,12 @@ void Recorder::showHistory(){
 }
 
 void Recorder::showTypeHistory(char category){
-    
+    std::unordered_map<char, std::vector<std::string>>:: iterator ourItr;
+    for(ourItr = commandMap.begin(); ourItr != commandMap.end(); ourItr++){
+        if(ourItr->first == category){
+            std::cout << "FUCK" << std::endl;
+        }
+    }
     return;
 }
 

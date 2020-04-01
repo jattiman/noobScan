@@ -59,7 +59,8 @@ int main(int argc, const char * argv[]) {
     ourCommand = promptUser();
     userRecorder.recordRequest(ourCommand);
     cout << "command was ";
-    userRecorder.showHistory();
+    //userRecorder.showHistory();
+    
     
     // regex interpret ourCommand to see what the user mainly wants
     
