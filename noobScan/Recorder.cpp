@@ -13,11 +13,9 @@ Recorder::Recorder(){}
 
 // records requests by type
 void Recorder::categorizeRequest(std::string userRequest, char category){
-    //std::vector<std::string> temp;
-    //temp.push_back(userRequest);
+    
     // add request and category to map
     commandMap[category].emplace_back(userRequest);
-    //commandMap.insert(std::make_pair(category,temp));
     
     // add request to record
     recordRequest(userRequest);

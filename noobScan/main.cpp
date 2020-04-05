@@ -40,38 +40,48 @@ void printLogo(){
 // prompt user
 string promptUser(){
     // prompt user for their command
-    cout << "Type 'help' for directions, 'settings' to adjust settings, 'exit' to exit, or simply enter your scan command.\n";
+    cout << ">: ";
     string userCommand;
     getline(cin, userCommand);
     return userCommand;
 }
 
+void outputDirections(){
+    cout << "Type 'help' for directions, 'settings' to adjust settings, 'exit' to exit, or simply enter your scan command.\n";
+    return;
+}
+
 
 int main(int argc, const char * argv[]) {
+    HelpModule ourHelper;
     Recorder userRecorder;
     string ourCommand;
     
     // welcome user with fancy logo
     printLogo();
     
+    // tell them what they need to do
+    ourHelper.displayDirections();
+    
     // retrieve the command from the user
-    
-    ourCommand = promptUser();
-    userRecorder.recordRequest(ourCommand);
-    cout << "command was ";
-    //userRecorder.showHistory();
-    
-    
-    // regex interpret ourCommand to see what the user mainly wants
-    
-    // If command asked for help
-    
-    // If command asked for settings
-    
-    // If command asked for scan
-    
-    // If command asked for exit
-    
+    while(ourCommand.compare("exit")){
+        ourCommand = promptUser();
+        //userRecorder.recordRequest(ourCommand);
+        userRecorder.categorizeRequest(ourCommand);
+        cout << "command was ";
+        userRecorder.showHistory();
+        
+        
+        // regex interpret ourCommand to see what the user mainly wants
+        
+        // If command asked for help
+        
+        // If command asked for settings
+        
+        // If command asked for scan
+        
+        // If command asked for exit
+    }
     
     return 0;
 }

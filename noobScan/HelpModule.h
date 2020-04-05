@@ -10,22 +10,21 @@
 
 #include <stdio.h>
 #include <string>
+#include <iostream>
 
 class HelpModule{
     
-private:
+public:
     HelpModule();
     
     // displays opening prompt for the user to select info for
-    void displayOpeningText();
+    void displayDirections();
     
     // returns help results based on the user request
     void returnInfo(std::string userString);
+
     
-    
-    
-    
-public:
+private:
     
 };
 

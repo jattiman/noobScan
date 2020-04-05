@@ -22,7 +22,7 @@ public:
     Recorder();
     
     // records requests by type
-    void categorizeRequest(std::string userRequest, char category);
+    void categorizeRequest(std::string userRequest, char category='x');
     
     // records user request
     void recordRequest(std::string userRequest);
