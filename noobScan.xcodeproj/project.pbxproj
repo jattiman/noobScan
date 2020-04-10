@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C50D0BA244000AB004F5B9F /* NoobScan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C50D0B8244000AB004F5B9F /* NoobScan.cpp */; };
 		4C633DCF242FE1F500B9ECC1 /* ScanAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C633DCD242FE1F500B9ECC1 /* ScanAddress.cpp */; };
 		4C633DD2242FE20900B9ECC1 /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C633DD0242FE20900B9ECC1 /* Recorder.cpp */; };
 		4C633DD5242FE21F00B9ECC1 /* HelpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C633DD3242FE21F00B9ECC1 /* HelpModule.cpp */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C50D0B8244000AB004F5B9F /* NoobScan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NoobScan.cpp; sourceTree = "<group>"; };
+		4C50D0B9244000AB004F5B9F /* NoobScan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoobScan.h; sourceTree = "<group>"; };
 		4C633DCD242FE1F500B9ECC1 /* ScanAddress.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScanAddress.cpp; sourceTree = "<group>"; };
 		4C633DCE242FE1F500B9ECC1 /* ScanAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScanAddress.h; sourceTree = "<group>"; };
 		4C633DD0242FE20900B9ECC1 /* Recorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Recorder.cpp; sourceTree = "<group>"; };
@@ -73,6 +76,8 @@
 				4C633DD1242FE20900B9ECC1 /* Recorder.h */,
 				4C633DD3242FE21F00B9ECC1 /* HelpModule.cpp */,
 				4C633DD4242FE21F00B9ECC1 /* HelpModule.h */,
+				4C50D0B8244000AB004F5B9F /* NoobScan.cpp */,
+				4C50D0B9244000AB004F5B9F /* NoobScan.h */,
 			);
 			path = noobScan;
 			sourceTree = "<group>";
@@ -136,6 +141,7 @@
 			files = (
 				4C633DD2242FE20900B9ECC1 /* Recorder.cpp in Sources */,
 				4C84553E240C6F2A005B7049 /* main.cpp in Sources */,
+				4C50D0BA244000AB004F5B9F /* NoobScan.cpp in Sources */,
 				4C633DD5242FE21F00B9ECC1 /* HelpModule.cpp in Sources */,
 				4C633DCF242FE1F500B9ECC1 /* ScanAddress.cpp in Sources */,
 			);

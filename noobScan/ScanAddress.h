@@ -17,7 +17,7 @@
 #include <arpa/inet.h>
 #include <string>
 
-class Scanaddress{
+class ScanAddress{
     
 private:
     // confirm the scan type being requested
