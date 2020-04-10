@@ -30,7 +30,11 @@ class NoobScan{
 public:
     NoobScan();
     void printLogo();
+    void welcomeText();
+    void initialPrompt();
     string promptUser();
+    void intakeCommands();
+    
     
 private:
     HelpModule *ourHelper;

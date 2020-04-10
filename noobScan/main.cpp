@@ -11,15 +11,11 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    NoobScan initializeTheNoob;
-    initializeTheNoob.printLogo();
-//    HelpModule ourHelper;
-//    Recorder userRecorder;
+    NoobScan ourNoob;
+    ourNoob.initialPrompt();
+
 //    string ourCommand;
-//
-//    // welcome user with fancy logo
-//    //printLogo();
-//
+
 //    // tell them what they need to do
 //    ourHelper.displayDirections();
 //

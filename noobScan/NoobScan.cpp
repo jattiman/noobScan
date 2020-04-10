@@ -24,7 +24,24 @@ void NoobScan::printLogo(){
         << "\\_\\ \\/ \\___/ \\___/|_.__/\\__/\\___\\__,_|_| |_|\n"
         << "                                            \n"
         << endl;
+    
 }
+
+void NoobScan::welcomeText(){
+    cout << "Welcome to NoobScan, the newbie port scanner!\n"
+    << "Please scan responsibly, and be ready to learn a thing or two.\n\n";
+    return;
+}
+
+//initial user prompt
+void NoobScan::initialPrompt(){
+    this->printLogo();
+    this->welcomeText();
+    ourHelper->displayDirections();
+    this->intakeCommands();
+}
+
+
 
 // prompt user
 string NoobScan::promptUser(){
@@ -35,3 +52,11 @@ string NoobScan::promptUser(){
     return userCommand;
 }
 
+void NoobScan::intakeCommands(){
+    while(ourCommand.compare("exit")){
+        ourCommand = promptUser();
+        //userRecorder.recordRequest(ourCommand);
+        userRecorder->categorizeRequest(ourCommand);
+    }
+    return;
+}

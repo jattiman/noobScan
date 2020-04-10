@@ -13,11 +13,12 @@ HelpModule::HelpModule(){
 
 // displays opening prompt for the user to select info for
 void HelpModule::displayDirections(){
-    std::cout << "Type 'help' for directions, 'settings' to adjust settings, 'exit' to exit, or simply enter your scan command.\n";
+    std::cout << "Type your command, or\n\t'help' for directions\n\t'settings' to adjust settings\n\t'exit' to exit\n";
     return;
 }
 
 // returns help results based on the user request
 void HelpModule::returnInfo(std::string userString){
+    
     return;
 }
