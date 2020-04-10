@@ -9,7 +9,9 @@
 
 
 // class initialization
-Recorder::Recorder(){}
+Recorder::Recorder(){
+    this->isRecorderOn=true;
+}
 
 // records requests by type
 void Recorder::categorizeRequest(std::string userRequest, char category){
@@ -64,4 +66,15 @@ void Recorder::showSuccessfulRequests(){
 // copy commands to file (class controls file)
 void Recorder::copyAllHistory(){
     
+}
+
+// set the recorder on/off status
+void Recorder::setRecorderStatus(bool recorderOn){
+    this->isRecorderOn = recorderOn;
+    return;
+}
+
+// returns if the recorder is on or off
+bool Recorder::getRecorderStatus(){
+    return this->isRecorderOn;
 }

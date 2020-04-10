@@ -27,20 +27,20 @@ void NoobScan::printLogo(){
     
 }
 
+// give user the welcome text
 void NoobScan::welcomeText(){
     cout << "Welcome to NoobScan, the newbie port scanner!\n"
     << "Please scan responsibly, and be ready to learn a thing or two.\n\n";
     return;
 }
 
-//initial user prompt
+//initial user prompt (only shown at startup)
 void NoobScan::initialPrompt(){
     this->printLogo();
     this->welcomeText();
     ourHelper->displayDirections();
     this->intakeCommands();
 }
-
 
 
 // prompt user
@@ -54,9 +54,18 @@ string NoobScan::promptUser(){
 
 void NoobScan::intakeCommands(){
     while(ourCommand.compare("exit")){
+        // prompt user for command
         ourCommand = promptUser();
-        //userRecorder.recordRequest(ourCommand);
+        // act on the command
+        
+        //if Recorder is on, categorize the request
         userRecorder->categorizeRequest(ourCommand);
+        
     }
+    return;
+}
+
+void NoobScan::commandResponse(string userCommand){
+    
     return;
 }

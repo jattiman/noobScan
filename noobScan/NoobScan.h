@@ -11,6 +11,7 @@
 #include "ScanAddress.h"
 #include "Recorder.h"
 #include "HelpModule.h"
+//#include "ScanCodes.h"
 
 // for socket address structures
 #include <netinet/in.h>
@@ -34,7 +35,7 @@ public:
     void initialPrompt();
     string promptUser();
     void intakeCommands();
-    
+    void commandResponse(string userCommand);
     
 private:
     HelpModule *ourHelper;

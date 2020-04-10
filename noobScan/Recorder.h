@@ -34,7 +34,7 @@ public:
     void showHistory();
     
     // shows history by type
-    void showTypeHistory(char category);
+    void showTypeHistory(char category='x');
     
     // shows all user commands
     void showAllRequests();
@@ -45,10 +45,16 @@ public:
     // copy commands to file (class controls file)
     void copyAllHistory();
     
+    // set the recorder on/off status
+    void setRecorderStatus(bool recorderOn);
+    
+    // returns if the recorder is on or off
+    bool getRecorderStatus();
+    
 private:
     std::vector<std::string> ourRecord;
     std::unordered_map<char, std::vector<std::string>> commandMap;
-    
+    bool isRecorderOn;
 };
 
 #endif /* Recorder_h */
