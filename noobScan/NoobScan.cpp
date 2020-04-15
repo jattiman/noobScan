@@ -57,9 +57,18 @@ void NoobScan::intakeCommands(){
         // prompt user for command
         ourCommand = promptUser();
         // act on the command
+        commandResponse(ourCommand);
         
-        //if Recorder is on, categorize the request
-        userRecorder->categorizeRequest(ourCommand);
+        // if Recorder is on
+        if(userRecorder->getRecorderStatus()){
+            // categorize the request
+            userRecorder->categorizeRequest(ourCommand);
+            
+            // categorize the answer
+        
+        }
+        // otherwise, just output the answer
+        
         
     }
     return;

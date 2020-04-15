@@ -42,6 +42,7 @@ private:
     Recorder *userRecorder;
     ScanAddress *ourScanner;
     string ourCommand;
+    string ourResult;
 };
 
 #endif /* NoobScan_h */
