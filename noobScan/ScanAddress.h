@@ -8,13 +8,14 @@
 #ifndef ScanAddress_h
 #define ScanAddress_h
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
 #include <string>
 
 class ScanAddress{

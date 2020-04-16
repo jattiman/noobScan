@@ -11,6 +11,9 @@
 NoobScan::NoobScan(){
     this->ourHelper = new HelpModule();
     this->userRecorder = new Recorder();
+    this->ourScanner = new ScanAddress();
+    this->ourResult.clear();
+    this->ourCommand.clear();
 }
 
 // output logo
@@ -36,9 +39,16 @@ void NoobScan::welcomeText(){
 
 //initial user prompt (only shown at startup)
 void NoobScan::initialPrompt(){
+    // print our logo
     this->printLogo();
+    
+    // welcome the user
     this->welcomeText();
+    
+    // display the directions
     ourHelper->displayDirections();
+    
+    // act on user commands
     this->intakeCommands();
 }
 
@@ -56,11 +66,13 @@ void NoobScan::intakeCommands(){
     while(ourCommand.compare("exit")){
         // prompt user for command
         ourCommand = promptUser();
+        
         // act on the command
         commandResponse(ourCommand);
         
         // if Recorder is on
         if(userRecorder->getRecorderStatus()){
+        
             // categorize the request
             userRecorder->categorizeRequest(ourCommand);
             
@@ -68,13 +80,30 @@ void NoobScan::intakeCommands(){
         
         }
         // otherwise, just output the answer
-        
+        cout << this->ourResult;
         
     }
     return;
 }
 
 void NoobScan::commandResponse(string userCommand){
+    // clear result string
+    
+    // intake command
+    
+    // categorize base request
+    
+    // if potential help request
+    if(userCommand.find("help")!=string::npos){
+        // if found, send the command to HelpModule for processing
+        cout << "Asking for help?\n";
+    }
+    
+    // if scan, call scanner
+    else{
+        
+    }
+    // update result string with answer to request
     
     return;
 }
