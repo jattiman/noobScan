@@ -27,10 +27,27 @@ private:
     // initiate scan, report results and output to screen
     std::string initiateScan(char ourScanType);
     
+    // training wheels scan to prompt user step by step
+    
+    
+    
 public:
     // array of ports
     unsigned short *portList;
+    
+    // code for scan type (tcp/udp)
     char scanType;
+    
+    // time out time
+    int timeOut;
+    
+    // save to file
+    bool saveToFile;
+    
+    // output to screen
+    bool screenOutput;
+    
+    
     
     
     
