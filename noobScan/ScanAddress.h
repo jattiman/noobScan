@@ -2,6 +2,7 @@
 /*
    Scanaddress.h of noobScan, a novice port scanner
    Scanaddress.h
+ Controls the settings of the scanner
 */
 /**/
 
@@ -46,8 +47,6 @@ public:
     
     // output to screen
     bool screenOutput;
-    
-    
     
     
     

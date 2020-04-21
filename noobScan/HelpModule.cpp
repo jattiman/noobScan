@@ -17,6 +17,12 @@ void HelpModule::displayDirections(){
     return;
 }
 
+// tells the user everything they can say
+void HelpModule::displayOptions(){
+    std::cout << "Detailed commands: " << std::endl;
+    return;
+}
+
 // returns help results based on the user request
 void HelpModule::returnInfo(std::string userString){
     
