@@ -15,7 +15,13 @@ enum class NoobCodes{
     tcp,
     udp,
     fin,
-    syn
+    syn,
+    socketError,
+    socketCreationError,
+    portConnectionDenied,
+    portConnectionSuccess,
+    IPBindingIssue,
+    hostNameIssue
 };
 
 

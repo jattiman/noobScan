@@ -63,12 +63,20 @@ string NoobScan::promptUser(){
 }
 
 void NoobScan::intakeCommands(){
-    while(ourCommand.compare("exit")){
+    //while(ourCommand.compare("exit")){
+    while(true){
         // prompt user for command
         ourCommand = promptUser();
         
         // act on the command
         commandResponse(ourCommand);
+        
+        if(ourCommand.compare("debug")==0){
+            debug();
+        }
+        if(ourCommand.compare("exit")==0){
+            return;
+        }
         
         // if Recorder is on
         if(userRecorder->getRecorderStatus()){
@@ -106,4 +114,29 @@ void NoobScan::commandResponse(string userCommand){
     // update result string with answer to request
     
     return;
+}
+
+void NoobScan::debug(){
+    cout << "testing debug\n";
+    
+    //TODO: add try catch block to this. Maybe isolate the ourScanner output before equating it to s_addr?
+//1
+//    struct sockaddr_in socketToScan;
+//    socketToScan.sin_addr.s_addr = *(unsigned long*) ((ourScanner->returnHostIP("www.google.com"))->h_addr);
+//    if(socketToScan.sin_addr.s_addr == NULL){
+//        cout << "no ip address associated.\n";
+//    }
+//
+//    else{
+//        cout << inet_ntoa(socketToScan.sin_addr);
+//    }
+//2
+//    if(ourScanner->returnHostIP("www.fhjkgshuilhusl.com")==NULL){
+//        cout << "It's null\n";
+//    }
+//    else{
+//        cout<<"Not null\n.";
+//    }
+//3
+    ourTCPScan->runScan(80);
 }

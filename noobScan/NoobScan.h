@@ -11,6 +11,7 @@
 #include "ScanAddress.h"
 #include "Recorder.h"
 #include "HelpModule.h"
+#include "TCPScanner.h"
 //#include "ScanCodes.h"
 
 // for socket address structures
@@ -18,6 +19,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/ip.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <errno.h>
@@ -36,11 +39,13 @@ public:
     string promptUser();
     void intakeCommands();
     void commandResponse(string userCommand);
+    void debug();
     
 private:
     HelpModule *ourHelper;
     Recorder *userRecorder;
     ScanAddress *ourScanner;
+    TCPScanner *ourTCPScan;
     string ourCommand;
     string ourResult;
 };

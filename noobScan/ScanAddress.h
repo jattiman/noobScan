@@ -16,23 +16,28 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #include <string>
+#include <iostream>
 
 class ScanAddress{
     
-private:
+public:
     // confirm the scan type being requested
     char checkScanType(std::string scanCommand);
     
     // initiate scan, report results and output to screen
     std::string initiateScan(char ourScanType);
     
+    // resolve host name
+    struct hostent * returnHostIP(std::string targetHost);
+    
     // training wheels scan to prompt user step by step
     
     
     
-public:
+private:
     // array of ports
     unsigned short *portList;
     
