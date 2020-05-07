@@ -14,7 +14,15 @@ char ScanAddress::checkScanType(std::string scanCommand){
 }
 
 // initiate scan, report results and output to screen
-std::string ScanAddress::initiateScan(char ourScanType){
+string ScanAddress::initiateScan(char ourScanType){
+    switch (ourScanType) {
+        case 't':
+            
+            break;
+            
+        default:
+            break;
+    }
     return "string";
 }
 
@@ -35,4 +43,15 @@ struct hostent * ScanAddress::returnHostIP(std::string targetHost){
     else{
         return ourHost;
     }
+}
+
+// list ports being scanned
+void ScanAddress::getPortList(){
+    if(this->portsToScan.size()==0){
+        std::cout << "You have not selected default ports to scan.\n";
+    }
+    else{
+        
+    }
+    return;
 }

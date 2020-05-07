@@ -12,6 +12,7 @@ NoobScan::NoobScan(){
     this->ourHelper = new HelpModule();
     this->userRecorder = new Recorder();
     this->ourScanner = new ScanAddress();
+    this->ourTCPScan = new TCPScanner();
     this->ourResult.clear();
     this->ourCommand.clear();
 }
@@ -66,14 +67,19 @@ void NoobScan::intakeCommands(){
     //while(ourCommand.compare("exit")){
     while(true){
         // prompt user for command
-        ourCommand = promptUser();
+        this->ourCommand = promptUser();
         
         // act on the command
-        commandResponse(ourCommand);
+        this->commandResponse(ourCommand);
         
-        if(ourCommand.compare("debug")==0){
-            debug();
-        }
+//        if(ourCommand.find("debug")!=string::npos){
+//            cout << "Enter port: ";
+//            int testPort=80;
+//            cin >> testPort;
+//            this->debug(testPort);
+//            cout << "Scan complete.\n";
+////            debug();
+//        }
         if(ourCommand.compare("exit")==0){
             return;
         }
@@ -107,6 +113,11 @@ void NoobScan::commandResponse(string userCommand){
         cout << "Asking for help?\n";
     }
     
+    if(userCommand.find("debug")!=string::npos){
+                cout << "debugging: \n";
+                debug(4767);
+    }
+    
     // if scan, call scanner
     else{
         
@@ -116,7 +127,7 @@ void NoobScan::commandResponse(string userCommand){
     return;
 }
 
-void NoobScan::debug(){
+void NoobScan::debug(int debugPort){
     cout << "testing debug\n";
     
     //TODO: add try catch block to this. Maybe isolate the ourScanner output before equating it to s_addr?
@@ -138,5 +149,9 @@ void NoobScan::debug(){
 //        cout<<"Not null\n.";
 //    }
 //3
-    ourTCPScan->runScan(80);
+    //TODO: find out why this returns double prompt if it fails
+    //ourTCPScan->runScan(debugPort);
+    vector<int> testVector{80,120,4767};
+    ourTCPScan->runMultiScan(testVector);
+    
 }

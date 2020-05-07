@@ -9,12 +9,15 @@
 #ifndef TCPScanner_h
 #define TCPScanner_h
 
-#include <iostream>
-#include <vector>
 #include "NoobCodes.h"
 #include "ScanAddress.h"
 
-class TCPScanner{
+//delete these 2 later if this doesn't work
+#include <vector>
+using namespace std;
+
+
+class TCPScanner : public ScanAddress{
 
 public:
     TCPScanner();
@@ -23,7 +26,7 @@ public:
     void addOpenPorts(int newOpenPort);
     
     // get open port list
-    std::vector<int> getOpenPorts();
+    vector<int> getOpenPorts();
     
     // print open ports
     void printOpenPorts();
@@ -31,13 +34,16 @@ public:
     // run scan - default value is own IP
     NoobCodes runScan(int portNum, std::string IPToScan="127.0.0.1");
     
+    // scan multiple ports at once
+    NoobCodes runMultiScan(vector<int> portNumbers, std::string IPToScan="127.0.0.1");
+    
     
     
 private:
-    std::vector<int> openPorts;
+    vector<int> openPorts;
     
     // not sure if I'll use this
-    std::vector<int> closedPorts;
+    vector<int> closedPorts;
     
 };
 

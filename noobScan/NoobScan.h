@@ -39,7 +39,7 @@ public:
     string promptUser();
     void intakeCommands();
     void commandResponse(string userCommand);
-    void debug();
+    void debug(int debugPort = 80);
     
 private:
     HelpModule *ourHelper;

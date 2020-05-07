@@ -20,6 +20,9 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+
+using namespace std;
 
 class ScanAddress{
     
@@ -28,10 +31,13 @@ public:
     char checkScanType(std::string scanCommand);
     
     // initiate scan, report results and output to screen
-    std::string initiateScan(char ourScanType);
+    string initiateScan(char ourScanType);
     
     // resolve host name
     struct hostent * returnHostIP(std::string targetHost);
+    
+    // list ports being scanned
+    void getPortList();
     
     // training wheels scan to prompt user step by step
     
@@ -53,7 +59,8 @@ private:
     // output to screen
     bool screenOutput;
     
-    
+    // vector of ports to scan
+    vector<int> portsToScan;
     
 };
 

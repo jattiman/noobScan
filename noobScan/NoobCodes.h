@@ -20,6 +20,7 @@ enum class NoobCodes{
     socketCreationError,
     portConnectionDenied,
     portConnectionSuccess,
+    portNumberInvalid,
     IPBindingIssue,
     hostNameIssue
 };
