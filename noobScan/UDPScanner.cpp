@@ -14,10 +14,10 @@ UDPScanner::UDPScanner(){
 
 NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
     // make a socket to scan ports
-    int ourTCPSock = socket(AF_INET, SOCK_DGRAM, 0);
+    int ourUDPSock = socket(AF_INET, SOCK_DGRAM, 0);
     
     // if the socket was unsuccessful
-    if(ourTCPSock == -1){
+    if(ourUDPSock == -1){
         return NoobCodes::socketCreationError;
     }
     
@@ -32,8 +32,15 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
         return NoobCodes::IPBindingIssue;
     }
     
+    string testString="test";
+    
     // check port
-
+    int portCheck=sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
+    if(portCheck==-1){
+        cout << "Port " << portNum << " closed\n";
+        return NoobCodes::portConnectionError;
+    }
+    
     //UDP reply: port open
     //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply.
     
@@ -58,5 +65,10 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
 //        close(ourTCPSock);
 //        return NoobCodes::portConnectionSuccess;
 //    }
+    return NoobCodes::success;
+}
+
+NoobCodes UDPScanner::runMultiScan(vector<int> portNumbers, string IPToScan){
+    
     return NoobCodes::success;
 }

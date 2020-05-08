@@ -9,7 +9,7 @@
 #ifndef TCPScanner_h
 #define TCPScanner_h
 
-#include "NoobCodes.h"
+//#include "NoobCodes.h"
 #include "ScanAddress.h"
 
 //delete these 2 later if this doesn't work

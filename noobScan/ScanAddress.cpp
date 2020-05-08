@@ -47,11 +47,32 @@ struct hostent * ScanAddress::returnHostIP(std::string targetHost){
 
 // list ports being scanned
 void ScanAddress::getPortList(){
+    
+    // if the vector is empty, don't try to use it
     if(this->portsToScan.size()==0){
-        std::cout << "You have not selected default ports to scan.\n";
+        cout << "You have not selected default ports to scan.\n";
     }
+    
+    // if a small number of ports are selected, print them vertically
+    else if(portsToScan.size()<20){
+        for(auto const & portNum : this->portsToScan){
+            cout << portNum << endl;
+        }
+    }
+    
+    // if a large number of ports are selected, print them on a line
     else{
-        
+        for(auto const & portNum : this->portsToScan){
+            cout << portNum << "\t";
+        }
     }
     return;
+}
+
+// check port number validity
+NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
+    if(portNumToCheck < 0 || portNumToCheck > 65535){
+        return NoobCodes::portNumberInvalid;
+    }
+    return NoobCodes::success;
 }

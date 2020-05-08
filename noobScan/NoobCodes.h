@@ -18,6 +18,7 @@ enum class NoobCodes{
     syn,
     socketError,
     socketCreationError,
+    portConnectionError,
     portConnectionDenied,
     portConnectionSuccess,
     portNumberInvalid,

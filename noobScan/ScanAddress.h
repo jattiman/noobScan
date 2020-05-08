@@ -22,6 +22,8 @@
 #include <iostream>
 #include <vector>
 
+#include "NoobCodes.h"
+
 using namespace std;
 
 class ScanAddress{
@@ -38,6 +40,9 @@ public:
     
     // list ports being scanned
     void getPortList();
+    
+    // check port number validity
+    NoobCodes portValidityCheck(int portNumToCheck);//0 and 65535
     
     // training wheels scan to prompt user step by step
     

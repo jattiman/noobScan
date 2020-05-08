@@ -72,14 +72,6 @@ void NoobScan::intakeCommands(){
         // act on the command
         this->commandResponse(ourCommand);
         
-//        if(ourCommand.find("debug")!=string::npos){
-//            cout << "Enter port: ";
-//            int testPort=80;
-//            cin >> testPort;
-//            this->debug(testPort);
-//            cout << "Scan complete.\n";
-////            debug();
-//        }
         if(ourCommand.compare("exit")==0){
             return;
         }
