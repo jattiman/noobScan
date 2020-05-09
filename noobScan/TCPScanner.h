@@ -41,8 +41,6 @@ public:
     
 private:
     vector<int> openPorts;
-    
-    // not sure if I'll use this
     vector<int> closedPorts;
     
 };

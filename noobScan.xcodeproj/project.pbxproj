@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C0637C324511BF1009FACC4 /* TCPScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C0637C124511BF1009FACC4 /* TCPScanner.cpp */; };
 		4C0637C624560598009FACC4 /* UDPScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C0637C424560598009FACC4 /* UDPScanner.cpp */; };
+		4C246C0C246692CB00B85591 /* SYNScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C246C0A246692CB00B85591 /* SYNScanner.cpp */; };
 		4C50D0BA244000AB004F5B9F /* NoobScan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C50D0B8244000AB004F5B9F /* NoobScan.cpp */; };
 		4C633DCF242FE1F500B9ECC1 /* ScanAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C633DCD242FE1F500B9ECC1 /* ScanAddress.cpp */; };
 		4C633DD2242FE20900B9ECC1 /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C633DD0242FE20900B9ECC1 /* Recorder.cpp */; };
@@ -33,6 +34,8 @@
 		4C0637C224511BF1009FACC4 /* TCPScanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TCPScanner.h; sourceTree = "<group>"; };
 		4C0637C424560598009FACC4 /* UDPScanner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UDPScanner.cpp; sourceTree = "<group>"; };
 		4C0637C524560598009FACC4 /* UDPScanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UDPScanner.h; sourceTree = "<group>"; };
+		4C246C0A246692CB00B85591 /* SYNScanner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SYNScanner.cpp; sourceTree = "<group>"; };
+		4C246C0B246692CB00B85591 /* SYNScanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SYNScanner.h; sourceTree = "<group>"; };
 		4C50D0B8244000AB004F5B9F /* NoobScan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NoobScan.cpp; sourceTree = "<group>"; };
 		4C50D0B9244000AB004F5B9F /* NoobScan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoobScan.h; sourceTree = "<group>"; };
 		4C50D0BD24469DCA004F5B9F /* NoobCodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoobCodes.h; sourceTree = "<group>"; };
@@ -90,6 +93,8 @@
 				4C0637C224511BF1009FACC4 /* TCPScanner.h */,
 				4C0637C424560598009FACC4 /* UDPScanner.cpp */,
 				4C0637C524560598009FACC4 /* UDPScanner.h */,
+				4C246C0A246692CB00B85591 /* SYNScanner.cpp */,
+				4C246C0B246692CB00B85591 /* SYNScanner.h */,
 			);
 			path = noobScan;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 				4C633DD2242FE20900B9ECC1 /* Recorder.cpp in Sources */,
 				4C84553E240C6F2A005B7049 /* main.cpp in Sources */,
 				4C50D0BA244000AB004F5B9F /* NoobScan.cpp in Sources */,
+				4C246C0C246692CB00B85591 /* SYNScanner.cpp in Sources */,
 				4C633DD5242FE21F00B9ECC1 /* HelpModule.cpp in Sources */,
 				4C0637C324511BF1009FACC4 /* TCPScanner.cpp in Sources */,
 				4C633DCF242FE1F500B9ECC1 /* ScanAddress.cpp in Sources */,

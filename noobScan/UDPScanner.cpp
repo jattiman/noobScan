@@ -14,6 +14,8 @@ UDPScanner::UDPScanner(){
 }
 
 NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
+    // UDP is typically more targeted scan, due to the time it takes
+    
     // make a socket to scan ports
     int ourUDPSock = socket(AF_INET, SOCK_DGRAM, 0);
     
@@ -48,6 +50,9 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
         addPortList(portNum, this->closedPorts);
         return NoobCodes::portConnectionDenied;
     }
+    //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply.
+    //UDP reply: port open
+    //no response: port is either open or filtered
     else{
         // if there is a response, or no response, the port is likely open
         cout << "Port " << portNum << " likely open\n";
@@ -55,30 +60,6 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
         return NoobCodes::portConnectionSuccess;
     }
     
-    //UDP reply: port open
-    //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply.
-    
-    //no response: port is either open or filtered
-    
-    // typically more targeted scan, due to the time it takes
-    
-    
-//    int checkConnect = connect(ourTCPSock, (sockaddr*)&socketToScan, sizeof(socketToScan));
-    
-    // if connection denied, return that info
-//    if(checkConnect==-1){
-//        std::cout << "Port " << portNum << " closed\n";
-//        return NoobCodes::portConnectionDenied;
-//    }
-    
-    // if the connection succeeded, add to open port list, close socket, and return success
-//    else{
-//        //addOpenPorts(portNum);
-//        std::cout << "Port " << portNum << " open\n";
-//        // close the port
-//        close(ourTCPSock);
-//        return NoobCodes::portConnectionSuccess;
-//    }
     return NoobCodes::success;
 }
 

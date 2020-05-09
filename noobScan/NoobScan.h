@@ -12,7 +12,10 @@
 #include "Recorder.h"
 #include "HelpModule.h"
 #include "TCPScanner.h"
-//#include "ScanCodes.h"
+#include "UDPScanner.h"
+#include "SYNScanner.h"
+
+//#include "NoobCodes.h"
 
 // for socket address structures
 #include <netinet/in.h>
@@ -46,6 +49,9 @@ private:
     Recorder *userRecorder;
     ScanAddress *ourScanner;
     TCPScanner *ourTCPScan;
+    UDPScanner *ourUDPScan;
+    SYNScanner *ourSYNScan;
+    
     string ourCommand;
     string ourResult;
 };
