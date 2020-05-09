@@ -29,6 +29,9 @@ using namespace std;
 class ScanAddress{
     
 public:
+    
+    ScanAddress();
+    
     // confirm the scan type being requested
     char checkScanType(std::string scanCommand);
     
@@ -38,11 +41,20 @@ public:
     // resolve host name
     struct hostent * returnHostIP(std::string targetHost);
     
+    // add to port list
+    void addPortList(int newPortNumber, vector<int> portVector);
+    
     // list ports being scanned
     void getPortList();
     
     // check port number validity
     NoobCodes portValidityCheck(int portNumToCheck);//0 and 65535
+    
+    // get sleep time
+    useconds_t getSleepTimer();
+    
+    // set sleep time
+    
     
     // training wheels scan to prompt user step by step
     
@@ -66,6 +78,9 @@ private:
     
     // vector of ports to scan
     vector<int> portsToScan;
+    
+    // sleep timer
+    useconds_t sleepTimer;
     
 };
 

@@ -12,7 +12,7 @@
 #include "NoobCodes.h"
 #include "ScanAddress.h"
 
-class UDPScanner{
+class UDPScanner : public ScanAddress{
     
 public:
     UDPScanner();
@@ -25,6 +25,7 @@ public:
 private:
     vector<int> openPorts;
     vector<int> closedPorts;
+    useconds_t ourSleepTimer;
 };
 
 #endif /* UDPScanner_h */

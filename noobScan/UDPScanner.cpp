@@ -9,6 +9,7 @@
 #include "UDPScanner.h"
 
 UDPScanner::UDPScanner(){
+    this->ourSleepTimer=getSleepTimer();
     return;
 }
 
@@ -32,13 +33,26 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
         return NoobCodes::IPBindingIssue;
     }
     
-    string testString="test";
+    string testString="test\nhelp\n";
     
-    // check port
-    int portCheck=sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
-    if(portCheck==-1){
-        cout << "Port " << portNum << " closed\n";
-        return NoobCodes::portConnectionError;
+    // check port (sendto returns ssize_t and not int)
+    ssize_t portCheck=sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
+    
+    // sleep while we wait for port response
+    usleep(this->ourSleepTimer);
+    
+    // return status of scan
+    if(portCheck<0){
+        // if there is a connection error, the port is likely closed
+        cout << "Port " << portNum << " likely closed\n";
+        addPortList(portNum, this->closedPorts);
+        return NoobCodes::portConnectionDenied;
+    }
+    else{
+        // if there is a response, or no response, the port is likely open
+        cout << "Port " << portNum << " likely open\n";
+        addPortList(portNum, this->openPorts);
+        return NoobCodes::portConnectionSuccess;
     }
     
     //UDP reply: port open

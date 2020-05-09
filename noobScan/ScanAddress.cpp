@@ -7,6 +7,9 @@
 
 #include "ScanAddress.h"
 
+ScanAddress::ScanAddress(){
+    this->sleepTimer=0;
+}
 
 // confirm the scan type being requested
 char ScanAddress::checkScanType(std::string scanCommand){
@@ -45,6 +48,11 @@ struct hostent * ScanAddress::returnHostIP(std::string targetHost){
     }
 }
 
+void ScanAddress::addPortList(int newPortNumber, vector<int> portVector){
+    portVector.emplace_back(newPortNumber);
+    return;
+}
+
 // list ports being scanned
 void ScanAddress::getPortList(){
     
@@ -75,4 +83,8 @@ NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
         return NoobCodes::portNumberInvalid;
     }
     return NoobCodes::success;
+}
+
+useconds_t ScanAddress::getSleepTimer(){
+    return this->sleepTimer;
 }

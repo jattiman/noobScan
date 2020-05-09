@@ -57,14 +57,14 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     
     // if connection denied, return that info
     if(checkConnect==-1){
-        cout << "Port " << portNum << " closed\n";
+        cout << "TCP Port " << portNum << " closed\n";
         close(ourTCPSock);
         return NoobCodes::portConnectionDenied;
     }
     
     // if the connection succeeded, add to open port list, close socket, and return success
     else{
-        cout << "Port " << portNum << " open\n";
+        cout << "TCP Port " << portNum << " open\n";
         // close the port
         close(ourTCPSock);
         addOpenPorts(portNum);
