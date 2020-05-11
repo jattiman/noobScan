@@ -18,6 +18,14 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+// to pull MAC address
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <net/if_dl.h>
+#include <ifaddrs.h>
+#include <errno.h>
+#include <stdio.h>
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -54,7 +62,10 @@ public:
     useconds_t getSleepTimer();
     
     // set sleep time
+    void setSleepTimer(useconds_t newSleepTime);
     
+    // get host MAC address
+    void getHostMac();
     
     // training wheels scan to prompt user step by step
     
@@ -81,6 +92,9 @@ private:
     
     // sleep timer
     useconds_t sleepTimer;
+    
+    // our mac address
+    char ourMac[32]={0};
     
 };
 

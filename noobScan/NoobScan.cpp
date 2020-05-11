@@ -143,7 +143,8 @@ void NoobScan::debug(int debugPort){
 //3
     //TODO: find out why this returns double prompt if it fails
     //ourTCPScan->runScan(debugPort);
-    vector<int> testVector{80,120,4767};
-    ourTCPScan->runMultiScan(testVector);
+//    vector<int> testVector{80,120,4767};
+//    ourTCPScan->runMultiScan(testVector);
+    ourScanner->getHostMac();
     
 }
