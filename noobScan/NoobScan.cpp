@@ -112,7 +112,8 @@ void NoobScan::inspectArgs(string userCommand){
     smatch matches;
     //regex commandHunter("[a-zA-Z]{1,}");
     regex commandHunter("\\b[^\\d\\W]+\\b");
-    regex portHunter("[\\d]{1,}");
+//    regex portHunter("[\\d]{1,}");
+    regex portHunter("\\b[0-9]{1,}");
     //regex portHunter("\\b[^\\W\\d]+\\b");
     
     vector<string> parsedCommand;
@@ -121,14 +122,7 @@ void NoobScan::inspectArgs(string userCommand){
     string passOne = userCommand;
     string passTwo = userCommand;
     
-    // parse the command string - regex used to
-//    sregex_iterator commandIterator(userCommand.begin(), userCommand.end(), commandHunter);
-//    sregex_iterator empty;
-//    while(commandIterator!=empty){
-//        matches=*commandIterator;
-//        parsedCommand.push_back(matches.str());
-//        commandIterator++;
-//    }
+
     
     while(regex_search(passOne, matches, commandHunter)){
         for(auto i:matches){
@@ -138,29 +132,13 @@ void NoobScan::inspectArgs(string userCommand){
         }
     }
     
-//    sregex_iterator portIterator(userCommand.begin(), userCommand.end(), portHunter);
-//    while(portIterator!=empty){
-//        matches=*portIterator;
-//        //portsToScan.push_back(stoi(portIterator));
-//        portIterator++;
-//    }
-  
+
     while(regex_search(passTwo, matches, portHunter)){
         for(auto i:matches){
             //cout << " " << i << " ";
             portsToScan.push_back(stoi(i));
             passTwo=matches.suffix().str();
         }
-    }
-    // output parsed for debug
-    cout << "printing command split:\n";
-    for(auto const & item : parsedCommand){
-        cout << item << endl;
-    }
-    
-    cout << "printing port split:\n";
-    for(auto const & item : portsToScan){
-        cout << item << endl;
     }
     
     // identify first argument
@@ -213,4 +191,34 @@ void NoobScan::debug(int debugPort){
 //    ourTCPScan->runMultiScan(testVector);
 //    ourScanner->getHostMac();
 //    ourScanner->debug();
+    
+            // parse the command string - regex used to
+        //    sregex_iterator commandIterator(userCommand.begin(), userCommand.end(), commandHunter);
+        //    sregex_iterator empty;
+        //    while(commandIterator!=empty){
+        //        matches=*commandIterator;
+        //        parsedCommand.push_back(matches.str());
+        //        commandIterator++;
+        //    }
+        
+    //    sregex_iterator portIterator(userCommand.begin(), userCommand.end(), portHunter);
+    //    while(portIterator!=empty){
+    //        matches=*portIterator;
+    //        //portsToScan.push_back(stoi(portIterator));
+    //        portIterator++;
+    //    }
+      
+    
+    //    // output parsed for debug
+    //    cout << "printing command split:\n";
+    //    for(auto const & item : parsedCommand){
+    //        cout << item << endl;
+    //    }
+    //
+    //    cout << "printing port split:\n";
+    //    for(auto const & item : portsToScan){
+    //        cout << item << endl;
+    //    }
+
+    
 }
