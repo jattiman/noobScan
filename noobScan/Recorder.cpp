@@ -47,7 +47,7 @@ void Recorder::showTypeHistory(char category){
     std::unordered_map<char, std::vector<std::string>>:: iterator ourItr;
     for(ourItr = commandMap.begin(); ourItr != commandMap.end(); ourItr++){
         if(ourItr->first == category){
-            std::cout << "FUCK" << std::endl;
+            std::cout << "FUDGE" << std::endl;
         }
     }
     return;

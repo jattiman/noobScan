@@ -67,6 +67,8 @@ public:
     // get host MAC address
     void getHostMac();
     
+    void debug();
+    
     // training wheels scan to prompt user step by step
     
     

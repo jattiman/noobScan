@@ -29,6 +29,9 @@
 #include <errno.h>
 #include <unistd.h>
 #include <iostream>
+// for splitting strings
+#include <regex>
+#include <sstream>
 
 using namespace std;
 
@@ -42,6 +45,7 @@ public:
     string promptUser();
     void intakeCommands();
     void commandResponse(string userCommand);
+    void inspectArgs(string userCommand);
     void debug(int debugPort = 80);
     
 private:
@@ -54,6 +58,8 @@ private:
     
     string ourCommand;
     string ourResult;
+    //vector<int> portsToScan;
+    
 };
 
 #endif /* NoobScan_h */
