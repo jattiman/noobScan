@@ -57,7 +57,7 @@ void NoobScan::initialPrompt(){
 }
 
 void NoobScan::systemCheck(){
-    cout << "Let's make sure you won't run into any trouble.\n\n";
+    cout << "Let's make sure you won't run into any trouble, ";
     
     // confirm user has admin rights
     this->adminCheck();
@@ -74,7 +74,7 @@ void NoobScan::adminCheck(){
     //bool isAdmin = false;
 
     struct passwd *userInfo = getpwuid(ourID);
-    cout << "Let's see if we can learn something today, " << userInfo->pw_gecos << " (neat username).\n\n";
+    cout << userInfo->pw_gecos << " (neat username).\n\n";
     
     cout << "Checking admin privileges ... \n\n";
 
@@ -92,19 +92,25 @@ void NoobScan::adminCheck(){
         cout << "\tLooks like you have admin rights on this account.\n\tThat's a good thing.\n";
     }
     else{
-        cout <<"\tYou don't seem to be an admin.\n\tYou can try running these commands, but you will run into trouble on some scans.\n\n\tStill, feel free to use this as a helper tool, to learn more about the wonderful world of port scanning.\n\n";
+        cout <<"\tYou don't seem to be an admin.\n\tYou can try running commands, but you will run into trouble on some scans.\n\n\tStill, feel free to use this as a helper tool, to learn more about the wonderful world of port scanning.\n\n";
     }
 }
 
 void NoobScan::opCheck(){
     cout << "Checking operating system...\n\n";
     
-    #ifdef _WIN32
-        cout << "\tWindows, huh? This program is not going to run well for you. Sorry.\n\n"
-    #elif __unix__
-        cout << "\tLooks like you're using a unix system, but not OSX.\n\tCertain scans may not work for you.\n\n"
-    #elif __APPLE__
+    #if defined(__APPLE__)
         cout << "\tYou're using an OSX variant. That's what this program was made for, so you should be ok!\n\n";
+    #elif defined(Macintosh)
+        cout << "\tYou're using an older MacOS, but I think things will work.\n\tTread carefully!\n\n";
+    #elif defined(_WIN32)
+        cout << "\tWindows, huh? This program is not going to run well for you. Sorry.\n\n";
+    #elif defined(__unix__)
+        cout << "\tLooks like you're using a unix system, but not OSX.\n\tCertain scans may not work for you.\n\n";
+    #elif defined(__gnu_linux__)
+        cout << "\tLooks like you're using Linux.\n\tYou'll probably run into some problems executing scans, but feel free to use the help commands.\n\n";
+    #else
+        cout << "\tHaven't come across your OS in a while.\n\tYou might encounter some problems with this program.\n\n";
     #endif
 }
 
@@ -206,25 +212,30 @@ void NoobScan::inspectArgs(string userCommand){
     // if the first argument is empty
     if(this->parsedCommand.empty()){
         // inform the user, clear the string, and let them try again
-        cout << "You didn't enter a command. Try again, perhaps.";
+        cout << "You didn't enter a command. Try again, perhaps.\n";
         userCommand.clear();
         return;
     }
     // otherwise, decide if the primary command is for help, settings, or scanning
-    else if(parsedCommand[0]=="help"){
+    else if(parsedCommand[0].compare("help")==0){
         cout << "Asking for help?\n";
         return;
     }
-    else if(parsedCommand[0]=="scan"){
+    else if(parsedCommand[0].compare("scan")==0){
         cout << "Scanning ... \n";
         return;
     }
-    else if(parsedCommand[0]=="settings"){
+    else if(parsedCommand[0].compare("settings")==0){
         // open settings
         cout << "Let's open up our settings...\n";
         return;
     }
-    else if(parsedCommand[0]=="exit"){
+    else if(parsedCommand[0].compare("debug")==0){
+        // run super secret debug function
+        cout << "Running debug function...\n";
+        return;
+    }
+    else if(parsedCommand[0].compare("exit")==0){
         cout << "Exiting ... \n";
         return;
     }
