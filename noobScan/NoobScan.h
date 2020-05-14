@@ -32,6 +32,9 @@
 // for splitting strings
 #include <regex>
 #include <sstream>
+// admin check
+#include <grp.h>
+#include <pwd.h>
 
 using namespace std;
 
@@ -42,10 +45,14 @@ public:
     void printLogo();
     void welcomeText();
     void initialPrompt();
+    void systemCheck();
+    void opCheck();
+    void adminCheck();
     string promptUser();
     void intakeCommands();
     void commandResponse(string userCommand);
     void inspectArgs(string userCommand);
+    void clearUserCommand();
     void debug(int debugPort = 80);
     
 private:
@@ -58,7 +65,10 @@ private:
     
     string ourCommand;
     string ourResult;
+    bool isAdmin = false;
     //vector<int> portsToScan;
+    vector<string> parsedCommand;
+    vector<int> portsToScan;
     
 };
 

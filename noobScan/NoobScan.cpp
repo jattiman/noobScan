@@ -46,6 +46,9 @@ void NoobScan::initialPrompt(){
     // welcome the user
     this->welcomeText();
     
+    // correct usage check
+    this->systemCheck();
+    
     // display the directions
     ourHelper->displayDirections();
     
@@ -53,9 +56,60 @@ void NoobScan::initialPrompt(){
     this->intakeCommands();
 }
 
+void NoobScan::systemCheck(){
+    cout << "Let's make sure you won't run into any trouble.\n\n";
+    
+    // confirm user has admin rights
+    this->adminCheck();
+    
+    // check user operating system for compatibility
+    this->opCheck();
+    
+    // mentally prepare user
+    cout << "Please choose your next commands carefully ... \n\n";
+}
+
+void NoobScan::adminCheck(){
+    uid_t ourID = getuid();
+    //bool isAdmin = false;
+
+    struct passwd *userInfo = getpwuid(ourID);
+    cout << "Let's see if we can learn something today, " << userInfo->pw_gecos << " (neat username).\n\n";
+    
+    cout << "Checking admin privileges ... \n\n";
+
+    struct group *adminCheck = getgrnam("admin");
+    
+    while(*adminCheck->gr_mem != NULL) {
+        
+        if (strcmp(userInfo->pw_name, *adminCheck->gr_mem) == 0) {
+            this->isAdmin=true;
+        }
+        adminCheck->gr_mem++;
+    }
+    
+    if(this->isAdmin){
+        cout << "\tLooks like you have admin rights on this account.\n\tThat's a good thing.\n";
+    }
+    else{
+        cout <<"\tYou don't seem to be an admin.\n\tYou can try running these commands, but you will run into trouble on some scans.\n\n\tStill, feel free to use this as a helper tool, to learn more about the wonderful world of port scanning.\n\n";
+    }
+}
+
+void NoobScan::opCheck(){
+    cout << "Checking operating system...\n\n";
+    
+    #ifdef _WIN32
+        cout << "\tWindows, huh? This program is not going to run well for you. Sorry.\n\n"
+    #elif __unix__
+        cout << "\tLooks like you're using a unix system, but not OSX.\n\tCertain scans may not work for you.\n\n"
+    #elif __APPLE__
+        cout << "\tYou're using an OSX variant. That's what this program was made for, so you should be ok!\n\n";
+    #endif
+}
+
 // intakes all commands from user - main function of this class
 void NoobScan::intakeCommands(){
-    //while(ourCommand.compare("exit")){
     while(true){
         // prompt user for command
         this->ourCommand = promptUser();
@@ -109,57 +163,98 @@ void NoobScan::commandResponse(string userCommand){
 }
 
 void NoobScan::inspectArgs(string userCommand){
+    // ensure any previous commands are empty
+    clearUserCommand();
+    
+    // set up regex to match commands with what we're looking for
     smatch matches;
-    //regex commandHunter("[a-zA-Z]{1,}");
+    
+    // this searches for words only (no numbers/white space)
     regex commandHunter("\\b[^\\d\\W]+\\b");
-//    regex portHunter("[\\d]{1,}");
+    
+    // this searches for numbers only (it's how we identify ports)
     regex portHunter("\\b[0-9]{1,}");
-    //regex portHunter("\\b[^\\W\\d]+\\b");
     
-    vector<string> parsedCommand;
-    vector<int> portsToScan;
-    
+    // save the userCommand string, because we're about to demolish it
     string passOne = userCommand;
+    // string must be saved twice, because we'll be going over it twice
     string passTwo = userCommand;
     
-
-    
+    // first pass: check for word-only commands
     while(regex_search(passOne, matches, commandHunter)){
+        // for all matches
         for(auto i:matches){
-            //cout << " " << i << " ";
-            parsedCommand.push_back(i);
+            // once a match is found, push it back
+            this->parsedCommand.push_back(i);
+            // trim the found match from the string being searched
             passOne=matches.suffix().str();
         }
     }
     
-
+    // second pass: check for number-only commands (ports)
     while(regex_search(passTwo, matches, portHunter)){
+        // for all matches
         for(auto i:matches){
-            //cout << " " << i << " ";
-            portsToScan.push_back(stoi(i));
+            // once a match is found, push it to the port list (remember to convert to an int, so your program doesn't implode)
+            this->portsToScan.push_back(stoi(i));
+            // trim the found match from the string, and continue searching for matches
             passTwo=matches.suffix().str();
         }
     }
     
     // identify first argument
+    // if the first argument is empty
+    if(this->parsedCommand.empty()){
+        // inform the user, clear the string, and let them try again
+        cout << "You didn't enter a command. Try again, perhaps.";
+        userCommand.clear();
+        return;
+    }
+    // otherwise, decide if the primary command is for help, settings, or scanning
+    else if(parsedCommand[0]=="help"){
+        cout << "Asking for help?\n";
+        return;
+    }
+    else if(parsedCommand[0]=="scan"){
+        cout << "Scanning ... \n";
+        return;
+    }
+    else if(parsedCommand[0]=="settings"){
+        // open settings
+        cout << "Let's open up our settings...\n";
+        return;
+    }
+    else if(parsedCommand[0]=="exit"){
+        cout << "Exiting ... \n";
+        return;
+    }
+    else{
+        cout << "Command not recognized. Try again.\n";
+    }
     
     // confirm secondary arguments are well formed
     
     // run appropriate function based on argument results
     
-    // if potential help request
-    if(userCommand.find("help")!=string::npos){
-        // if found, send the command to HelpModule for processing
-        cout << "Asking for help?\n";
-    }
-    else if(userCommand.find("debug")!=string::npos){
-                cout << "debugging: \n";
-                debug(4767);
-    }
-    // if scan, call scanner
-    else{
-        
-    }
+//    // if potential help request
+//    if(userCommand.find("help")!=string::npos){
+//        // if found, send the command to HelpModule for processing
+//        cout << "Asking for help?\n";
+//    }
+//    else if(userCommand.find("debug")!=string::npos){
+//                cout << "debugging: \n";
+//                debug(4767);
+//    }
+//    // if scan, call scanner
+//    else{
+//
+//    }
+    return;
+}
+
+void NoobScan::clearUserCommand(){
+    this->parsedCommand.clear();
+    this->portsToScan.clear();
     return;
 }
 

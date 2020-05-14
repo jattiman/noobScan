@@ -8,13 +8,20 @@
 #include "NoobScan.h"
 
 
+
 using namespace std;
 
 int main(int argc, const char * argv[]) {
     NoobScan ourNoob;
     ourNoob.initialPrompt();
     
+//    if( getuid() !=0){
+//        cout << "Not root.\n";
+//    }
+//    else{
+//        cout << "Root\n";
+//    }
     
-    
+
     return 0;
 }
