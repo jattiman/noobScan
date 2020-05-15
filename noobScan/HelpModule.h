@@ -11,7 +11,11 @@
 #include <stdio.h>
 #include <string>
 #include <map>
+
+// file manipulation
 #include <iostream>
+#include <fstream>
+using namespace std;
 
 class HelpModule{
     
@@ -25,11 +29,15 @@ public:
     void displayOptions();
     
     // returns help results based on the user request
-    void returnInfo(std::string userString);
+    void returnInfo(string userString);
+    
+    void populateDirectory();
+    
+    void printFullDirectory();
 
     
 private:
-    std::map<std::string,std::string> helpDirectory;
+    std::map<string,string> helpDirectory;
 };
 
 #endif /* HelpModule_h */
