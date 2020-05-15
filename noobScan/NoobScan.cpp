@@ -279,6 +279,7 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
             break;
         case NoobCodes::debugRequest:
             cout << "Debug request registered\n";
+            this->debug();
             break;
         case NoobCodes::exitRequest:
             cout << "Exit request registered\n";
@@ -348,6 +349,7 @@ void NoobScan::clearUserCommand(){
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
     cout << "testing debug\n";
+    ourHelper->populateDirectory();
     
     //TODO: add try catch block to this. Maybe isolate the ourScanner output before equating it to s_addr?
 //1

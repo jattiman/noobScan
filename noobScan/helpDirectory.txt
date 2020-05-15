@@ -1,1 +1,3 @@
-test: this is a test to show that the definition function works
+a: this is a test to show that the definition function works
+c: this is a second test
+b: our third test. Right here.
