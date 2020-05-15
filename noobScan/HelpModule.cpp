@@ -28,3 +28,8 @@ void HelpModule::returnInfo(std::string userString){
     
     return;
 }
+
+void HelpModule::populateDirectory(){
+    
+    return;
+}

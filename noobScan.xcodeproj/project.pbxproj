@@ -47,6 +47,7 @@
 		4C633DD4242FE21F00B9ECC1 /* HelpModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelpModule.h; sourceTree = "<group>"; };
 		4C84553A240C6F2A005B7049 /* noobScan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = noobScan; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C84553D240C6F2A005B7049 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4CEA1ED8246E5551007CA379 /* helpDirectory.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = helpDirectory.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +96,7 @@
 				4C0637C524560598009FACC4 /* UDPScanner.h */,
 				4C246C0A246692CB00B85591 /* SYNScanner.cpp */,
 				4C246C0B246692CB00B85591 /* SYNScanner.h */,
+				4CEA1ED8246E5551007CA379 /* helpDirectory.txt */,
 			);
 			path = noobScan;
 			sourceTree = "<group>";
