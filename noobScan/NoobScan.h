@@ -14,8 +14,7 @@
 #include "TCPScanner.h"
 #include "UDPScanner.h"
 #include "SYNScanner.h"
-
-//#include "NoobCodes.h"
+#include "NoobCodes.h"
 
 // for socket address structures
 #include <netinet/in.h>
@@ -29,10 +28,10 @@
 #include <errno.h>
 #include <unistd.h>
 #include <iostream>
-// for splitting strings
+// for identifying and splitting strings
 #include <regex>
 #include <sstream>
-// admin check
+// admin privileges check
 #include <grp.h>
 #include <pwd.h>
 
@@ -52,6 +51,12 @@ public:
     void intakeCommands();
     void commandResponse(string userCommand);
     void inspectArgs(string userCommand);
+    void parseUserArgument(string userCommand);
+    NoobCodes reviewPrimaryCommand();
+    NoobCodes reviewSecondaryCommands(NoobCodes commandType);
+    void helpRequestCheck();
+    void scanRequestCheck();
+    void settingsRequestCheck();
     void clearUserCommand();
     void debug(int debugPort = 80);
     

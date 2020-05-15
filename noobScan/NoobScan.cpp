@@ -112,6 +112,7 @@ void NoobScan::opCheck(){
     #else
         cout << "\tHaven't come across your OS in a while.\n\tYou might encounter some problems with this program.\n\n";
     #endif
+    return;
 }
 
 // intakes all commands from user - main function of this class
@@ -169,6 +170,24 @@ void NoobScan::commandResponse(string userCommand){
 }
 
 void NoobScan::inspectArgs(string userCommand){
+    NoobCodes userRequest;
+    
+    // parse the argument into commands and ports
+    this->parseUserArgument(userCommand);
+    
+    // identify first argument
+    userRequest = this->reviewPrimaryCommand();
+    
+    // confirm secondary arguments are well formed
+    this->reviewSecondaryCommands(userRequest);
+    
+    // run appropriate function based on argument results
+    
+
+    return;
+}
+
+void NoobScan::parseUserArgument(string userCommand){
     // ensure any previous commands are empty
     clearUserCommand();
     
@@ -207,59 +226,116 @@ void NoobScan::inspectArgs(string userCommand){
             passTwo=matches.suffix().str();
         }
     }
-    
-    // identify first argument
+    return;
+}
+
+NoobCodes NoobScan::reviewPrimaryCommand(){
     // if the first argument is empty
     if(this->parsedCommand.empty()){
-        // inform the user, clear the string, and let them try again
+        // inform the user and let them try again
         cout << "You didn't enter a command. Try again, perhaps.\n";
-        userCommand.clear();
-        return;
+        return NoobCodes::fail;
     }
-    // otherwise, decide if the primary command is for help, settings, or scanning
+    
+    // otherwise, decide if the primary command is for help, settings, or scanning (among other things). Thanks to the power of regex, we can compare exact matches without having to worry about extra spaces and the like.
     else if(parsedCommand[0].compare("help")==0){
         cout << "Asking for help?\n";
-        return;
+        return NoobCodes::helpRequest;
     }
     else if(parsedCommand[0].compare("scan")==0){
         cout << "Scanning ... \n";
-        return;
+        return NoobCodes::scanRequest;
     }
     else if(parsedCommand[0].compare("settings")==0){
         // open settings
         cout << "Let's open up our settings...\n";
-        return;
+        return NoobCodes::settingsRequest;
     }
     else if(parsedCommand[0].compare("debug")==0){
         // run super secret debug function
         cout << "Running debug function...\n";
-        return;
+        return NoobCodes::debugRequest;
     }
     else if(parsedCommand[0].compare("exit")==0){
         cout << "Exiting ... \n";
-        return;
+        return NoobCodes::exitRequest;
     }
     else{
         cout << "Command not recognized. Try again.\n";
+        return NoobCodes::fail;
     }
+}
+
+NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
+    switch (commandType) {
+        case NoobCodes::helpRequest:
+            this->helpRequestCheck();
+            break;
+        case NoobCodes::scanRequest:
+            cout << "Scan request registered\n";
+            break;
+        case NoobCodes::settingsRequest:
+            cout << "Settings request registered\n";
+            break;
+        case NoobCodes::debugRequest:
+            cout << "Debug request registered\n";
+            break;
+        case NoobCodes::exitRequest:
+            cout << "Exit request registered\n";
+            break;
+        default:
+            cout << "No command type.\n";
+            break;
+    }
+    return NoobCodes::fail;
+}
+
+void NoobScan::helpRequestCheck(){
+    cout << "Help request registered\n";
+    // count parsedCommand entries
     
-    // confirm secondary arguments are well formed
+    // if zero secondary commands, give general help text
     
-    // run appropriate function based on argument results
+    // if 1, call the help module to give definitions/help based on that term
     
-//    // if potential help request
-//    if(userCommand.find("help")!=string::npos){
-//        // if found, send the command to HelpModule for processing
-//        cout << "Asking for help?\n";
-//    }
-//    else if(userCommand.find("debug")!=string::npos){
-//                cout << "debugging: \n";
-//                debug(4767);
-//    }
-//    // if scan, call scanner
-//    else{
-//
-//    }
+    // if more than 1, inform the user that only the first argument is being used
+    
+    return;
+}
+
+void NoobScan::scanRequestCheck(){
+    cout << "Scan request registered\n";
+    // count parsedCommand entries
+    
+    // If total (including scan request) is more than 2
+        // check the last command for special port selection
+        // if 3 is a special and 2 is a specific scan type, send to scanner function
+    
+    // If total is 2
+        // confirm scan type is well formed,
+        // confirm that there are portsToScan (at least 1 port is entered)
+        // and send scan to scanner function (tcp/udp)
+    
+    // If total is less than 2, the command is malformed
+    // We COULD prompt the user to enter a scan type ...
+    
+    return;
+}
+
+void NoobScan::settingsRequestCheck(){
+    cout << "Settings request registered\n";
+    // count parsedCommand entries
+    
+    // if extra arguments present (3+), inform the user and only go on first additional argument
+    
+    // if portsToScan is not empty, inform the user it will be ignored/discarded
+    
+    // if no additional entries (1 arg), take to main settings menu
+    
+    // if additional entry (2 arg), check to see if it belongs to a sub-page on settings, and take the user there
+    
+    
+    
     return;
 }
 
@@ -269,6 +345,7 @@ void NoobScan::clearUserCommand(){
     return;
 }
 
+// code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
     cout << "testing debug\n";
     
@@ -326,5 +403,18 @@ void NoobScan::debug(int debugPort){
     //        cout << item << endl;
     //    }
 
+    //    // if potential help request
+    //    if(userCommand.find("help")!=string::npos){
+    //        // if found, send the command to HelpModule for processing
+    //        cout << "Asking for help?\n";
+    //    }
+    //    else if(userCommand.find("debug")!=string::npos){
+    //                cout << "debugging: \n";
+    //                debug(4767);
+    //    }
+    //    // if scan, call scanner
+    //    else{
+    //
+    //    }
     
 }
