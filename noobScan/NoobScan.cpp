@@ -350,6 +350,9 @@ void NoobScan::clearUserCommand(){
 void NoobScan::debug(int debugPort){
     cout << "testing debug\n";
     ourHelper->populateDirectory();
+    ourHelper->returnInfo("1592");
+    ourHelper->returnInfo("nondictionary term");
+    ourHelper->returnInfo("15number alpha");
     
     //TODO: add try catch block to this. Maybe isolate the ourScanner output before equating it to s_addr?
 //1
