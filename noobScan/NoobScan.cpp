@@ -178,6 +178,10 @@ void NoobScan::inspectArgs(string userCommand){
     // identify first argument
     userRequest = this->reviewPrimaryCommand();
     
+    if(userRequest==NoobCodes::fail){
+        return;
+    }
+    
     // confirm secondary arguments are well formed
     this->reviewSecondaryCommands(userRequest);
     
@@ -233,7 +237,7 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
     // if the first argument is empty
     if(this->parsedCommand.empty()){
         // inform the user and let them try again
-        cout << "You didn't enter a command. Try again, perhaps.\n";
+        cout << "You didn't enter a command. Try again, perhaps?\n";
         return NoobCodes::fail;
     }
     
@@ -257,7 +261,6 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
         return NoobCodes::debugRequest;
     }
     else if(parsedCommand[0].compare("exit")==0){
-        cout << "Exiting ... \n";
         return NoobCodes::exitRequest;
     }
     else{
@@ -272,17 +275,16 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
             this->helpRequestCheck();
             break;
         case NoobCodes::scanRequest:
-            cout << "Scan request registered\n";
+            this->scanRequestCheck();
             break;
         case NoobCodes::settingsRequest:
-            cout << "Settings request registered\n";
+            this->settingsRequestCheck();
             break;
         case NoobCodes::debugRequest:
-            cout << "Debug request registered\n";
             this->debug();
             break;
         case NoobCodes::exitRequest:
-            cout << "Exit request registered\n";
+            cout << "Exiting...\n";
             break;
         default:
             cout << "No command type.\n";
@@ -292,8 +294,28 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
 }
 
 void NoobScan::helpRequestCheck(){
-    cout << "Help request registered\n";
+    size_t parsedCount=0;
+    
     // count parsedCommand entries
+    parsedCount=parsedCommand.size();
+    
+    switch (parsedCount) {
+        // if there is only 1 item in the command
+        case 1:
+            // check to see if there are port numbers to define
+            if(portsToScan.size()>0){
+                this->ourHelper->returnInfo(portsToScan[0]);
+            }
+            // if no port numbers, give user general help info
+            else{
+                cout << "General help options\n";
+            }
+            break;
+        case 2:
+            this->ourHelper->returnInfo(parsedCommand[1]);
+        default:
+            break;
+    }
     
     // if zero secondary commands, give general help text
     

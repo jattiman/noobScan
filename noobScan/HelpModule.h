@@ -30,10 +30,17 @@ public:
     
     // returns help results based on the user request
     void returnInfo(string userString);
+    void returnInfo(int userNum);
     
     void populateDirectory();
     
     void printFullDirectory();
+    
+    void promptToAdd(string userWord);
+    
+    void addToDictionary();
+    
+    string getNewEntry();
 
     
 private:

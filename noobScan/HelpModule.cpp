@@ -8,6 +8,8 @@
 #include "HelpModule.h"
 
 HelpModule::HelpModule(){
+    // populate the directory
+    populateDirectory();
     return;
 }
 
@@ -24,7 +26,7 @@ void HelpModule::displayOptions(){
 }
 
 // returns help results based on the user request
-void HelpModule::returnInfo(std::string userString){
+void HelpModule::returnInfo(string userString){
     if(helpDirectory.count(userString)!=0){
         cout << "\t" << helpDirectory.find(userString)->first << ": ";
         cout << helpDirectory.find(userString)->second << endl << endl;
@@ -34,8 +36,39 @@ void HelpModule::returnInfo(std::string userString){
         cout << "\tPorts typically number from 0 to 65535.\n\n";
     }
     else{
-        cout << "\t" << userString << " is an undefined term! Would you like to add it to the dictionary?\n\n";
-        //TODO: dictionary add feature
+//        char userOption;
+//        cout << "\t" << userString << " is an undefined term! Would you like to add it to the dictionary? (y/n) \n\n";
+//        cin >> userOption;
+//        if(userOption=='y'){
+//            addToDictionary();
+//        }
+        this->promptToAdd(userString);
+    }
+    return;
+}
+
+// returns help results based on the user request
+void HelpModule::returnInfo(int userNum){
+    // create placeholder string for int conversion
+    string userString = to_string(userNum);
+    
+    if(helpDirectory.count(userString)!=0){
+        cout << "\t" << helpDirectory.find(userString)->first << ": ";
+        cout << helpDirectory.find(userString)->second << endl << endl;
+    }
+    else if(isdigit(userString[0])){
+        cout << "\t" << userString << " is undefined. It looks like you may be searching for port. If so, this port is unassigned.\n";
+        cout << "\tPorts typically number from 0 to 65535.\n\n";
+    }
+    else{
+//        char userOption;
+//        cout << "\t" << userString << " is an undefined term! Would you like to add it to the dictionary? (y/n) \n\n";
+//        cin >> userOption;
+//        if(userOption=='y'){
+//            addToDictionary();
+//        }
+        
+        this->promptToAdd(userString);
     }
     return;
 }
@@ -71,6 +104,8 @@ void HelpModule::populateDirectory(){
     
 //    cout << "Dictionary updated successfully.\n";
     //this->printFullDirectory();
+    // close your file
+    ourFile.close();
     return;
 }
 
@@ -80,5 +115,76 @@ void HelpModule::printFullDirectory(){
     for(auto terms : helpDirectory){
         // print the dictionary term and definition
         cout << terms.first << ": " << terms.second << endl;
+    }
+    return;
+}
+
+void HelpModule::promptToAdd(string userWord){
+    char userChoice;
+    cout << "\t" << userWord << " is an undefined term! Would you like to add it to the dictionary? (y/n) \n\n";
+    cin >> userChoice;
+    if(userChoice=='y'){
+        addToDictionary();
+    }
+    return;
+}
+
+void HelpModule::addToDictionary(){
+    // create holders for our file and new word entry
+    ofstream ourFile;
+    string ourEntry;
+    
+    // prompt user to input new entry - keep attempting if they make a mistake
+    do{
+        ourEntry=getNewEntry();
+    }while(ourEntry.compare("error")!=0);
+    
+    // if the user wanted to redefine a term, cancel (not allowed)
+    if(ourEntry.compare("cancel")==0){
+        return;
+    }
+    // otherwise, add the dictionary item to the end of the file
+    else{
+        //ourFile.open("helpDirectory.txt", ios::out | ios::app);
+        ourFile.open("helpDirectory.txt", ios::app);
+        if(ourFile.good()){
+            ourFile << ourEntry;
+            ourFile.close();
+        }
+    }
+    return;
+}
+
+string HelpModule::getNewEntry(){
+    string ourWord;
+    string ourDefinition;
+    string newEntry;
+    
+    char userAnswer;
+    
+    // get the word to define
+    cout << "Enter the word you want to define:\n\t";
+    getline(cin,ourWord);
+    //TODO: work on getline issues - move map count term to prompt
+    // check to confirm the word is not already defined
+    if(helpDirectory.count(ourWord)>0){
+        cout << "This word is already defined. Sorry - these words are set in stone.\n";
+        return "cancel";
+    }
+    
+    // get the definition
+    cout << "Enter the definition for your word:\n\t";
+    getline(cin,ourDefinition);
+    newEntry=ourWord+ourDefinition;
+    
+    cout << "Are you sure you want to input the following entry? (y/n) \n\t" << newEntry << endl;
+    
+    cin >> userAnswer;
+    
+    if(userAnswer=='y'){
+        return newEntry;
+    }
+    else{
+        return "error";
     }
 }
