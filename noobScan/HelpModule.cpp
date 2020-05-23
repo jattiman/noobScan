@@ -44,7 +44,9 @@ void HelpModule::displayOptions(){
         << endl;
     
     // settings overview
-    cout << "Looking to change settings? Input \"settings\" instead of \"help\" at the next prompt. A list of settings that you can manipulate will be displayed."
+    cout << "Looking to change settings? Input \"settings\" instead of \"help\" at the next prompt. A list of settings that you can manipulate will be displayed:\n"
+        << "\toutput: toggles output to screen or file\n"
+        << "\tdelay: allows you to set the delay time between scanning ports"
         << endl;
     
     return;
@@ -61,7 +63,7 @@ void HelpModule::returnInfo(string userString){
             << "\tPorts typically number from 0 to 65535.\n" << endl;
     }
     else{
-        cout << "\t" << userString << " is an undefined term! Want to add items to the dictionary? You can do that manually through settings.\n\n";
+        cout << "\t" << userString << " is an undefined term! Want to add items to the dictionary? You can do that manually through settings.\n" << endl;
     }
     return;
 }
@@ -141,26 +143,33 @@ void HelpModule::promptToAdd(){
 }
 
 void HelpModule::addToDictionary(){
-    // create holders for our file and new word entry
-    ofstream ourFile;
+    // create holders for new word entry
     string ourEntry;
     
     // prompt user to input new entry - keep attempting if they make a mistake
-    do{
+    //do{
         ourEntry=getNewEntry();
-    }while(ourEntry.compare("error")!=0);
+    //}while(ourEntry.compare("error")!=0);
     
     // if the user wanted to redefine a term, cancel (not allowed)
     if(ourEntry.compare("cancel")==0){
+        cout << "We're cancelling your request. Better luck next time!" << endl;
         return;
     }
     // otherwise, add the dictionary item to the end of the file
     else{
+        // create file holder
+        ofstream ourFile;
+        // open file to append
         //ourFile.open("helpDirectory.txt", ios::out | ios::app);
         ourFile.open("helpDirectory.txt", ios::app);
+        // confirm no issue with opening
         if(ourFile.good()){
             ourFile << ourEntry;
             ourFile.close();
+        }
+        else{
+            cout << "File did not open correctly." << endl;
         }
     }
     return;
@@ -180,21 +189,23 @@ string HelpModule::getNewEntry(){
     char userAnswer;
     
     // clear the buffer
-    cin.ignore();
+    //cin.ignore();
     
     // get the word to define
-    cout << "Enter the word you want to define:\n\t";
+    cout << "Enter the word you want to define:" << endl;
+    
     getline(cin,ourWord);
         
     //TODO: work on getline issues - move map count term to prompt
     // check to confirm the word is not already defined
     if(helpDirectory.count(ourWord)>0){
         cout << "This word is already defined. Sorry - these words are set in stone.\n";
+        ourWord.clear();
         return "cancel";
     }
     
     // get the definition
-    cout << "Enter the definition for " << ourWord <<":\n\t";
+    cout << "Enter the definition for " << ourWord <<":" << endl;
     
     getline(cin,ourDefinition);
     
@@ -208,6 +219,9 @@ string HelpModule::getNewEntry(){
         return newEntry;
     }
     else{
+        ourWord.clear();
+        ourDefinition.clear();
+        newEntry.clear();
         return "cancel";
     }
 }

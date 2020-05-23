@@ -375,7 +375,9 @@ void NoobScan::clearUserCommand(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
-//    cout << "testing debug\n";
+
+    ourHelper->addToDictionary();
+    //    cout << "testing debug\n";
 //    ourHelper->populateDirectory();
 //    ourHelper->returnInfo("1592");
 //    ourHelper->returnInfo("nondictionary term");
@@ -404,7 +406,7 @@ void NoobScan::debug(int debugPort){
     //ourTCPScan->runScan(debugPort);
 //    vector<int> testVector{80,120,4767};
 //    ourTCPScan->runMultiScan(testVector);
-    ourScanner->getHostMac();
+//    ourScanner->getHostMac();
 //    ourScanner->debug();
     
             // parse the command string - regex used to
