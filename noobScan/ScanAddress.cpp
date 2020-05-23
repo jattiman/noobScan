@@ -99,19 +99,24 @@ void ScanAddress::getHostMac(){
     struct ifaddrs *if_addrs = NULL;
     struct ifaddrs *if_addr = NULL;
     
+    // holder for the mac address
+    unsigned char mac[6];
+    
     // populate structures to hold mac address, transfer accordingly
     if (0 == getifaddrs(&if_addrs)) {
       for (if_addr = if_addrs; if_addr != NULL; if_addr = if_addr->ifa_next){
           if (strcmp(if_addr->ifa_name,"en0")==0 && if_addr->ifa_addr != NULL && if_addr->ifa_addr->sa_family == AF_LINK){
               struct sockaddr_dl* sdl = (struct sockaddr_dl *)if_addr->ifa_addr;
-              // Why 6? Digital high five if you enter in the chat before I explain
-              unsigned char mac[6];
+//              // holder for the mac address
+//              unsigned char mac[6];
               if (6 == sdl->sdl_alen) {
                   memcpy(mac, LLADDR(sdl), sdl->sdl_alen);
-                  // format mac address appropriately
+                  // format MAC address appropriately. Note: %02x forces at least 2 digits to appear for each entry in the MAC address. This is for both formatting and the leading 0.
+                  
                   printf("mac  : %02x:%02x:%02x:%02x:%02x:%02x\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+                  
                   // for debug: see what the address looks like without format
-                  cout << "Also: " << mac[0] << mac[1] << mac[2] << mac[3] << mac[4] << mac[5] << endl;
+                  cout << "Also: " << mac[0] << ":" << mac[1] << ":"  << mac[2] << ":" << mac[3] << ":"  << mac[4] << ":"  << mac[5] << endl;
               }
           }
           
@@ -124,6 +129,7 @@ void ScanAddress::getHostMac(){
         printf("getifaddrs() failed with errno =  %i %s\n", errno, strerror(errno));
         
     }
+    return;
 }
 
 void ScanAddress::debug(){

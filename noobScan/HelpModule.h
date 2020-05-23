@@ -32,12 +32,16 @@ public:
     void returnInfo(string userString);
     void returnInfo(int userNum);
     
+    // fill in the dictionary from file
     void populateDirectory();
     
+    // print the entire dictionary
     void printFullDirectory();
     
-    void promptToAdd(string userWord);
+    // prompt user to add entry
+    void promptToAdd();
     
+    // add entry to dictionary
     void addToDictionary();
     
     string getNewEntry();

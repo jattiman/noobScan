@@ -9,10 +9,15 @@
 #include "NoobScan.h"
 
 NoobScan::NoobScan(){
+    // instantiate member objects
     this->ourHelper = new HelpModule();
     this->userRecorder = new Recorder();
     this->ourScanner = new ScanAddress();
     this->ourTCPScan = new TCPScanner();
+    this->ourUDPScan = new UDPScanner();
+    this->ourSYNScan = new SYNScanner();
+    
+    // clear any noise in out command strings
     this->ourResult.clear();
     this->ourCommand.clear();
 }
@@ -308,7 +313,7 @@ void NoobScan::helpRequestCheck(){
             }
             // if no port numbers, give user general help info
             else{
-                cout << "General help options\n";
+                this->ourHelper->displayOptions();
             }
             break;
         case 2:
@@ -370,11 +375,11 @@ void NoobScan::clearUserCommand(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
-    cout << "testing debug\n";
-    ourHelper->populateDirectory();
-    ourHelper->returnInfo("1592");
-    ourHelper->returnInfo("nondictionary term");
-    ourHelper->returnInfo("15number alpha");
+//    cout << "testing debug\n";
+//    ourHelper->populateDirectory();
+//    ourHelper->returnInfo("1592");
+//    ourHelper->returnInfo("nondictionary term");
+//    ourHelper->returnInfo("15number alpha");
     
     //TODO: add try catch block to this. Maybe isolate the ourScanner output before equating it to s_addr?
 //1
@@ -399,7 +404,7 @@ void NoobScan::debug(int debugPort){
     //ourTCPScan->runScan(debugPort);
 //    vector<int> testVector{80,120,4767};
 //    ourTCPScan->runMultiScan(testVector);
-//    ourScanner->getHostMac();
+    ourScanner->getHostMac();
 //    ourScanner->debug();
     
             // parse the command string - regex used to

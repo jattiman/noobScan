@@ -41,26 +41,63 @@ using namespace std;
 class NoobScan{
 public:
     NoobScan();
+    
+    // print the program text logo
     void printLogo();
+    
+    // welcome the user
     void welcomeText();
+    
+    // display the initial prompt
     void initialPrompt();
+    
+    // confirm the user has the proper system settings for all features of this program
     void systemCheck();
+    
+    // confirm user has the right operating system
     void opCheck();
+    
+    // confirm user is running admin privileges
     void adminCheck();
+    
+    // prompt user for their input
     string promptUser();
+    
+    // take in user commands
     void intakeCommands();
+    
+    // respond to the user command
     void commandResponse(string userCommand);
+    
+    // inspect user command arguments
     void inspectArgs(string userCommand);
+    
+    // parse user command arguments
     void parseUserArgument(string userCommand);
+    
+    // review first command
     NoobCodes reviewPrimaryCommand();
+    
+    // review sub (secondary) commands
     NoobCodes reviewSecondaryCommands(NoobCodes commandType);
+    
+    // respond to help requests
     void helpRequestCheck();
+    
+    // respond to scan requests
     void scanRequestCheck();
+    
+    // respond to settings requests
     void settingsRequestCheck();
+    
+    // clear commands for next round of questions
     void clearUserCommand();
+    
+    // debug (for testing purposes)
     void debug(int debugPort = 80);
     
 private:
+    
     HelpModule *ourHelper;
     Recorder *userRecorder;
     ScanAddress *ourScanner;
@@ -68,11 +105,19 @@ private:
     UDPScanner *ourUDPScan;
     SYNScanner *ourSYNScan;
     
+    // string holding user command
     string ourCommand;
+    
+    // string holding result of an action
     string ourResult;
+    
+    // bool reflecting if user has admin rights to their system
     bool isAdmin = false;
-    //vector<int> portsToScan;
+    
+    // vector holding the string-based user commands
     vector<string> parsedCommand;
+    
+    // vector holding port numbers to scan from user commands
     vector<int> portsToScan;
     
 };

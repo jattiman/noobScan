@@ -15,13 +15,38 @@ HelpModule::HelpModule(){
 
 // displays opening prompt for the user to select info for
 void HelpModule::displayDirections(){
-    cout << "Type your command, or\n\t'help' for directions\n\t'settings' to adjust settings\n\t'exit' to exit\n";
+    cout << "Type your command, or\n"
+        << "\t'help' for directions\n"
+        << "\t'settings' to adjust settings\n"
+        << "\t'exit' to exit\n"
+        << endl;
     return;
 }
 
 // tells the user everything they can say
 void HelpModule::displayOptions(){
-    cout << "Detailed commands: " << std::endl;
+    
+    // general help commands overview
+    cout << "\nGeneral help commands overview: \n"
+        << "\thelp [term]: will give you a definition of a term.\n"
+        << "\t\tExample:\n\t\t\thelp port\n\n"
+        << "\thelp [scan type]: will tell you how to format your specific scan requests.\n"
+        << "\t\tExample:\n\t\t\thelp tcp\n\n\thelp [port number]: will give you general information about a port\n"
+        << "\t\tExample:\n\t\t\thelp 22\n"
+        << endl;
+    
+    // scanning overview
+    cout << "General scanning commands overview:\n"
+        << "\tLooking to scan? Input \"scan [scan type] [scanning destination] [ports or port types]\" at the next prompt.\n"
+        << "\t\tExample:\n\t\t\tscan tcp www.google.com 22 4747 88 (to TCP scan www.google.com at ports 22, 4747, and 88.\n\n"
+        << "\t\tExample:\n\t\t\tscan syn chat (to syn scan common \"chat\" application ports (IRC, Discord, etc) on 127.0.0.1.\n\n"
+        << "\t\tNote: inputting the IP address of your destination is always preferred (plays nicer).\n"
+        << endl;
+    
+    // settings overview
+    cout << "Looking to change settings? Input \"settings\" instead of \"help\" at the next prompt. A list of settings that you can manipulate will be displayed."
+        << endl;
+    
     return;
 }
 
@@ -32,17 +57,11 @@ void HelpModule::returnInfo(string userString){
         cout << helpDirectory.find(userString)->second << endl << endl;
     }
     else if(isdigit(userString[0])){
-        cout << "\t" << userString << " is undefined. It looks like you may be searching for port. If so, this port is unassigned.\n";
-        cout << "\tPorts typically number from 0 to 65535.\n\n";
+        cout << "\t" << userString << " is undefined. It looks like you may be searching for port. If so, this port is unassigned.\n"
+            << "\tPorts typically number from 0 to 65535.\n" << endl;
     }
     else{
-//        char userOption;
-//        cout << "\t" << userString << " is an undefined term! Would you like to add it to the dictionary? (y/n) \n\n";
-//        cin >> userOption;
-//        if(userOption=='y'){
-//            addToDictionary();
-//        }
-        this->promptToAdd(userString);
+        cout << "\t" << userString << " is an undefined term! Want to add items to the dictionary? You can do that manually through settings.\n\n";
     }
     return;
 }
@@ -52,23 +71,19 @@ void HelpModule::returnInfo(int userNum){
     // create placeholder string for int conversion
     string userString = to_string(userNum);
     
+    // if the term is in the dictionary, print it
     if(helpDirectory.count(userString)!=0){
         cout << "\t" << helpDirectory.find(userString)->first << ": ";
         cout << helpDirectory.find(userString)->second << endl << endl;
     }
+    // if the term isn't in the dictionary, but starts with a number, let them know it's an undefined port
     else if(isdigit(userString[0])){
         cout << "\t" << userString << " is undefined. It looks like you may be searching for port. If so, this port is unassigned.\n";
         cout << "\tPorts typically number from 0 to 65535.\n\n";
     }
+    // otherwise, if it's not in the dictionary, and not a port number.
     else{
-//        char userOption;
-//        cout << "\t" << userString << " is an undefined term! Would you like to add it to the dictionary? (y/n) \n\n";
-//        cin >> userOption;
-//        if(userOption=='y'){
-//            addToDictionary();
-//        }
-        
-        this->promptToAdd(userString);
+        cout << "\t" << userString << " is an undefined term! Want to add items to the dictionary? You can do that manually through settings.\n\n";
     }
     return;
 }
@@ -92,18 +107,14 @@ void HelpModule::populateDirectory(){
     // iterate through the file, and assign definitions to map accordingly
     while(getline(ourFile, fileLine)){
         // instead of using regex (robust), we'll manually hunt for the delimiter and split each file line into word and definition
-//        cout << fileLine << endl;
         tokenHunter=fileLine.find(':');
         dictionaryTerm = fileLine.substr(0,tokenHunter);
         definition = fileLine.substr(tokenHunter+2,string::npos);
-//        cout << dictionaryTerm << ":" << definition << endl;
         
         // add this to the map
         helpDirectory[dictionaryTerm] = definition;
     }
     
-//    cout << "Dictionary updated successfully.\n";
-    //this->printFullDirectory();
     // close your file
     ourFile.close();
     return;
@@ -119,9 +130,9 @@ void HelpModule::printFullDirectory(){
     return;
 }
 
-void HelpModule::promptToAdd(string userWord){
+void HelpModule::promptToAdd(){
     char userChoice;
-    cout << "\t" << userWord << " is an undefined term! Would you like to add it to the dictionary? (y/n) \n\n";
+    cout << "Would you like to add a term to the dictionary? (y/n) \n\n";
     cin >> userChoice;
     if(userChoice=='y'){
         addToDictionary();
@@ -156,15 +167,25 @@ void HelpModule::addToDictionary(){
 }
 
 string HelpModule::getNewEntry(){
+    // string holder for new dictionary word
     string ourWord;
+    
+    // string holder for dictionary definition
     string ourDefinition;
+    
+    // new entry string
     string newEntry;
     
+    // holder for user answer
     char userAnswer;
+    
+    // clear the buffer
+    cin.ignore();
     
     // get the word to define
     cout << "Enter the word you want to define:\n\t";
     getline(cin,ourWord);
+        
     //TODO: work on getline issues - move map count term to prompt
     // check to confirm the word is not already defined
     if(helpDirectory.count(ourWord)>0){
@@ -173,8 +194,10 @@ string HelpModule::getNewEntry(){
     }
     
     // get the definition
-    cout << "Enter the definition for your word:\n\t";
+    cout << "Enter the definition for " << ourWord <<":\n\t";
+    
     getline(cin,ourDefinition);
+    
     newEntry=ourWord+ourDefinition;
     
     cout << "Are you sure you want to input the following entry? (y/n) \n\t" << newEntry << endl;
@@ -185,6 +208,6 @@ string HelpModule::getNewEntry(){
         return newEntry;
     }
     else{
-        return "error";
+        return "cancel";
     }
 }
