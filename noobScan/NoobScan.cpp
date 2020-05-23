@@ -62,7 +62,7 @@ void NoobScan::initialPrompt(){
 }
 
 void NoobScan::systemCheck(){
-    cout << "Let's make sure you won't run into any trouble, ";
+    cout << "Before we get started, let's make sure you won't run into any trouble ... ";
     
     // confirm user has admin rights
     this->adminCheck();
@@ -303,12 +303,19 @@ void NoobScan::helpRequestCheck(){
     
     // count parsedCommand entries
     parsedCount=parsedCommand.size();
-    
+        
     switch (parsedCount) {
-        // if there is only 1 item in the command
+        // if there are 0 non-port items in the command
         case 1:
             // check to see if there are port numbers to define
-            if(portsToScan.size()>0){
+            // if multiple
+            if(portsToScan.size()>1){
+                // display warning, and define only the first
+                this->ourHelper->helpWarning();
+                this->ourHelper->returnInfo(portsToScan[0]);
+            }
+            // if only 1 port, define that port
+            else if(portsToScan.size()>0){
                 this->ourHelper->returnInfo(portsToScan[0]);
             }
             // if no port numbers, give user general help info
@@ -316,20 +323,30 @@ void NoobScan::helpRequestCheck(){
                 this->ourHelper->displayOptions();
             }
             break;
+        // if 1 non-port item is present, return info on the parsed command
         case 2:
+            // if there are also ports requested, display warning
+            if(portsToScan.size()>0){
+                this->ourHelper->helpWarning();
+            }
+            // define the non-port item requested
             this->ourHelper->returnInfo(parsedCommand[1]);
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+            this->ourHelper->helpWarning();
+            this->ourHelper->returnInfo(parsedCommand[1]);
+            break;
         default:
             break;
     }
     
-    // if zero secondary commands, give general help text
-    
-    // if 1, call the help module to give definitions/help based on that term
-    
-    // if more than 1, inform the user that only the first argument is being used
-    
     return;
 }
+
+
 
 void NoobScan::scanRequestCheck(){
     cout << "Scan request registered\n";

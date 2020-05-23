@@ -45,6 +45,9 @@ public:
     void addToDictionary();
     
     string getNewEntry();
+    
+    // give a warning to the user if they're asking too much of the help function
+    void helpWarning();
 
     
 private:

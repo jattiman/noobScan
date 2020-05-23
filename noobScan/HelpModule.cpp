@@ -46,7 +46,8 @@ void HelpModule::displayOptions(){
     // settings overview
     cout << "Looking to change settings? Input \"settings\" instead of \"help\" at the next prompt. A list of settings that you can manipulate will be displayed:\n"
         << "\toutput: toggles output to screen or file\n"
-        << "\tdelay: allows you to set the delay time between scanning ports"
+        << "\tdelay: allows you to set the delay time between scanning ports\n"
+        << "\tdictionary: allows you to add items or review the dictionary"
         << endl;
     
     return;
@@ -175,6 +176,7 @@ void HelpModule::addToDictionary(){
     return;
 }
 
+//TODO: figure out why this triggers "You didn't enter a command. Try again" when it returns.
 string HelpModule::getNewEntry(){
     // string holder for new dictionary word
     string ourWord;
@@ -187,10 +189,7 @@ string HelpModule::getNewEntry(){
     
     // holder for user answer
     char userAnswer;
-    
-    // clear the buffer
-    //cin.ignore();
-    
+        
     // get the word to define
     cout << "Enter the word you want to define:" << endl;
     
@@ -199,7 +198,7 @@ string HelpModule::getNewEntry(){
     //TODO: work on getline issues - move map count term to prompt
     // check to confirm the word is not already defined
     if(helpDirectory.count(ourWord)>0){
-        cout << "This word is already defined. Sorry - these words are set in stone.\n";
+        cout << "This word is already defined. Sorry - these words are set in stone." << endl;
         ourWord.clear();
         return "cancel";
     }
@@ -224,4 +223,9 @@ string HelpModule::getNewEntry(){
         newEntry.clear();
         return "cancel";
     }
+}
+
+void HelpModule::helpWarning(){
+    cout << "We noticed you're asking for help for more than 1 term. We'll only help out with 1 term at a time, so please ask for each term individually. When multiple terms are requested, word-based terms (non-ports) are favored." << endl;
+    return;
 }
