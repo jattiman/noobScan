@@ -147,25 +147,27 @@ void HelpModule::addToDictionary(){
     // create holders for new word entry
     string ourEntry;
     
-    // prompt user to input new entry - keep attempting if they make a mistake
-    //do{
-        ourEntry=getNewEntry();
-    //}while(ourEntry.compare("error")!=0);
+    // prompt user to input new entry
+    ourEntry=getNewEntry();
     
-    // if the user wanted to redefine a term, cancel (not allowed)
+    // if the user wanted to redefine a term, their entry would have been replaced with "cancel". Inform them of their error and exit.
     if(ourEntry.compare("cancel")==0){
         cout << "We're cancelling your request. Better luck next time!" << endl;
         return;
     }
+    
     // otherwise, add the dictionary item to the end of the file
     else{
         // create file holder
         ofstream ourFile;
+        
         // open file to append
         //ourFile.open("helpDirectory.txt", ios::out | ios::app);
         ourFile.open("helpDirectory.txt", ios::app);
+        
         // confirm no issue with opening
         if(ourFile.good()){
+            // append the new word to the dictionary
             ourFile << ourEntry;
             ourFile.close();
         }
@@ -195,7 +197,6 @@ string HelpModule::getNewEntry(){
     
     getline(cin,ourWord);
         
-    //TODO: work on getline issues - move map count term to prompt
     // check to confirm the word is not already defined
     if(helpDirectory.count(ourWord)>0){
         cout << "This word is already defined. Sorry - these words are set in stone." << endl;
@@ -208,7 +209,7 @@ string HelpModule::getNewEntry(){
     
     getline(cin,ourDefinition);
     
-    newEntry=ourWord+ourDefinition;
+    newEntry=ourWord+": "+ourDefinition;
     
     cout << "Are you sure you want to input the following entry? (y/n) \n\t" << newEntry << endl;
     
