@@ -171,6 +171,7 @@ void NoobScan::commandResponse(string userCommand){
     
     // update result string with answer to request
     
+    
     return;
 }
 
@@ -208,6 +209,8 @@ void NoobScan::parseUserArgument(string userCommand){
     
     // this searches for numbers only (it's how we identify ports)
     regex portHunter("\\b[0-9]{1,}");
+    
+    
     
     // save the userCommand string, because we're about to demolish it
     string passOne = userCommand;
@@ -350,7 +353,29 @@ void NoobScan::helpRequestCheck(){
 
 void NoobScan::scanRequestCheck(){
     cout << "Scan request registered\n";
+    
+    // holder for scan type
+    NoobCodes scanType;
+    
     // count parsedCommand entries
+    size_t parsedCount=0;
+    parsedCount=parsedCommand.size();
+    
+    // if at least 3 arguments (scan [scan type] [destination]), the command is most likely sufficiently formed
+    if(parsedCount>=3){
+        // check scan type
+        scanType=checkScanType();
+        
+        // confirm sub arguments called correctly
+        
+        // run scan
+        
+    }
+    // if less than 3 arguments, the command is malformed
+    else{
+        cout << "It looks like you might be having some trouble formulating your scan. Please follow the scan directions:" << endl;
+        this->ourHelper->returnInfo("scan");
+    }
     
     // If total (including scan request) is more than 2
         // check the last command for special port selection
@@ -384,6 +409,31 @@ void NoobScan::settingsRequestCheck(){
     return;
 }
 
+NoobCodes NoobScan::checkScanType(){
+    string ourScanType = parsedCommand[1];
+    if(ourScanType=="tcp"){
+        cout << "You're requesting a TCP scan\n";
+        return NoobCodes::tcp;
+    }
+    else if(ourScanType=="udp"){
+        cout << "You're requesting a UDP scan\n";
+        return NoobCodes::udp;
+    }
+    else if(ourScanType=="syn"){
+        cout << "You're requesting a SYN scan\n";
+        return NoobCodes::syn;
+    }
+    else if(ourScanType=="fin"){
+        cout << "You're requesting a FIN scan\n";
+        return NoobCodes::fin;
+    }
+    else{
+        cout << "Something went wrong ... \n";
+        return NoobCodes::fail;
+    }
+}
+
+// clears the user command
 void NoobScan::clearUserCommand(){
     this->parsedCommand.clear();
     this->portsToScan.clear();

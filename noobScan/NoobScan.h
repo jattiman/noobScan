@@ -90,6 +90,8 @@ public:
     // respond to settings requests
     void settingsRequestCheck();
     
+    NoobCodes checkScanType();
+    
     // clear commands for next round of questions
     void clearUserCommand();
     
@@ -119,6 +121,9 @@ private:
     
     // vector holding port numbers to scan from user commands
     vector<int> portsToScan;
+    
+    // string holding the IP address from the user command
+    string ipToScan;
     
 };
 
