@@ -123,7 +123,7 @@ private:
     vector<int> portsToScan;
     
     // string holding the IP address from the user command
-    string ipToScan;
+    vector<string> ipToScan;
     
 };
 

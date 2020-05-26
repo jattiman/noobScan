@@ -205,17 +205,37 @@ void NoobScan::parseUserArgument(string userCommand){
     smatch matches;
     
     // this searches for words only (no numbers/white space)
+    /* breakdown of Regex info, for those curious:
+    \\b
+     [^\\d\\W]+
+     \\b
+    */
     regex commandHunter("\\b[^\\d\\W]+\\b");
     
     // this searches for numbers only (it's how we identify ports)
-    regex portHunter("\\b[0-9]{1,}");
+    //regex portHunter("\\b[0-9]{1,}");
+    /* breakdown of Regex info, for those curious:
+     [^\\.] Ensure number isn't preceeded by a '.' to avoid IP confusion
+     \\b[0-9]+ look for numbers 0-9 (as many in a row as you'd like) at the start
+     \\b(?!\\.) Ensure the number doesn't end with a '.' to avoid IP confusion
+     */
+    regex portHunter("[^\\.]\\b[0-9]+\\b(?!\\.)");
     
+    // This searches for our IP address, if it's there (if not, we assume a URL is being used)
+    /* breakdown of Regex info, for those curious:
+    R makes the regex more readable (raw string). Using it here to show variety. Note that we don't need to use double escape characters (\\) with this mode.
+     (\d{1,3}\. look for any number (from 1-3 in a row) followed by a '.'
+     \d{1,3}\. same
+     \d{1,3}\. same
+     \d{1,3}) look for any number (from 1-3 in a row), but without a
+     '.' after. This closes the IP address in IPV4
+    */
+    regex ipHunter(R"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
     
-    
-    // save the userCommand string, because we're about to demolish it
+    // save the userCommand string, because we're about to demolish it with 3 passes
     string passOne = userCommand;
-    // string must be saved twice, because we'll be going over it twice
     string passTwo = userCommand;
+    string passThree = userCommand;
     
     // first pass: check for word-only commands
     while(regex_search(passOne, matches, commandHunter)){
@@ -229,16 +249,37 @@ void NoobScan::parseUserArgument(string userCommand){
     }
     
     // second pass: check for number-only commands (ports)
+    // bool holding whether or not an error was encountered
+    bool firstError=true;
     while(regex_search(passTwo, matches, portHunter)){
         // for all matches
+        
         for(auto i:matches){
             // once a match is found, push it to the port list (remember to convert to an int, so your program doesn't implode)
-            this->portsToScan.push_back(stoi(i));
+            try {
+                portsToScan.push_back(stoi(i));
+            } catch (const std::invalid_argument) {
+                if(firstError){
+                    portsToScan.pop_back();
+                    firstError=false;
+                }
+                cout << "Your formatting is off (misreading for " << i << "). Results may be unexpected.\n";
+            }
             // trim the found match from the string, and continue searching for matches
             passTwo=matches.suffix().str();
         }
     }
-    return;
+    
+    // third pass: check for IP addresses
+    while(regex_search(passThree, matches, ipHunter)){
+        // for all matches
+        for(auto i:matches){
+            // add in the IP address as the next command
+            parsedCommand.push_back(i);
+            passThree=matches.suffix().str();
+        }
+    }
+    
 }
 
 NoobCodes NoobScan::reviewPrimaryCommand(){
