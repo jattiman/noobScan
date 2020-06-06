@@ -41,7 +41,6 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     }
     
     // create socket structure to check port
-    // TODO: figure out if socketToScan needs to be a struct
     struct sockaddr_in socketToScan;
     socketToScan.sin_family = AF_INET;
     socketToScan.sin_port = htons(portNum);
