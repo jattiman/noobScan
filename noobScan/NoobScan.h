@@ -34,6 +34,8 @@
 // admin privileges check
 #include <grp.h>
 #include <pwd.h>
+// string to unsigned conversion
+#include <cstdlib>
 
 using namespace std;
 
@@ -41,6 +43,9 @@ using namespace std;
 class NoobScan{
 public:
     NoobScan();
+    
+    // confirm user input is valid
+    int getValidInput(int minNum=0, int maxNum=65535);
     
     // print the program text logo
     void printLogo();
@@ -90,10 +95,18 @@ public:
     // respond to settings requests
     void settingsRequestCheck();
     
+    NoobCodes findSettingsRequestType(string userRequest);
+    
+    void displaySettings(NoobCodes settings=NoobCodes::settingsRequest);
+    
     NoobCodes checkScanType();
     
     // clear commands for next round of questions
     void clearUserCommand();
+    
+    void displayUserCommands();
+    
+    void displayUserPortRequests();
     
     // debug (for testing purposes)
     void debug(int debugPort = 80);
@@ -116,11 +129,14 @@ private:
     // bool reflecting if user has admin rights to their system
     bool isAdmin = false;
     
+    // bool reflecting if user wants more program feedback
+    bool systemFeedback = true;
+    
     // vector holding the string-based user commands
     vector<string> parsedCommand;
     
     // vector holding port numbers to scan from user commands
-    vector<int> portsToScan;
+    vector<unsigned> portsToScan;
     
     // string holding the IP address from the user command
     vector<string> ipToScan;

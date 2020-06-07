@@ -21,6 +21,8 @@ enum class NoobCodes{
     exitRequest,
     debugRequest,
     settingsRequest,
+    settingsForDelay,
+    settingsForDictionary,
     socketError,
     socketCreationError,
     portConnectionError,

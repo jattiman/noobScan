@@ -22,6 +22,16 @@ NoobScan::NoobScan(){
     this->ourCommand.clear();
 }
 
+int NoobScan::getValidInput(int minNum, int maxNum){
+    int userInput;
+    while(!(cin >> userInput) || userInput < minNum || userInput > maxNum){
+        cin.clear();
+        cin.ignore(500,'\n');
+        cout << "Please select a valid option." << endl;
+    }
+    return userInput;
+}
+
 // output logo
 // http://patorjk.com/software/taag/#p=display&f=Ogre&t=NoobScan
 void NoobScan::printLogo(){
@@ -42,6 +52,7 @@ void NoobScan::welcomeText(){
     << "Please scan responsibly, and be ready to learn a thing or two.\n\n";
     return;
 }
+
 
 //initial user prompt (only shown at startup)
 void NoobScan::initialPrompt(){
@@ -198,6 +209,8 @@ void NoobScan::inspectArgs(string userCommand){
 }
 
 void NoobScan::parseUserArgument(string userCommand){
+    // TODO: remove formatted URLs from the string
+    
     // ensure any previous commands are empty
     clearUserCommand();
     
@@ -255,9 +268,12 @@ void NoobScan::parseUserArgument(string userCommand){
         // for all matches
         
         for(auto i:matches){
-            // once a match is found, push it to the port list (remember to convert to an int, so your program doesn't implode)
+            // once a match is found, push it to the port list (remember to convert to number, so the program doesn't implode)
             try {
-                portsToScan.push_back(stoi(i));
+                // TODO: make check for good unsigned conversion
+                // convert the string to an unsigned number
+                unsigned long ourPort = stoul(i);
+                portsToScan.push_back((unsigned int)ourPort);
             } catch (const std::invalid_argument) {
                 if(firstError){
                     portsToScan.pop_back();
@@ -283,13 +299,18 @@ void NoobScan::parseUserArgument(string userCommand){
 }
 
 NoobCodes NoobScan::reviewPrimaryCommand(){
+    
+    if(this->systemFeedback){
+        this->displayUserCommands();
+        this->displayUserPortRequests();
+    }
+    
     // if the first argument is empty
     if(this->parsedCommand.empty()){
         // inform the user and let them try again
         cout << "You didn't enter a command. Try again, perhaps?\n";
         return NoobCodes::fail;
     }
-    
     // otherwise, decide if the primary command is for help, settings, or scanning (among other things). Thanks to the power of regex, we can compare exact matches without having to worry about extra spaces and the like.
     else if(parsedCommand[0].compare("help")==0){
         cout << "Asking for help?\n";
@@ -435,20 +456,74 @@ void NoobScan::scanRequestCheck(){
 
 void NoobScan::settingsRequestCheck(){
     cout << "Settings request registered\n";
+    
+    // NoobCodes return for settings response
+    // NoobCodes settingsHolder;
+    
     // count parsedCommand entries
+    size_t parsedCount=0;
+    parsedCount=parsedCommand.size();
     
-    // if extra arguments present (3+), inform the user and only go on first additional argument
-    
+    // if user is requesting settings for a port
+    if(portsToScan.size()!=0){
+        // Inform them they have formatted their request incorrectly
+        cout << "Port numbers do not apply to settings.\n\n";
+        
+        // dump to general settings menu.
+    }
+    // if user is requesting a specific setting to toggle
+    else if(parsedCount==2){
+        cout << "You're asking specifically to access the setting for: " << parsedCommand[1] << endl << endl;
+        
+        // check if user's command corresponds to a setting, and react appropriately
+    }
+    // if user just entered "settings"
+    else if(parsedCount==1){
+        // general settings request - show all settings menu
+        cout << "You're asking for general settings.\n\n";
+        
+    }
+    else{
+        // TODO: if additional entry (2 arg), check to see if it belongs to a sub-page on settings, and take the user there
+
+        
+        // incorrectly formed settings request
+        cout << "Your settings request was formatted incorrectly. Either input \"settings\", or \"settings [specific setting topic]\"\n\n";
+        // dump them into the general settings menu
+    }
+        
     // if portsToScan is not empty, inform the user it will be ignored/discarded
     
     // if no additional entries (1 arg), take to main settings menu
     
-    // if additional entry (2 arg), check to see if it belongs to a sub-page on settings, and take the user there
-    
+        
     
     
     return;
 }
+
+// interprets userRequest to display appropriate settings menu
+NoobCodes NoobScan::findSettingsRequestType(string userRequest){
+    if(userRequest=="delay"){
+        return NoobCodes::settingsForDelay;
+    }
+    else if(userRequest=="dictionary"){
+        return NoobCodes::settingsForDictionary;
+    }
+    else{
+        return NoobCodes::fail;
+    }
+}
+
+void NoobScan::displaySettings(NoobCodes settings){
+    if(settings == NoobCodes::settingsRequest){
+        // display default menu and get input
+    }
+    
+}
+
+
+
 
 NoobCodes NoobScan::checkScanType(){
     string ourScanType = parsedCommand[1];
@@ -478,6 +553,24 @@ NoobCodes NoobScan::checkScanType(){
 void NoobScan::clearUserCommand(){
     this->parsedCommand.clear();
     this->portsToScan.clear();
+    return;
+}
+
+void NoobScan::displayUserCommands(){
+    cout << "\n\tCommands input: \n\t";
+    for(const auto & i: this->parsedCommand){
+        cout << i << " ";
+    }
+    cout << endl;
+    return;
+}
+
+void NoobScan::displayUserPortRequests(){
+    cout << "\n\tPorts requested: \n\t";
+    for(const auto & i: this->portsToScan){
+        cout << i << " ";
+    }
+    cout << endl;
     return;
 }
 
