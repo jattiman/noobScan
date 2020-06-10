@@ -99,7 +99,8 @@ void HelpModule::populateDirectory(){
     unsigned long tokenHunter=0;
     
     // open dictionary file for input
-    ifstream ourFile("helpDirectory.txt", ifstream::in);
+    // Note: the full file path needs to be listed, for now, to run from an executable outside of Xcode. Relative paths will work in Xcode, but not when running from terminal/console
+    ifstream ourFile("/Users/jatti/Documents/noobScan/noobScan/helpDirectory.txt", ifstream::in);
     
     // confirm file opened correctly. Exit if not.
     if(!ourFile.good()){
@@ -163,7 +164,8 @@ void HelpModule::addToDictionary(){
         
         // open file to append
         //ourFile.open("helpDirectory.txt", ios::out | ios::app);
-        ourFile.open("helpDirectory.txt", ios::app);
+        //ourFile.open("helpDirectory.txt", ios::app);
+        ourFile.open("/Users/jatti/Documents/noobScan/noobScan/helpDirectory.txt", ios::app);
         
         // confirm no issue with opening
         if(ourFile.good()){

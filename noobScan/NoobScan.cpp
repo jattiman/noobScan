@@ -491,13 +491,6 @@ void NoobScan::settingsRequestCheck(){
         cout << "Your settings request was formatted incorrectly. Either input \"settings\", or \"settings [specific setting topic]\"\n\n";
         // dump them into the general settings menu
     }
-        
-    // if portsToScan is not empty, inform the user it will be ignored/discarded
-    
-    // if no additional entries (1 arg), take to main settings menu
-    
-        
-    
     
     return;
 }
@@ -518,7 +511,12 @@ NoobCodes NoobScan::findSettingsRequestType(string userRequest){
 void NoobScan::displaySettings(NoobCodes settings){
     if(settings == NoobCodes::settingsRequest){
         // display default menu and get input
+        
     }
+    if(settings == NoobCodes::exitRequest){
+        return;
+    }
+    settings = NoobCodes::exitRequest;
     
 }
 

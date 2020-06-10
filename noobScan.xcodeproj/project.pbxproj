@@ -15,17 +15,19 @@
 		4C633DD2242FE20900B9ECC1 /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C633DD0242FE20900B9ECC1 /* Recorder.cpp */; };
 		4C633DD5242FE21F00B9ECC1 /* HelpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C633DD3242FE21F00B9ECC1 /* HelpModule.cpp */; };
 		4C84553E240C6F2A005B7049 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C84553D240C6F2A005B7049 /* main.cpp */; };
+		4C9B2BAF248F127900BDA981 /* helpDirectory.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4CEA1ED8246E5551007CA379 /* helpDirectory.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		4C845538240C6F2A005B7049 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = usr/share/man/man1;
+			dstSubfolderSpec = 6;
 			files = (
+				4C9B2BAF248F127900BDA981 /* helpDirectory.txt in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -45,7 +47,7 @@
 		4C633DD1242FE20900B9ECC1 /* Recorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
 		4C633DD3242FE21F00B9ECC1 /* HelpModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelpModule.cpp; sourceTree = "<group>"; };
 		4C633DD4242FE21F00B9ECC1 /* HelpModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelpModule.h; sourceTree = "<group>"; };
-		4C84553A240C6F2A005B7049 /* noobScan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = noobScan; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C84553A240C6F2A005B7049 /* noobScan */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = noobScan; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C84553D240C6F2A005B7049 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4CEA1ED8246E5551007CA379 /* helpDirectory.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = helpDirectory.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */

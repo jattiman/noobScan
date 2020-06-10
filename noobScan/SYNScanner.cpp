@@ -9,5 +9,5 @@
 #include "SYNScanner.h"
 
 SYNScanner::SYNScanner(){
-    
+    //TODO: get interface "en0" etc from user before running scan?
 }
