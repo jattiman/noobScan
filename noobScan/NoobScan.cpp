@@ -481,7 +481,7 @@ void NoobScan::settingsRequestCheck(){
     else if(parsedCount==1){
         // general settings request - show all settings menu
         cout << "You're asking for general settings.\n\n";
-        
+        this->displaySettings(NoobCodes::settingsRequest);
     }
     else{
         // TODO: if additional entry (2 arg), check to see if it belongs to a sub-page on settings, and take the user there
@@ -511,12 +511,68 @@ NoobCodes NoobScan::findSettingsRequestType(string userRequest){
 void NoobScan::displaySettings(NoobCodes settings){
     if(settings == NoobCodes::settingsRequest){
         // display default menu and get input
-        
+        cout << "\t1. Assisted Scan\n"
+        << "\t2. Dictionary\n"
+        << "\t3. Recorder Settings\n"
+        << "\t4. Scan groups\n"
+        << "\t5. Timeouts\n"
+        << "\t6. Toggle debug text\n"
+        << "\t7. Exit settings\n\n";
     }
-    if(settings == NoobCodes::exitRequest){
+    else if(settings == NoobCodes::settingsForDelay){
+        // display delay time options (variable, or enter specific number)
+        cout << "Your current delay time between scans is " << this->ourScanner->getSleepTimer() << endl << endl;
+        cout << "\t1. Set specific delay time\n"
+        << "\t2. Enable variable delay time between scans.\n"
+        << "\t3. Exit (keep current delay setting)\n";
+    }
+    else if(settings == NoobCodes::settingsForRecorder){
+        // display recorder on/off status
+        cout << "The recorder is currently ";
+        if(this->userRecorder->getRecorderStatus()){
+            cout << "on.\n\n";
+        }
+        else{
+            cout << "off.\n\n";
+        }
+        
+        cout << "\t1. Ensure recorder on.\n"
+        << "\t2. Ensure recorder off.\n"
+        << "\t3. Exit (keep current recorder setting)\n";
+    }
+    else if(settings == NoobCodes::settingsForTimeouts){
+        // TODO: figure out how long to wait until timeout between pings, and update variables here.
+    }
+    else if(settings == NoobCodes::settingsForDebugText){
+        //TODO: add on off status here after creating getter/setter
+        
+        // display recorder on/off status
+        cout << "Feedback text is currently ";
+        
+        cout << "\n\n";
+        
+        cout << "\t1. Ensure feedback on.\n"
+        << "\t2. Ensure feedback off.\n"
+        << "\t3. Exit (keep current feedback setting)\n";
+    }
+    else if(settings == NoobCodes::settingsForScanGroups){
+        // display scan groups
+        
+        // allow edit of scan groups
+        
+        // exit
+    }
+    else if(settings == NoobCodes::settingsForAssistedScan){
+        // TODO: create assisted scan system for user, where they enter the scan line by line. in new function: "what type of scan?" "scanning IP address or website?" "what IP address/website are you scanning?" "do you want to scan certain ports, or a port group?"
+    }
+    else if(settings == NoobCodes::exitRequest){
+        cout << "Exiting settings ... \n";
         return;
     }
-    settings = NoobCodes::exitRequest;
+    else{
+        cout << "Invalid settings choice. Please try again.\n";
+        return;
+    }
     
 }
 
