@@ -28,6 +28,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <iostream>
+#include <iomanip>
 // for identifying and splitting strings
 #include <regex>
 #include <sstream>
@@ -66,7 +67,7 @@ public:
     void adminCheck();
     
     // prompt user for their input
-    string promptUser();
+    string promptUser(bool sign=true);
     
     // take in user commands
     void intakeCommands();
@@ -97,9 +98,13 @@ public:
     
     NoobCodes findSettingsRequestType(string userRequest);
     
-    void displaySettings(NoobCodes settings=NoobCodes::settingsRequest);
+    NoobCodes displaySettings(NoobCodes settings=NoobCodes::settingsRequest);
     
     NoobCodes checkScanType();
+    
+    void setSystemFeedback(bool isOn);
+    
+    bool getSystemFeedback();
     
     // clear commands for next round of questions
     void clearUserCommand();
@@ -107,6 +112,7 @@ public:
     void displayUserCommands();
     
     void displayUserPortRequests();
+    
     
     // debug (for testing purposes)
     void debug(int debugPort = 80);

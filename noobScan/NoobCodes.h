@@ -12,6 +12,7 @@
 enum class NoobCodes{
     fail,
     success,
+    restart,
     tcp,
     udp,
     fin,

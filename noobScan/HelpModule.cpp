@@ -44,11 +44,7 @@ void HelpModule::displayOptions(){
         << endl;
     
     // settings overview
-    cout << "Looking to change settings? Input \"settings\" instead of \"help\" at the next prompt. A list of settings that you can manipulate will be displayed:\n"
-        << "\toutput: toggles output to screen or file\n"
-        << "\tdelay: allows you to set the delay time between scanning ports\n"
-        << "\tdictionary: allows you to add items or review the dictionary"
-        << endl;
+    cout << "Looking to change settings? Input \"settings\" instead of \"help\" at the next prompt. A list of settings that you can manipulate will be displayed.\n";
     
     return;
 }
