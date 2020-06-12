@@ -310,6 +310,7 @@ void NoobScan::parseUserArgument(string userCommand){
         for(auto i:matches){
             // add in the IP address as the next command
             parsedCommand.push_back(i);
+            ipToScan.push_back(i);
             passThree=matches.suffix().str();
         }
     }
@@ -441,14 +442,20 @@ void NoobScan::scanRequestCheck(){
     size_t parsedCount=0;
     parsedCount=parsedCommand.size();
     
+    string scanTarget;
+    
     // if at least 3 arguments (scan [scan type] [destination]), the command is most likely sufficiently formed
     if(parsedCount>=3){
         // check scan type
         scanType=checkScanType();
         
         // confirm sub arguments called correctly
+        //TODO: pull URL out and turn it into an IP address
         
         // run scan
+        if(scanType==NoobCodes::tcp){
+            this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
+        }
         
     }
     // if less than 3 arguments, the command is malformed
@@ -470,6 +477,31 @@ void NoobScan::scanRequestCheck(){
     // We COULD prompt the user to enter a scan type ...
     
     return;
+}
+
+// processes scan type and acts accordingly
+NoobCodes NoobScan::checkScanType(){
+    string ourScanType = parsedCommand[1];
+    if(ourScanType=="tcp"){
+        outputFeedback("You're requesting a TCP scan\n");
+        return NoobCodes::tcp;
+    }
+    else if(ourScanType=="udp"){
+        outputFeedback("You're requesting a UDP scan\n");
+        return NoobCodes::udp;
+    }
+    else if(ourScanType=="syn"){
+        outputFeedback("You're requesting a SYN scan\n");
+        return NoobCodes::syn;
+    }
+    else if(ourScanType=="fin"){
+        outputFeedback("You're requesting a FIN scan\n");
+        return NoobCodes::fin;
+    }
+    else{
+        cout << "Something went wrong ... \n";
+        return NoobCodes::fail;
+    }
 }
 
 void NoobScan::settingsRequestCheck(){
@@ -696,31 +728,6 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
         }
     }
     return NoobCodes::restart;
-}
-
-// processes scan type and acts accordingly
-NoobCodes NoobScan::checkScanType(){
-    string ourScanType = parsedCommand[1];
-    if(ourScanType=="tcp"){
-        outputFeedback("You're requesting a TCP scan\n");
-        return NoobCodes::tcp;
-    }
-    else if(ourScanType=="udp"){
-        outputFeedback("You're requesting a UDP scan\n");
-        return NoobCodes::udp;
-    }
-    else if(ourScanType=="syn"){
-        outputFeedback("You're requesting a SYN scan\n");
-        return NoobCodes::syn;
-    }
-    else if(ourScanType=="fin"){
-        outputFeedback("You're requesting a FIN scan\n");
-        return NoobCodes::fin;
-    }
-    else{
-        cout << "Something went wrong ... \n";
-        return NoobCodes::fail;
-    }
 }
 
 // turn on and off feedback

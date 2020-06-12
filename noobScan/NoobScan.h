@@ -150,6 +150,9 @@ private:
     // string holding the IP address from the user command
     vector<string> ipToScan;
     
+    // string holding the URL (if no IP) from the user command
+    vector<string> siteToScan;
+    
 };
 
 #endif /* NoobScan_h */

@@ -19,16 +19,24 @@ void TCPScanner::addOpenPorts(int newOpenPort){
     return;
 }
 
+void TCPScanner::addClosedPorts(int newClosedPort){
+    this->closedPorts.emplace_back(newClosedPort);
+    return;
+}
+
+// return vector of open ports
 vector<int> TCPScanner::getOpenPorts(){
     return this->openPorts;
 }
 
+// output the open ports
 void TCPScanner::printOpenPorts(){
     for(auto const & portValue: this->openPorts){
         cout << portValue << endl;
     }
     return;
 }
+
 
 NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     
@@ -74,7 +82,7 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
 }
 
 // scan multiple ports at once
-NoobCodes TCPScanner::runMultiScan(vector<int> portNumbers, std::string IPToScan){
+NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPToScan){
     
     // placeholder for scanning socket
     int ourTCPSock = 0;
@@ -108,12 +116,13 @@ NoobCodes TCPScanner::runMultiScan(vector<int> portNumbers, std::string IPToScan
         
         // if connection denied, return that info
         if(checkConnect==-1){
-            cout << "Port " << nextPort << " closed\n";
+            cout << "\tPort " << nextPort << " closed\n";
+            
         }
         
         // if the connection succeeded, add to open port list, close socket, and return success
         else{
-            cout << "Port " << nextPort << " open\n";
+            cout << "\tPort " << nextPort << " open\n";
             // close the port
             addOpenPorts(nextPort);
         }

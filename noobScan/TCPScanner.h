@@ -25,6 +25,9 @@ public:
     // add open port to list
     void addOpenPorts(int newOpenPort);
     
+    // add closed port to list
+    void addClosedPorts(int newClosedPort);
+    
     // get open port list
     vector<int> getOpenPorts();
     
@@ -35,7 +38,7 @@ public:
     NoobCodes runScan(int portNum, std::string IPToScan="127.0.0.1");
     
     // scan multiple ports at once
-    NoobCodes runMultiScan(vector<int> portNumbers, std::string IPToScan="127.0.0.1");
+    NoobCodes runMultiScan(vector<unsigned> portNumbers, std::string IPToScan="127.0.0.1");
     
     
     
