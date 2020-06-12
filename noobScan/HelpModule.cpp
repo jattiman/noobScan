@@ -13,6 +13,17 @@ HelpModule::HelpModule(){
     return;
 }
 
+int HelpModule::getValidInput(int minNum, int maxNum){
+    int userInput;
+    cout << ">: ";
+    while(!(cin >> userInput) || userInput < minNum || userInput > maxNum){
+        cin.clear();
+        cin.ignore(500,'\n');
+        cout << "Please select a valid option." << endl;
+    }
+    return userInput;
+}
+
 // displays opening prompt for the user to select info for
 void HelpModule::displayDirections(){
     cout << "Type your command, or\n"
@@ -159,7 +170,6 @@ void HelpModule::addToDictionary(){
         ofstream ourFile;
         
         // open file to append
-        //ourFile.open("helpDirectory.txt", ios::out | ios::app);
         //ourFile.open("helpDirectory.txt", ios::app);
         ourFile.open("/Users/jatti/Documents/noobScan/noobScan/helpDirectory.txt", ios::app);
         
@@ -176,8 +186,10 @@ void HelpModule::addToDictionary(){
     return;
 }
 
-//TODO: figure out why this triggers "You didn't enter a command. Try again" when it returns.
+// gets a new dictionary term from user
 string HelpModule::getNewEntry(){
+    cin.ignore(256,'\n');
+    
     // string holder for new dictionary word
     string ourWord;
     
@@ -188,7 +200,7 @@ string HelpModule::getNewEntry(){
     string newEntry;
     
     // holder for user answer
-    char userAnswer;
+    int userAnswer;
         
     // get the word to define
     cout << "Enter the word you want to define:" << endl;
@@ -197,7 +209,7 @@ string HelpModule::getNewEntry(){
         
     // check to confirm the word is not already defined
     if(helpDirectory.count(ourWord)>0){
-        cout << "This word is already defined. Sorry - these words are set in stone." << endl;
+        cout << "This word is already defined. Sorry." << endl;
         ourWord.clear();
         return "cancel";
     }
@@ -209,11 +221,13 @@ string HelpModule::getNewEntry(){
     
     newEntry=ourWord+": "+ourDefinition;
     
-    cout << "Are you sure you want to input the following entry? (y/n) \n\t" << newEntry << endl;
+    cout << "Are you sure you want to input the following entry?\n\t" << newEntry << endl;
+    cout << "\t1. Yes\n"
+    << "\t2. No (cancel entry)" << endl;
     
-    cin >> userAnswer;
+    userAnswer = getValidInput(1,2);
     
-    if(userAnswer=='y'){
+    if(userAnswer==1){
         return newEntry;
     }
     else{

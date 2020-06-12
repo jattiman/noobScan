@@ -48,6 +48,9 @@ public:
     // confirm user input is valid
     int getValidInput(int minNum=0, int maxNum=65535);
     
+    // output additional feedback
+    void outputFeedback(string feedback);
+    
     // print the program text logo
     void printLogo();
     
