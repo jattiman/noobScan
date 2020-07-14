@@ -41,7 +41,7 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
     ssize_t portCheck=sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
     
     // sleep while we wait for port response
-    usleep(this->ourSleepTimer);
+    //usleep(this->ourSleepTimer);
     
     // return status of scan
     if(portCheck<0){
@@ -55,7 +55,7 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
     //no response: port is either open or filtered
     else{
         // if there is a response, or no response, the port is likely open
-        cout << "Port " << portNum << " likely open\n";
+        cout << "Port " << portNum << " open / filtered\n";
         addPortList(portNum, this->openPorts);
         return NoobCodes::portConnectionSuccess;
     }
@@ -63,7 +63,56 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
     return NoobCodes::success;
 }
 
-NoobCodes UDPScanner::runMultiScan(vector<int> portNumbers, string IPToScan){
+NoobCodes UDPScanner::runMultiScan(vector<unsigned> portNumbers, string IPToScan){
+    
+    // UDP is typically more targeted scan, due to the time it takes
+    
+    // make a socket to scan ports
+    int ourUDPSock = socket(AF_INET, SOCK_DGRAM, 0);
+    
+    // if the socket was unsuccessful
+    if(ourUDPSock == -1){
+        return NoobCodes::socketCreationError;
+    }
+    
+    // create socket structure to check port
+    struct sockaddr_in socketToScan;
+    socketToScan.sin_family = AF_INET;
+    // TODO: change this placeholder
+    socketToScan.sin_port = htons(portNumbers[0]);
+    
+    // convert IP address accordingly
+    if(!inet_pton(AF_INET, IPToScan.c_str(), &socketToScan.sin_addr)){
+        std::cout << "IP binding issue\n";
+        return NoobCodes::IPBindingIssue;
+    }
+    
+    string testString="test\nhelp\n";
+    
+    // check port (sendto returns ssize_t and not int)
+    ssize_t portCheck=sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
+    
+    // sleep while we wait for port response
+    //usleep(this->ourSleepTimer);
+    
+    // return status of scan
+    if(portCheck<0){
+        // if there is a connection error, the port is likely closed
+        // TODO: change these placeholders
+        cout << "Port " << portNumbers[0] << " likely closed\n";
+        addPortList(portNumbers[0], this->closedPorts);
+        return NoobCodes::portConnectionDenied;
+    }
+    //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply.
+    //UDP reply: port open
+    //no response: port is either open or filtered
+    else{
+        // if there is a response, or no response, the port is likely open
+        // TODO: change these placeholders
+        cout << "Port " << portNumbers[0] << " open / filtered\n";
+        addPortList(portNumbers[0], this->openPorts);
+        return NoobCodes::portConnectionSuccess;
+    }
     
     return NoobCodes::success;
 }

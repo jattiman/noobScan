@@ -456,6 +456,12 @@ void NoobScan::scanRequestCheck(){
         if(scanType==NoobCodes::tcp){
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
         }
+        else if(scanType==NoobCodes::udp){
+            this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
+        }
+        else{
+            cout << "Scan type currently unavailable.\n";
+        }
         
     }
     // if less than 3 arguments, the command is malformed
