@@ -25,6 +25,7 @@ public:
 private:
     vector<int> openPorts;
     vector<int> closedPorts;
+    struct timeval ourWaitTimer;
     useconds_t ourSleepTimer;
 };
 

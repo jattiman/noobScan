@@ -22,7 +22,16 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
     
     // if the socket was unsuccessful
     if(ourUDPSock == -1){
-        return NoobCodes::socketCreationError;
+        return NoobCodes::socketCreationErrorDGRAM;
+    }
+    
+    // make a RAW ICMP socket to receive port status later
+    int ourRawICMPSock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+    
+    // confirm ICMP socket was successful
+    if(ourRawICMPSock == -1){
+        
+        return NoobCodes::socketCreationErrorICMP;
     }
     
     // create socket structure to check port
