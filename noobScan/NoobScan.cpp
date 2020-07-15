@@ -457,7 +457,8 @@ void NoobScan::scanRequestCheck(){
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
         }
         else if(scanType==NoobCodes::udp){
-            this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
+            //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
+            this->ourUDPScan->runScan(portsToScan[0]);
         }
         else{
             cout << "Scan type currently unavailable.\n";

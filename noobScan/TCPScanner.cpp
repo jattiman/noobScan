@@ -116,7 +116,24 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
         
         // if connection denied, return that info
         if(checkConnect==-1){
-            cout << "\tPort " << nextPort << " closed\n";
+            if(errno==ECONNREFUSED){
+                cout << "\tPort " << nextPort << " closed\n";
+            }
+            else if(errno==ETIMEDOUT){
+                cout << "\tPort " << nextPort << " closed: timeout (perhaps try later)\n";
+            }
+            else if(errno==EACCES || errno==EPERM){
+                cout << "\tPort " << nextPort << " closed: permissions issue\n";
+            }
+            else if(errno==EAGAIN){
+                cout << "\tPort " << nextPort << " closed: nonblocking/busy, or routing cache issue\n";
+            }
+            else if(errno==ENETUNREACH){
+                cout << "\tPort " << nextPort << " closed: network reachability issue\n";
+            }
+            else{
+                cout << "\tPort " << nextPort << " closed\n";
+            }
             
         }
         

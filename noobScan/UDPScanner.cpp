@@ -14,6 +14,7 @@ UDPScanner::UDPScanner(){
 }
 
 NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
+    
     // UDP is typically more targeted scan, due to the time it takes
     
     // make a socket to scan ports
@@ -46,8 +47,32 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
     // return status of scan
     if(portCheck<0){
         // if there is a connection error, the port is likely closed
-        cout << "Port " << portNum << " likely closed\n";
-        addPortList(portNum, this->closedPorts);
+        // review error status, and report why it's closed
+        if(errno == EAGAIN || errno == EWOULDBLOCK){
+            cout << "Port " << portNum << " closed: nonblocking port blocked by request\n";
+        }
+        else if(errno == EBADF){
+            cout << "Port " << portNum << " file descriptor issue\n";
+        }
+        else if(errno == EFAULT){
+            cout << "Port " << portNum << " rejected userspace address\n";
+        }
+        else if(errno == EINVAL){
+            cout << "Port " << portNum << " received invalid argument\n";
+        }
+        else if(errno == EMSGSIZE){
+            cout << "Port " << portNum << " issue: message size error \n";
+        }
+        else if(errno == ENOBUFS){
+            cout << "Port " << portNum << " issue: output queue full\n";
+        }
+        else if(errno == EOPNOTSUPP){
+            cout << "Port " << portNum << " had issue with flags\n";
+        }
+        else{
+            cout << "Port " << portNum << " likely closed\n";
+            addPortList(portNum, this->closedPorts);
+        }
         return NoobCodes::portConnectionDenied;
     }
     //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply.
