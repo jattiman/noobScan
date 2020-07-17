@@ -8,7 +8,8 @@
 #include "ScanAddress.h"
 
 ScanAddress::ScanAddress(){
-    this->sleepTimer=0;
+    this->sleepTimer=2;
+    this->retries=3;
 }
 
 // confirm the scan type being requested
@@ -129,6 +130,17 @@ void ScanAddress::getHostMac(){
         printf("getifaddrs() failed with errno =  %i %s\n", errno, strerror(errno));
         
     }
+    return;
+}
+
+// get the number of times the port will be retried
+int ScanAddress::getRetries(){
+    return this->retries;
+}
+
+// set the number of times the port will be retried
+void ScanAddress::setRetries(int newRetryAmount){
+    this->retries=newRetryAmount;
     return;
 }
 

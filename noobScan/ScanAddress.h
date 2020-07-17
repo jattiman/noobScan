@@ -67,6 +67,12 @@ public:
     // get host MAC address
     void getHostMac();
     
+    // get port retry number
+    int getRetries();
+    
+    // set the retry number
+    void setRetries(int newRetryAmount);
+    
     void debug();
     
     // training wheels scan to prompt user step by step
@@ -97,6 +103,9 @@ private:
     
     // our mac address
     char ourMac[32]={0};
+    
+    // number of times to retry certain ports if there's a connection error
+    int retries;
     
 };
 
