@@ -27,15 +27,17 @@ NoobCodes UDPScanner::runScan(int portNum, std::string IPToScan){
         return NoobCodes::socketCreationErrorDGRAM;
     }
     
-//    // make a RAW ICMP socket to receive port status later
-//    int ourRawICMPSock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
-//
-//    // confirm ICMP socket was successful
-//    if(ourRawICMPSock == -1){
-//        cout << "icmp error\n";
-//        return NoobCodes::socketCreationErrorICMP;
-//    }
-//
+    // make a RAW ICMP socket to receive port status later
+    int ourRawICMPSock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+
+    // confirm ICMP socket was successful
+    if(ourRawICMPSock == -1){
+        cout << errno << endl;
+        printf("Error: %s\n", strerror(errno));
+        cout << "icmp error\n";
+        return NoobCodes::socketCreationErrorICMP;
+    }
+
     // create socket structure to check port
     struct sockaddr_in socketToScan;
     socketToScan.sin_family = AF_INET;

@@ -101,7 +101,11 @@ void NoobScan::adminCheck(){
     cout << userInfo->pw_gecos << " (neat username).\n\n";
     
     cout << "Checking admin privileges ... \n\n";
+    // TODO: test root access through these calls on non-admin
+    cout << "geteuid() == " << geteuid() << endl;
+    cout << "geteuid() == " << getuid() << endl;
 
+    //struct group *adminCheck = getgrnam("admin");
     struct group *adminCheck = getgrnam("admin");
     
     while(*adminCheck->gr_mem != NULL) {
