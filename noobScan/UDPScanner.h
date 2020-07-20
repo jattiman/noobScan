@@ -18,9 +18,11 @@ public:
     UDPScanner();
     
     // run scan - default value is own IP
-    NoobCodes runScan(int portNum, string IPToScan="127.0.0.1");
+    NoobCodes runScan(int portNum, bool isAdmin, string IPToScan="127.0.0.1");
     
     NoobCodes runMultiScan(vector<unsigned> portNumbers, string IPToScan="127.0.0.1");
+    
+    
     
 private:
     vector<int> openPorts;

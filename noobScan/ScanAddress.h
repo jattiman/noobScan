@@ -47,7 +47,10 @@ public:
     string initiateScan(char ourScanType);
     
     // resolve host name
-    struct hostent * returnHostIP(std::string targetHost);
+    struct hostent * getHostIP(std::string targetHost);
+    
+    // print host name in human readable format
+    void displayHostIP();
     
     // add to port list
     void addPortList(int newPortNumber, vector<int> portVector);

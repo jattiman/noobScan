@@ -101,9 +101,6 @@ void NoobScan::adminCheck(){
     cout << userInfo->pw_gecos << " (neat username).\n\n";
     
     cout << "Checking admin privileges ... \n\n";
-    // TODO: test root access through these calls on non-admin
-    cout << "geteuid() == " << geteuid() << endl;
-    cout << "geteuid() == " << getuid() << endl;
 
     //struct group *adminCheck = getgrnam("admin");
     struct group *adminCheck = getgrnam("admin");
@@ -116,12 +113,21 @@ void NoobScan::adminCheck(){
         adminCheck->gr_mem++;
     }
     
-    if(this->isAdmin){
-        cout << "\tLooks like you have admin rights on this account.\n\tThat's a good thing.\n";
+    if(this->isAdmin && ourID==0){
+        cout << "\tLooks like you have admin rights on this account, AND have root access.\n\tThat's a good thing.\n\n";
+    }
+    else if(this->isAdmin){
+        cout << "\tLooks like you have admin rights on this machine, but you don't have root access.\n\tTry running this program as root, or with sudo, to unlock all the perks.\n\n\tAs is, you may run into some trouble when attempting to run certain scans, although the helper tool can still be used as a good resource.\n\n";
     }
     else{
         cout <<"\tYou don't seem to be an admin.\n\tYou can try running commands, but you will run into trouble on some scans.\n\n\tStill, feel free to use this as a helper tool, to learn more about the wonderful world of port scanning.\n\n";
     }
+}
+
+// confirm user host IP is retrievable
+void NoobScan::hostIPCheck(){
+    
+    return;
 }
 
 // check user operating system to ensure it's the right one for this program
@@ -462,7 +468,7 @@ void NoobScan::scanRequestCheck(){
         }
         else if(scanType==NoobCodes::udp){
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
-            this->ourUDPScan->runScan(portsToScan[0]);
+            this->ourUDPScan->runScan(portsToScan[0], this->isAdmin);
         }
         else{
             cout << "Scan type currently unavailable.\n";
@@ -783,8 +789,9 @@ void NoobScan::displayUserPortRequests(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
-
-    ourHelper->addToDictionary();
+    //cout << ourScanner->getHostIP("www.google.com")->h_addr;
+    ourScanner->displayHostIP();
+    //ourHelper->addToDictionary();
     //    cout << "testing debug\n";
 //    ourHelper->populateDirectory();
 //    ourHelper->returnInfo("1592");

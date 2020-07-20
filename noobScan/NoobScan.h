@@ -69,6 +69,9 @@ public:
     // confirm user is running admin privileges
     void adminCheck();
     
+    // confirm user host IP is retrievable
+    void hostIPCheck();
+    
     // prompt user for their input
     string promptUser(bool sign=true);
     

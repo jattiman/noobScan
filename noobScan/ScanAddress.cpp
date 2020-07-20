@@ -31,7 +31,7 @@ string ScanAddress::initiateScan(char ourScanType){
 }
 
 // resolve host name to IP address
-struct hostent * ScanAddress::returnHostIP(std::string targetHost){
+struct hostent * ScanAddress::getHostIP(std::string targetHost){
         
     // create host structure to convert URL to IP address
     struct hostent *ourHost;
@@ -46,6 +46,14 @@ struct hostent * ScanAddress::returnHostIP(std::string targetHost){
     else{
         return ourHost;
     }
+}
+
+// TODO: print host name in human readable format
+void ScanAddress::displayHostIP(){
+    char readableHostIP[256];
+    gethostname(readableHostIP, sizeof(readableHostIP));
+    printf("Host IP: %s\n", readableHostIP);
+    
 }
 
 void ScanAddress::addPortList(int newPortNumber, vector<int> portVector){
