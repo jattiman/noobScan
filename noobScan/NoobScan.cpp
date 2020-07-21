@@ -789,81 +789,10 @@ void NoobScan::displayUserPortRequests(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
-    //cout << ourScanner->getHostIP("www.google.com")->h_addr;
-    ourScanner->displayHostIP();
-    //ourHelper->addToDictionary();
-    //    cout << "testing debug\n";
-//    ourHelper->populateDirectory();
-//    ourHelper->returnInfo("1592");
-//    ourHelper->returnInfo("nondictionary term");
-//    ourHelper->returnInfo("15number alpha");
+    // get IP from URL
+//    string ourString = ourScanner->getTargetIP("Scanme.Nmap.Org");
+//    cout << "-" << ourString << "-" << endl;
     
-    //TODO: add try catch block to this. Maybe isolate the ourScanner output before equating it to s_addr?
-//1
-//    struct sockaddr_in socketToScan;
-//    socketToScan.sin_addr.s_addr = *(unsigned long*) ((ourScanner->returnHostIP("www.google.com"))->h_addr);
-//    if(socketToScan.sin_addr.s_addr == NULL){
-//        cout << "no ip address associated.\n";
-//    }
-//
-//    else{
-//        cout << inet_ntoa(socketToScan.sin_addr);
-//    }
-//2
-//    if(ourScanner->returnHostIP("www.fhjkgshuilhusl.com")==NULL){
-//        cout << "It's null\n";
-//    }
-//    else{
-//        cout<<"Not null\n.";
-//    }
-//3
-    //TODO: find out why this returns double prompt if it fails
-    //ourTCPScan->runScan(debugPort);
-//    vector<int> testVector{80,120,4767};
-//    ourTCPScan->runMultiScan(testVector);
-//    ourScanner->getHostMac();
-//    ourScanner->debug();
-    
-            // parse the command string - regex used to
-        //    sregex_iterator commandIterator(userCommand.begin(), userCommand.end(), commandHunter);
-        //    sregex_iterator empty;
-        //    while(commandIterator!=empty){
-        //        matches=*commandIterator;
-        //        parsedCommand.push_back(matches.str());
-        //        commandIterator++;
-        //    }
-        
-    //    sregex_iterator portIterator(userCommand.begin(), userCommand.end(), portHunter);
-    //    while(portIterator!=empty){
-    //        matches=*portIterator;
-    //        //portsToScan.push_back(stoi(portIterator));
-    //        portIterator++;
-    //    }
-      
-    
-    //    // output parsed for debug
-    //    cout << "printing command split:\n";
-    //    for(auto const & item : parsedCommand){
-    //        cout << item << endl;
-    //    }
-    //
-    //    cout << "printing port split:\n";
-    //    for(auto const & item : portsToScan){
-    //        cout << item << endl;
-    //    }
-
-    //    // if potential help request
-    //    if(userCommand.find("help")!=string::npos){
-    //        // if found, send the command to HelpModule for processing
-    //        cout << "Asking for help?\n";
-    //    }
-    //    else if(userCommand.find("debug")!=string::npos){
-    //                cout << "debugging: \n";
-    //                debug(4767);
-    //    }
-    //    // if scan, call scanner
-    //    else{
-    //
-    //    }
-    
+    // get host machine IPs
+    ourScanner->getHostIP();
 }

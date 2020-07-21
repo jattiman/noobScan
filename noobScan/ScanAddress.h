@@ -18,6 +18,9 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+//for IP address
+#include <netinet/ip.h>
+
 // to pull MAC address
 #include <sys/ioctl.h>
 #include <net/if.h>
@@ -41,16 +44,16 @@ public:
     ScanAddress();
     
     // confirm the scan type being requested
-    char checkScanType(std::string scanCommand);
+    char checkScanType(string scanCommand);
     
     // initiate scan, report results and output to screen
     string initiateScan(char ourScanType);
     
-    // resolve host name
-    struct hostent * getHostIP(std::string targetHost);
+    // resolve target IP from URL
+    string getTargetIP(string targetHost);
     
     // print host name in human readable format
-    void displayHostIP();
+    void getHostIP();
     
     // add to port list
     void addPortList(int newPortNumber, vector<int> portVector);
