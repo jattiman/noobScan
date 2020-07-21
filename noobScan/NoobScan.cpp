@@ -794,5 +794,8 @@ void NoobScan::debug(int debugPort){
 //    cout << "-" << ourString << "-" << endl;
     
     // get host machine IPs
-    ourScanner->getHostIP();
+    string test;
+    test = ourScanner->getHostIP();
+    cout << test << endl;
+    
 }

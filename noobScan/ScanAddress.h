@@ -53,7 +53,7 @@ public:
     string getTargetIP(string targetHost);
     
     // print host name in human readable format
-    void getHostIP();
+    string getHostIP(string ifaNamePreference = "en0");
     
     // add to port list
     void addPortList(int newPortNumber, vector<int> portVector);

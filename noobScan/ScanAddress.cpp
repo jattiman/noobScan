@@ -55,164 +55,38 @@ string ScanAddress::getTargetIP(string targetHost){
 }
 
 // TODO: print host name in human readable format. Nothing is working ...
-void ScanAddress::getHostIP(){
-    
-    // attempt 1
-    /*
-//    cout << "Variable setup\n";
-//    char * send_buf[400];
-//    char ipHolder[15];
-//    struct ip *ourIP = (struct ip *)send_buf;
-//    struct hostent *ourMachine;
-//    char unreadableHostIP[256];
-//    string readableHostIP;
-//
-//    cout << "gethostname\n";
-//    gethostname(unreadableHostIP, sizeof(unreadableHostIP));
-//    //printf("Host IP: %s\n", unreadableHostIP);
-//    cout << "gethostbyname\n";
-//    ourMachine=gethostbyname(unreadableHostIP);
-//    cout << "transcribing IP\n";
-//    ourIP->ip_src = (*(struct in_addr *)ourMachine->h_addr);
-//    cout << "Printing IP.\n";
-////    cout << inet_ntoa(ourIP->ip_src);
-//    sprintf(ipHolder, "%s", inet_ntoa(ourIP->ip_src));
-//    cout << ipHolder;
-//    return;
-     */
-    
-    //attempt 2
-    /*
-//    char send_buf[400], src_name[256], src_ip[15];
-//    struct ip *ip = (struct ip *)send_buf;
-//
-//    struct hostent *src_hp;
-//    int on;
-//
-//
-//
-//    //Initialize variables
-//    on = 1;
-//    memset(send_buf, 0, sizeof(send_buf));
-//
-//    // Get source IP address
-//    if(gethostname(src_name, sizeof(src_name)) < 0)
-//    {
-//        perror("gethostname() error");
-//        exit(EXIT_FAILURE);
-//    }
-//    else
-//    {
-//        if((src_hp = gethostbyname(src_name)) == NULL)
-//        {
-//            fprintf(stderr, "%s: Can't resolve, unknown source.\n", src_name);
-//            exit(EXIT_FAILURE);
-//        }
-//        else
-//            ip->ip_src = (*(struct in_addr *)src_hp->h_addr);
-//    }
-//
-//
-//    sprintf(src_ip, "%s", inet_ntoa(ip->ip_src));
-//    printf("Source IP: '%s'\n", src_ip);
-    */
-    
-    //attempt 3
-    /*
-//    char hostbuffer[256];
-//    char *IPbuffer;
-//    struct hostent *host_entry;
-//    int hostname;
-//
-//    // To retrieve hostname
-//    hostname = gethostname(hostbuffer, sizeof(hostbuffer));
-////    checkHostName(hostname);
-//    if(hostname==-1){
-//        cout << "HOSTNAME FUCKED UP\n";
-//        return;
-//    }
-//
-//    // To retrieve host information
-//    host_entry = gethostbyname("localhost");
-////    checkHostEntry(host_entry);
-//    if(host_entry==NULL){
-//        cout << "h_errno is: " << h_errno << endl;
-//        switch(h_errno){
-//            case HOST_NOT_FOUND:
-//                cout << "Host not found\n";
-//                break;
-//            case TRY_AGAIN:
-//                cout << "Try again\n";
-//                break;
-//            case NO_RECOVERY:
-//                cout << "No recovery\n";
-//                break;
-//            case NO_DATA:
-//                cout << "No data.";
-//                break;
-//            default:
-//                cout << "some other issue.\n";
-//                cout << errno << endl;
-//                break;
-//        }
-//        return;
-//    }
-//
-//    // To convert an Internet network
-//    // address into ASCII string
-//    IPbuffer = inet_ntoa(*((struct in_addr*) host_entry->h_addr_list[0]));
-//
-//    printf("Hostname: %s\n", hostbuffer);
-//    printf("Host IP: %s", IPbuffer);
-*/
-    
-    //attempt 4
-    /*
-//    struct ifaddrs *id;
-//    int val;
-//    val = getifaddrs(&id);
-//    printf("Network Interface Name :- %s\n",id->ifa_name);
-//    printf("Network Address of %s :- %d\n",id->ifa_name,(int*)id->ifa_addr);
-//    printf("Network Data :- %d \n",(int)id->ifa_data);
-//    printf("Socket Data : -%s\n",id->ifa_addr->sa_data);
-//    return;
-     */
-    //attempt 5
-    /*
-    char host[256];
-    char *IP;
-    struct hostent *host_entry;
-    int hostname;
-    hostname = gethostname(host, sizeof(host)); //find the host name
-    if(hostname==-1){
-        cout << "hostname fucked you\n";
-        return;
-    }
-    host_entry = gethostbyname("Scanme.Nmap.Org"); //find host information
-    if(host_entry==NULL){
-        cout << "fucked by host_entry\n";
-        return;
-    }
-    IP = inet_ntoa(*((struct in_addr*) host_entry->h_addr_list[0])); //Convert into IP string
-    printf("Current Host Name: %s\n", host);
-    printf("Host IP: %s\n", IP);
-     */
-    
-    // attempt 6
-    struct ifaddrs *ifap, *ifa;
+string ScanAddress::getHostIP(string ifaNamePreference){
+    // create address structure for IP
+    struct ifaddrs *ifaHolder;
+    struct ifaddrs *ifaInspector;
     struct sockaddr_in *sa;
-    char *addr;
+    string addr;
+    string ourHostIP;
 
-    getifaddrs (&ifap);
-    for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-        if (ifa->ifa_addr && ifa->ifa_addr->sa_family==AF_INET) {
-            sa = (struct sockaddr_in *) ifa->ifa_addr;
-            addr = inet_ntoa(sa->sin_addr);
-            printf("Interface: %s\tAddress: %s\n", ifa->ifa_name, addr);
-        }
+    // attempt to get list of machine's network interfaces
+
+    // if this fails, abandon and report
+    if(getifaddrs (&ifaHolder)==-1){
+        cout << "Error finding network interfaces.\n";
+        return {};
     }
+    // if it succeeds, find the IP for the preferred interface
+    else{
+        // look through all interfaces on machine
+        for (ifaInspector = ifaHolder; ifaInspector; ifaInspector = ifaInspector->ifa_next) {
+            // ensure that the interface is
+            if (ifaInspector->ifa_addr && ifaInspector->ifa_addr->sa_family==AF_INET) {
+                sa = (struct sockaddr_in *) ifaInspector->ifa_addr;
+                addr = inet_ntoa(sa->sin_addr);
+                if(ifaInspector->ifa_name == ifaNamePreference){
+                    ourHostIP=addr;
+                }
 
-    freeifaddrs(ifap);
+            }
+        }
+        freeifaddrs(ifaHolder);
+        return ourHostIP;
+    }
 }
 
 void ScanAddress::addPortList(int newPortNumber, vector<int> portVector){
