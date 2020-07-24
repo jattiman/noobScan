@@ -21,6 +21,9 @@
 //for IP address
 #include <netinet/ip.h>
 
+// for ICMP usage - must include after ip.h to avoid conflicts
+#include <netinet/ip_icmp.h>
+
 // to pull MAC address
 #include <sys/ioctl.h>
 #include <net/if.h>
@@ -71,7 +74,7 @@ public:
     void setSleepTimer(useconds_t newSleepTime);
     
     // get host MAC address
-    void getHostMac();
+    string getHostMac(string ifaNamePreference = "en0");
     
     // get port retry number
     int getRetries();

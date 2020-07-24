@@ -54,7 +54,7 @@ string ScanAddress::getTargetIP(string targetHost){
     }
 }
 
-// TODO: print host name in human readable format. Nothing is working ...
+// TODO: print host IP in human readable format. Nothing is working ...
 string ScanAddress::getHostIP(string ifaNamePreference){
     // create address structure for IP
     struct ifaddrs *ifaHolder;
@@ -135,43 +135,56 @@ void ScanAddress::setSleepTimer(useconds_t newSleepTime){
     return;
 }
 
-void ScanAddress::getHostMac(){
+string ScanAddress::getHostMac(string ifaNamePreference){
     
     // define structures
-    struct ifaddrs *if_addrs = NULL;
-    struct ifaddrs *if_addr = NULL;
+    struct ifaddrs *ifaHolder = NULL;
+    struct ifaddrs *ifaInspector = NULL;
     
-    // holder for the mac address
-    unsigned char mac[6];
+    // holder for the raw mac address
+    unsigned char rawMac[6];
     
-    // populate structures to hold mac address, transfer accordingly
-    if (0 == getifaddrs(&if_addrs)) {
-      for (if_addr = if_addrs; if_addr != NULL; if_addr = if_addr->ifa_next){
-          if (strcmp(if_addr->ifa_name,"en0")==0 && if_addr->ifa_addr != NULL && if_addr->ifa_addr->sa_family == AF_LINK){
-              struct sockaddr_dl* sdl = (struct sockaddr_dl *)if_addr->ifa_addr;
-//              // holder for the mac address
-//              unsigned char mac[6];
-              if (6 == sdl->sdl_alen) {
-                  memcpy(mac, LLADDR(sdl), sdl->sdl_alen);
-                  // format MAC address appropriately. Note: %02x forces at least 2 digits to appear for each entry in the MAC address. This is for both formatting and the leading 0.
-                  
-                  printf("mac  : %02x:%02x:%02x:%02x:%02x:%02x\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-                  
-                  // for debug: see what the address looks like without format
-                  cout << "Also: " << mac[0] << ":" << mac[1] << ":"  << mac[2] << ":" << mac[3] << ":"  << mac[4] << ":"  << mac[5] << endl;
-              }
-          }
-          
-      }
-        freeifaddrs(if_addrs);
-        if_addrs = NULL;
+    // holder for the human readable mac address
+    char ourMac[32]={0};
+    
+    // string to be returned
+    string finalMac;
+    
+    // populate structures to hold mac address, transfer accordingly. Note: ioctl will not work on macOS as it would on LINUX, due to SIOCGIFHWADDR not being recognized on macOS currently. This is why we use this longer for loop to match the MAC with the interface being used, below.
+    if (getifaddrs(&ifaHolder) == 0) {
         
+        // loop through interfaces
+        for (ifaInspector = ifaHolder; ifaInspector != NULL; ifaInspector = ifaInspector->ifa_next){
+            
+            // if we find the interface we're looking for
+            if (ifaInspector->ifa_name == ifaNamePreference && ifaInspector->ifa_addr != NULL && ifaInspector->ifa_addr->sa_family == AF_LINK){
+                
+                // create structure to hold MAC address
+                struct sockaddr_dl* sdl = (struct sockaddr_dl *)ifaInspector->ifa_addr;
+                
+                // grab the mac address into an unsigned char array
+                if (6 == sdl->sdl_alen) {
+                    memcpy(rawMac, LLADDR(sdl), sdl->sdl_alen);
+                    
+                    // format MAC address appropriately. Note: %02x forces at least 2 digits to appear for each entry in the MAC address. This is for both formatting and the leading 0.
+                    // use sprintf (instead of sstream) to copy address
+                    sprintf(ourMac, "%02x:%02x:%02x:%02x:%02x:%02x",rawMac[0], rawMac[1], rawMac[2], rawMac[3], rawMac[4], rawMac[5]);
+                    
+                    // to make things easier on return, topy readable mac to string
+                    finalMac = ourMac;
+                }
+            }
+        }
+        freeifaddrs(ifaHolder);
+        return finalMac;
     }
+    
+    // if getifaddrs fails, we return an empty string
     else {
-        printf("getifaddrs() failed with errno =  %i %s\n", errno, strerror(errno));
-        
+        printf("Error: %s\n", strerror(errno));
+        cout << "Error accessing host machine network interface.\n";
+        return {};
     }
-    return;
 }
 
 // get the number of times the port will be retried

@@ -137,6 +137,7 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
             // otherwise, check to see if we have a packet response, indicating an open port
             else{
 //                cout << "Receiving packet " << i+1 << "\n";
+                
                 // check for receive (remember to time out)
                 receivedPacket = recvfrom(ourUDPSock, ourBuffer, MAXRETURN, 0, (struct sockaddr *) &socketToScan, (socklen_t *) &length);
                 
@@ -145,18 +146,24 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
                 if(receivedPacket>0){
                     // if there is a response the port is likely open
                     cout << "Port " << portNum << " open - response received\n";
+                    
+                    // add it to open port lists
                     addPortList(portNum, this->openPorts);
+                    
+                    // close the port, and return connection success
                     close(ourUDPSock);
                     return NoobCodes::portConnectionSuccess;
                 }
                 
-                // if 0 is sent back, the port is closed. Note that data is never guaranteed to be sent back for UDP.
+                // if 0 is sent back, the port is closed. Note that data is never guaranteed to be sent back for UDP. With ICMP, you may receive a more obvious closed port signal (typically a RST)
                 else if(receivedPacket==0){
                     cout << "Port " << portNum << " closed. recvfrom returned 0.\n";
                     addPortList(portNum, this->openPorts);
                     close(ourUDPSock);
                     return NoobCodes::portConnectionDenied;
                 }
+                
+                // if no packet is received, the port is likely filtered (firewall settings).
                 else{
                     cout << "No packet received.\n";
                 }

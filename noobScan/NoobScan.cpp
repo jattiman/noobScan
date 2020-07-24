@@ -798,4 +798,12 @@ void NoobScan::debug(int debugPort){
     test = ourScanner->getHostIP();
     cout << test << endl;
     
+    test.clear();
+    
+    // get host machine's MAC
+    test = ourScanner->getHostMac();
+    cout << test << endl;
+    
+    // alt get host machine MAC
+    
 }
