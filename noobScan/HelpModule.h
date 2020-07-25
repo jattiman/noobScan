@@ -35,6 +35,9 @@ public:
     void returnInfo(string userString);
     void returnInfo(int userNum);
     
+    // make string lowercase
+    void convertToLowerCase(string & ourString);
+    
     // fill in the dictionary from file
     void populateDirectory();
     

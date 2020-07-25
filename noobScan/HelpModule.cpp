@@ -62,6 +62,7 @@ void HelpModule::displayOptions(){
 
 // returns help results based on the user request
 void HelpModule::returnInfo(string userString){
+    convertToLowerCase(userString);
     if(helpDirectory.count(userString)!=0){
         cout << "\t" << helpDirectory.find(userString)->first << ": ";
         cout << helpDirectory.find(userString)->second << endl << endl;
@@ -94,6 +95,15 @@ void HelpModule::returnInfo(int userNum){
     // otherwise, if it's not in the dictionary, and not a port number.
     else{
         cout << "\t" << userString << " is an undefined term! Want to add items to the dictionary? You can do that manually through settings.\n\n";
+    }
+    return;
+}
+
+// make string lowercase
+void HelpModule::convertToLowerCase(string & ourString){
+    // TODO: account for non-english character keyboards
+    for(auto & alpha: ourString){
+        alpha = tolower(alpha);
     }
     return;
 }
