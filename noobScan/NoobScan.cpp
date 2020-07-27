@@ -805,5 +805,6 @@ void NoobScan::debug(int debugPort){
     cout << test << endl;
     
     // alt get host machine MAC
+    ourScanner->debug();
     
 }

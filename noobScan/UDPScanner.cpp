@@ -21,25 +21,18 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
     // make a socket to scan ports
     int ourUDPSock = socket(AF_INET, SOCK_DGRAM, 0);
     
+    // holder for recvfrom packets
+    ssize_t receivedPacket;
+    
+    
     // if the socket was unsuccessful
     if(ourUDPSock == -1){
         cout << "Dgram error \n";
         return NoobCodes::socketCreationErrorDGRAM;
     }
     
-    // if Admin status is present, you can use ICMP and raw sockets to assist with the scan
-    if(isAdmin){
-        // make a RAW ICMP socket to receive port status later
-        int ourRawICMPSock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
-
-        // confirm ICMP socket was successful
-        if(ourRawICMPSock == -1){
-            printf("Error: %s\n", strerror(errno));
-            cout << "ICMP access error. UDP scan will be limited.\n";
-            //return NoobCodes::socketCreationErrorICMP;
-        }
-    }
-    else{
+    // if root status isn't present, inform the user that their scan will not be as powerful
+    if(!isAdmin){
         cout << "As you are not root, you cannot access ICMP/raw sockets. Your UDP scan will be more limited.\n";
     }
 
@@ -95,22 +88,73 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
         }
         return NoobCodes::portConnectionDenied;
     }
-    //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply.
-    //UDP reply: port open
-    //no response: port is either open or filtered
+    
+    //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply. UDP reply: port open. No response: port is either open or filtered
     int length = sizeof(socketToScan);
     char ourBuffer[MAXRETURN];
     
     // set time out length of 3 seconds
     struct timeval timeout = {this->getSleepTimer(),0};
+    
+    
+    
+    // if root status is present, you can use ICMP and raw sockets to assist with the scan
+    if(isAdmin){
+        
+        // make a RAW ICMP socket to receive port status later. Note: ICMP sockets are SOCK_RAW, and explictly follow ICMP protocol (IPPROTO_ICMP)
+        int receivingICMPSock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+
+        // confirm ICMP socket was successful
+        
+        // if it wasn't successful, abandon ship and inform user
+        if(receivingICMPSock == -1){
+            printf("Error: %s\n", strerror(errno));
+            cout << "ICMP access error. UDP scan will be limited.\n";
+            //return NoobCodes::socketCreationErrorICMP;
+        }
+        
+        // if ICMP creation was successful, test packet receipt through it
+        else{
+            cout << "Setting ICMP socket delay\n";
+            // ensure our receive call doesn't block indefinitely
+            setsockopt(receivingICMPSock, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout));
+            
+            cout << "Receiving from ICMP socket\n";
+            // receive from port
+            receivedPacket = recvfrom(receivingICMPSock, ourBuffer, MAXRETURN, 0, (struct sockaddr *) &socketToScan, (socklen_t *) &length);
+            
+            // create IP structure, and feed the received buffer into it
+            struct ip* ourIPHeader = (struct ip*) ourBuffer;
+            
+            // bitwise left shift the IP_HL portion of our packet
+            int ipLength = ourIPHeader->ip_hl << 2;
+            
+            // add the combined buffer and length into an ICMP structure
+            struct icmp* ourICMP = (struct icmp * ) (ourBuffer + ipLength);
+            
+            // see if the UDP port reported that it's unreachable
+            if((ourICMP->icmp_type == ICMP_UNREACH) && (ourICMP->icmp_code == ICMP_UNREACH_PORT)){
+                cout << "ICMP port unreachable and stuff.\n";
+                cout << "\ttype: " <<ourICMP->icmp_type << endl << "\tcode: " << ourICMP->icmp_code << endl;
+            }
+            else{
+                cout << "Something else happened, I guess?\n";
+                cout << "\ttype: " <<ourICMP->icmp_type << endl << "\tcode: " << ourICMP->icmp_code << endl;
+            }
+            
+            
+        }
+
+    }
+    
     // ensure our receive call doesn't block indefinitely
     setsockopt(ourUDPSock, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout));
     
     // after MAXRETURN, MSG_DONTWAIT can be used in place of the 0 to bypass any hangups. However, we'd want to wait for a designated time, just in case we can get a result.
-    ssize_t receivedPacket = recvfrom(ourUDPSock, ourBuffer, MAXRETURN, 0, (struct sockaddr *) &socketToScan, (socklen_t *) &length);
+    receivedPacket = recvfrom(ourUDPSock, ourBuffer, MAXRETURN, 0, (struct sockaddr *) &socketToScan, (socklen_t *) &length);
     
-    // TODO: make send and receive checks their own functions, to review errno and report back
-    // review packet receipt status and check for port open/closed/filtered indicators.
+    // if you are not an admin, or if the ICMP status was not successful, send and receive additional packets through non-root to see if we can get a clue about the server
+    // review packet receipt status and check for port open/closed/filtered indicators, as non-root
     if(receivedPacket==-1){
         
         if(errno == EAGAIN || errno == EWOULDBLOCK){

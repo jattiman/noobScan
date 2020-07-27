@@ -54,10 +54,10 @@ string ScanAddress::getTargetIP(string targetHost){
     }
 }
 
-// TODO: print host IP in human readable format. Nothing is working ...
+// retrieve our IP address
 string ScanAddress::getHostIP(string ifaNamePreference){
     // create address structure for IP
-    struct ifaddrs *ifaHolder;
+    struct ifaddrs *ifaPlaceholder;
     struct ifaddrs *ifaInspector;
     struct sockaddr_in *sa;
     string addr;
@@ -66,14 +66,14 @@ string ScanAddress::getHostIP(string ifaNamePreference){
     // attempt to get list of machine's network interfaces
 
     // if this fails, abandon and report
-    if(getifaddrs (&ifaHolder)==-1){
+    if(getifaddrs (&ifaPlaceholder)==-1){
         cout << "Error finding network interfaces.\n";
         return {};
     }
     // if it succeeds, find the IP for the preferred interface
     else{
         // look through all interfaces on machine
-        for (ifaInspector = ifaHolder; ifaInspector; ifaInspector = ifaInspector->ifa_next) {
+        for (ifaInspector = ifaPlaceholder; ifaInspector; ifaInspector = ifaInspector->ifa_next) {
             // ensure that the interface is
             if (ifaInspector->ifa_addr && ifaInspector->ifa_addr->sa_family==AF_INET) {
                 sa = (struct sockaddr_in *) ifaInspector->ifa_addr;
@@ -84,7 +84,7 @@ string ScanAddress::getHostIP(string ifaNamePreference){
 
             }
         }
-        freeifaddrs(ifaHolder);
+        freeifaddrs(ifaPlaceholder);
         return ourHostIP;
     }
 }
@@ -138,8 +138,8 @@ void ScanAddress::setSleepTimer(useconds_t newSleepTime){
 string ScanAddress::getHostMac(string ifaNamePreference){
     
     // define structures
-    struct ifaddrs *ifaHolder = NULL;
-    struct ifaddrs *ifaInspector = NULL;
+    struct ifaddrs *ifaPlaceholder;
+    struct ifaddrs *ifaInspector;
     
     // holder for the raw mac address
     unsigned char rawMac[6];
@@ -151,10 +151,10 @@ string ScanAddress::getHostMac(string ifaNamePreference){
     string finalMac;
     
     // populate structures to hold mac address, transfer accordingly. Note: ioctl will not work on macOS as it would on LINUX, due to SIOCGIFHWADDR not being recognized on macOS currently. This is why we use this longer for loop to match the MAC with the interface being used, below.
-    if (getifaddrs(&ifaHolder) == 0) {
+    if (getifaddrs(&ifaPlaceholder) == 0) {
         
         // loop through interfaces
-        for (ifaInspector = ifaHolder; ifaInspector != NULL; ifaInspector = ifaInspector->ifa_next){
+        for (ifaInspector = ifaPlaceholder; ifaInspector != NULL; ifaInspector = ifaInspector->ifa_next){
             
             // if we find the interface we're looking for
             if (ifaInspector->ifa_name == ifaNamePreference && ifaInspector->ifa_addr != NULL && ifaInspector->ifa_addr->sa_family == AF_LINK){
@@ -175,14 +175,13 @@ string ScanAddress::getHostMac(string ifaNamePreference){
                 }
             }
         }
-        freeifaddrs(ifaHolder);
+        freeifaddrs(ifaPlaceholder);
         return finalMac;
     }
     
     // if getifaddrs fails, we return an empty string
     else {
-        printf("Error: %s\n", strerror(errno));
-        cout << "Error accessing host machine network interface.\n";
+        printf("Error accessing host machine network interface: %s\n", strerror(errno));
         return {};
     }
 }
@@ -199,20 +198,6 @@ void ScanAddress::setRetries(int newRetryAmount){
 }
 
 void ScanAddress::debug(){
-
-    ifaddrs* iflist;
-    if (getifaddrs(&iflist) == 0) {
-        for (ifaddrs* cur = iflist; cur; cur = cur->ifa_next) {
-            if ((cur->ifa_addr->sa_family == AF_LINK) && (strcmp(cur->ifa_name, "en0") == 0) && cur->ifa_addr) {
-                sockaddr_dl* sdl = (sockaddr_dl*)cur->ifa_addr;
-                memcpy(this->ourMac, LLADDR(sdl), sdl->sdl_alen);
-                break;
-            }
-        }
-        freeifaddrs(iflist);
-        
-    }
-    cout << "Mac: " << this->ourMac << endl;
-    
+    return;
 }
 
