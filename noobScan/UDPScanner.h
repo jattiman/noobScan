@@ -22,6 +22,7 @@ public:
     
     NoobCodes runMultiScan(vector<unsigned> portNumbers, string IPToScan="127.0.0.1");
     
+    bool sendCheck(ssize_t ourSocket, int ourPort);
     
     
 private:

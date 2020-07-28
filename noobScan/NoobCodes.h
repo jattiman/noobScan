@@ -38,6 +38,9 @@ enum class NoobCodes{
     portConnectionDenied,
     portConnectionSuccess,
     portNumberInvalid,
+    portSendError,
+    portSendDenied,
+    portReceiveError,
     IPBindingIssue,
     hostNameIssue
 };
