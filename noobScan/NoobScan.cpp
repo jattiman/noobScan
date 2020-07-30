@@ -197,7 +197,7 @@ string NoobScan::promptUser(bool sign){
     return userCommand;
 }
 
-// respon to user commands by initiating the appropriate functions
+// respond to user commands by initiating the appropriate functions
 void NoobScan::commandResponse(string userCommand){
     // clear result string
     this->ourResult.clear();
@@ -789,6 +789,10 @@ void NoobScan::displayUserPortRequests(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
+    
+    userRecorder->showHistory();
+
+/*
     // get IP from URL
 //    string ourString = ourScanner->getTargetIP("Scanme.Nmap.Org");
 //    cout << "-" << ourString << "-" << endl;
@@ -806,5 +810,5 @@ void NoobScan::debug(int debugPort){
     
     // alt get host machine MAC
     ourScanner->debug();
-    
+*/
 }

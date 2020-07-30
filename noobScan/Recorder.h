@@ -25,13 +25,13 @@ public:
     void categorizeRequest(std::string userRequest, char category='x');
     
     // records user request
-    void recordRequest(std::string userRequest);
+//    void recordRequest(std::string userRequest);
     
     // purges history fully
     void clearHistory();
     
     // shows all user history
-    void showHistory();
+    void showHistory(char historyType='a');
     
     // shows history by type
     void showTypeHistory(char category='x');
