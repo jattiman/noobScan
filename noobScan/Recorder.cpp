@@ -22,21 +22,12 @@ void Recorder::categorizeRequest(std::string userRequest, char category){
     // add request to the overall record
     commandMap['a'].emplace_back(userRequest);
     
-    // TODO: Decide if record request is even needed anymore
-    // add request to record
-//    recordRequest(userRequest);
     return;
 }
 
-//// records all user requests in order
-//void Recorder::recordRequest(std::string userRequest){
-//    ourRecord.push_back(userRequest);
-//    return;
-//}
 
 // purges history fully
 void Recorder::clearHistory(){
-//    ourRecord.clear();
     this->commandMap.clear();
     return;
 }
@@ -58,10 +49,10 @@ void Recorder::showHistory(char historyType){
 }
 
 void Recorder::showTypeHistory(char category){
-    std::unordered_map<char, std::vector<std::string>>:: iterator ourItr;
+    unordered_map<char, vector<string>>:: iterator ourItr;
     for(ourItr = commandMap.begin(); ourItr != commandMap.end(); ourItr++){
         if(ourItr->first == category){
-            std::cout << "FUDGE" << std::endl;
+            cout << "FUDGE" << endl;
         }
     }
     return;
@@ -83,8 +74,8 @@ void Recorder::copyAllHistory(){
 }
 
 // set the recorder on/off status
-void Recorder::setRecorderStatus(bool recorderOn){
-    this->isRecorderOn = recorderOn;
+void Recorder::setRecorderStatus(bool recorderStatus){
+    this->isRecorderOn = recorderStatus;
     return;
 }
 

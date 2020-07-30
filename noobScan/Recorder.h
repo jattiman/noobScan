@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
 
 class Recorder {
     
@@ -22,7 +23,7 @@ public:
     Recorder();
     
     // records requests by type
-    void categorizeRequest(std::string userRequest, char category='x');
+    void categorizeRequest(string userRequest, char category='x');
     
     // records user request
 //    void recordRequest(std::string userRequest);
@@ -46,14 +47,15 @@ public:
     void copyAllHistory();
     
     // set the recorder on/off status
-    void setRecorderStatus(bool recorderOn);
+    void setRecorderStatus(bool recorderStatus);
     
     // returns if the recorder is on or off
     bool getRecorderStatus();
     
 private:
-    std::vector<std::string> ourRecord;
-    std::unordered_map<char, std::vector<std::string>> commandMap;
+    vector<string> ourRecord;
+    unordered_map<char, vector<string>> commandMap;
+    unordered_map<char, vector<std::pair <string, string>>> commandMapTwo;
     bool isRecorderOn;
 };
 
