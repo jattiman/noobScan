@@ -185,9 +185,12 @@ void HelpModule::addToDictionary(){
         
         // confirm no issue with opening
         if(ourFile.good()){
-            // append the new word to the dictionary
-            ourFile << ourEntry;
+            // append the new word to the dictionary file
+            ourFile << ourEntry << endl;
             ourFile.close();
+            
+            // TODO: add to our helpDirectory
+            cout << "Entry added successfully." << endl;
         }
         else{
             cout << "File did not open correctly." << endl;
@@ -201,13 +204,13 @@ string HelpModule::getNewEntry(){
     cin.ignore(256,'\n');
     
     // string holder for new dictionary word
-    string ourWord;
+    string ourWord="";
     
     // string holder for dictionary definition
-    string ourDefinition;
+    string ourDefinition="";
     
     // new entry string
-    string newEntry;
+    string newEntry="";
     
     // holder for user answer
     int userAnswer;
@@ -238,6 +241,10 @@ string HelpModule::getNewEntry(){
     userAnswer = getValidInput(1,2);
     
     if(userAnswer==1){
+        // add to map
+        this->addToHelpDirectory(ourWord, ourDefinition);
+        
+        // return to add to file
         return newEntry;
     }
     else{
@@ -246,6 +253,11 @@ string HelpModule::getNewEntry(){
         newEntry.clear();
         return "cancel";
     }
+}
+
+// add individual entry to help directory
+void HelpModule::addToHelpDirectory(string word, string definition){
+    this->helpDirectory[word] = definition;
 }
 
 void HelpModule::helpWarning(){

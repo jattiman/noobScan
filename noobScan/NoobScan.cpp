@@ -95,29 +95,33 @@ void NoobScan::systemCheck(){
 
 void NoobScan::adminCheck(){
     uid_t ourID = getuid();
-    //bool isAdmin = false;
 
     struct passwd *userInfo = getpwuid(ourID);
     cout << userInfo->pw_gecos << " (neat username).\n\n";
     
-    cout << "Checking admin privileges ... \n\n";
+    cout << "Checking admin/root privileges ... \n\n";
 
-    //struct group *adminCheck = getgrnam("admin");
     struct group *adminCheck = getgrnam("admin");
     
     while(*adminCheck->gr_mem != NULL) {
         
+        // if you find the admin code in titles, note that they're admin
         if (strcmp(userInfo->pw_name, *adminCheck->gr_mem) == 0) {
-            this->isAdmin=true;
+            setAdmin(true);
         }
         adminCheck->gr_mem++;
     }
     
-    if(this->isAdmin && ourID==0){
+    // confirm root is updated
+    if(ourID==0){
+        setRoot(true);
+    }
+    
+    if(this->getIsAdmin() && this->getIsRoot()){
         cout << "\tLooks like you have admin rights on this account, AND have root access.\n\tThat's a good thing.\n\n";
     }
-    else if(this->isAdmin){
-        cout << "\tLooks like you have admin rights on this machine, but you don't have root access.\n\tTry running this program as root, or with sudo, to unlock all the perks.\n\n\tAs is, you may run into some trouble when attempting to run certain scans, although the helper tool can still be used as a good resource.\n\n";
+    else if(this->getIsAdmin()){
+        cout << "\tLooks like you have admin rights on this machine, but you don't have root access.\n\tTry running this program as root, or with sudo (recommended), to unlock all the perks.\n\n\tAs is, you may run into some trouble when attempting to run certain scans, although the helper tool can still be used as a good resource.\n\n";
     }
     else{
         cout <<"\tYou don't seem to be an admin.\n\tYou can try running commands, but you will run into trouble on some scans.\n\n\tStill, feel free to use this as a helper tool, to learn more about the wonderful world of port scanning.\n\n";
@@ -157,7 +161,7 @@ void NoobScan::intakeCommands(){
         // prompt user for command
         this->ourCommand = promptUser();
         
-        // if for some reason the command is empty (return issue), prompt again without the prompt notice, to avoid it from occurring twice. This will not be in a while loop, as if it happens more than once, it's more than just a glitch, and should be remedied.
+        // if for some reason the command is empty (return issue), prompt again without the prompt notice.
         if(ourCommand.empty()){
             flush(cout);
             this->ourCommand = promptUser(false);
@@ -179,7 +183,8 @@ void NoobScan::intakeCommands(){
             // categorize the answer
         
         }
-        // otherwise, just output the answer
+        // output the answer
+        //TODO: make this a function to interpret the noobcodes...
         cout << this->ourResult;
         
     }
@@ -214,6 +219,7 @@ void NoobScan::commandResponse(string userCommand){
     return;
 }
 
+//TODO: give this a noobcodes
 void NoobScan::inspectArgs(string userCommand){
     NoobCodes userRequest;
     
@@ -223,15 +229,19 @@ void NoobScan::inspectArgs(string userCommand){
     // identify first argument
     userRequest = this->reviewPrimaryCommand();
     
+    // if first argument doesn't match, return a fail command
     if(userRequest==NoobCodes::fail){
+        // TODO: update record with fail command here
         return;
     }
     
-    // confirm secondary arguments are well formed
+    // confirm secondary arguments are well formed, and act accordingly
+    // TODO: change this function to have a return code, and use that to update the record with the appropriate command here
     this->reviewSecondaryCommands(userRequest);
     
-    // run appropriate function based on argument results
     
+    
+    // run appropriate function based on argument results
 
     return;
 }
@@ -329,6 +339,7 @@ void NoobScan::parseUserArgument(string userCommand){
 
 NoobCodes NoobScan::reviewPrimaryCommand(){
     
+    // if feedback is on, print user commands and ports selected
     if(this->systemFeedback){
         this->displayUserCommands();
         this->displayUserPortRequests();
@@ -340,7 +351,8 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
         cout << "You didn't enter a command. Try again, perhaps?\n";
         return NoobCodes::fail;
     }
-    // otherwise, decide if the primary command is for help, settings, or scanning (among other things). Thanks to the power of regex, we can compare exact matches without having to worry about extra spaces and the like.
+    
+    // otherwise, decide if the primary command is for help, settings, scanning, etc, and act accordingly.
     else if(parsedCommand[0].compare("help")==0){
         outputFeedback("Asking for help?\n");
         return NoobCodes::helpRequest;
@@ -367,6 +379,7 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
         return NoobCodes::fail;
     }
 }
+
 
 NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
     switch (commandType) {
@@ -454,8 +467,8 @@ void NoobScan::scanRequestCheck(){
     
     string scanTarget;
     
-    // if at least 3 arguments (scan [scan type] [destination]), the command is most likely sufficiently formed
-    if(parsedCount>=3){
+    // if at least 3 arguments (scan [scan type] [destination]), the command is most likely sufficiently formed. Remember: ports are not part of the parsedCommand
+    if(parsedCount >= 3){
         // check scan type
         scanType=checkScanType();
         
@@ -468,7 +481,7 @@ void NoobScan::scanRequestCheck(){
         }
         else if(scanType==NoobCodes::udp){
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
-            this->ourUDPScan->runScan(portsToScan[0], this->isAdmin);
+            this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
         }
         else{
             cout << "Scan type currently unavailable.\n";
@@ -647,8 +660,12 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
                 return NoobCodes::restart;
             }
             else if(userAnswer==2){
+                
+                // clear the input buffer to help prevent funny business
                 cin.ignore(256,'\n');
                 string viewEntry;
+                
+                // prompt user and attempt to retrieve entry
                 cout << "Please enter the term you'd like to look up: ";
                 getline(cin,viewEntry);
                 this->ourHelper->returnInfo(viewEntry);
@@ -752,9 +769,28 @@ void NoobScan::setSystemFeedback(bool isOn){
     this->systemFeedback=isOn;
 }
 
+// turn on and off root indicator
+void NoobScan::setRoot(bool rootStatus){
+    this->isRoot=rootStatus;
+}
+
+// turn on and off admin indicator
+void NoobScan::setAdmin(bool adminStatus){
+    this->isAdmin=adminStatus;
+}
+
+
 // check if feedback is on
 bool NoobScan::getSystemFeedback(){
     return this->systemFeedback;
+}
+
+bool NoobScan::getIsRoot(){
+    return this->isRoot;
+}
+
+bool NoobScan::getIsAdmin(){
+    return this->isAdmin;
 }
 
 // clears the user command

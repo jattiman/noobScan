@@ -110,7 +110,15 @@ public:
     
     void setSystemFeedback(bool isOn);
     
+    void setRoot(bool rootStatus);
+    
+    void setAdmin(bool adminStatus);
+    
     bool getSystemFeedback();
+    
+    bool getIsRoot();
+    
+    bool getIsAdmin();
     
     // clear commands for next round of questions
     void clearUserCommand();
@@ -141,8 +149,11 @@ private:
     // bool reflecting if user has admin rights to their system
     bool isAdmin = false;
     
+    // bool reflecting if user has root access on their system
+    bool isRoot = false;
+    
     // bool reflecting if user wants more program feedback
-    bool systemFeedback = true;
+    bool systemFeedback = false;
     
     // vector holding the string-based user commands
     vector<string> parsedCommand;

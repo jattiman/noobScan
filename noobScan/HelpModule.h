@@ -47,8 +47,11 @@ public:
     // prompt user to add entry
     void promptToAdd();
     
-    // add entry to dictionary
+    // add entry to dictionary file
     void addToDictionary();
+    
+    // add individual entry to help directory
+    void addToHelpDirectory(string word, string definition);
     
     // prompt user for new dictionary entry
     string getNewEntry();
