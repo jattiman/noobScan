@@ -9,7 +9,20 @@
 
 ScanAddress::ScanAddress(){
     this->sleepTimer=2;
-    this->retries=3;
+    this->retries=2;
+    this->ourInterface="en0";
+}
+
+// confirm user input is valid
+int ScanAddress::getValidInput(int minNum, int maxNum){
+    int userInput;
+    cout << ">: ";
+    while(!(cin >> userInput) || userInput < minNum || userInput > maxNum){
+        cin.clear();
+        cin.ignore(500,'\n');
+        cout << "Please select a valid option." << endl;
+    }
+    return userInput;
 }
 
 // confirm the scan type being requested
@@ -67,7 +80,7 @@ string ScanAddress::getHostIP(string ifaNamePreference){
 
     // if this fails, abandon and report
     if(getifaddrs (&ifaPlaceholder)==-1){
-        cout << "Error finding network interfaces.\n";
+        cout << "\tError finding network interfaces.\n";
         return {};
     }
     // if it succeeds, find the IP for the preferred interface
@@ -89,6 +102,7 @@ string ScanAddress::getHostIP(string ifaNamePreference){
     }
 }
 
+// add a port to the port list
 void ScanAddress::addPortList(int newPortNumber, vector<int> portVector){
     portVector.emplace_back(newPortNumber);
     return;
@@ -191,10 +205,64 @@ int ScanAddress::getRetries(){
     return this->retries;
 }
 
+string ScanAddress::getInterface(){
+    return this->ourInterface;
+}
+
+// variable delay status
+bool ScanAddress::getVariableDelayStatus(){
+    return this->variableDelay;
+}
+
 // set the number of times the port will be retried
 void ScanAddress::setRetries(int newRetryAmount){
-    this->retries=newRetryAmount;
+    this->retries = newRetryAmount;
     return;
+}
+
+// set the user interface
+void ScanAddress::setInterface(string ifType){
+    
+    // ensure any items in string are fully cleared to avoid oddities from arising
+    this->ourInterface.clear();
+    
+    // assign new interface string
+    this->ourInterface = ifType;
+}
+
+void ScanAddress::setVariableDelayStatus(bool variableDelayStatus){
+    this->variableDelay = variableDelayStatus;
+    return;
+}
+
+// training wheels scan to prompt user step by step
+//TODO: most to noobscan main?
+NoobCodes ScanAddress::assistedScan(){
+    int userAnswer=0;
+    int portToScan=1;
+    string targetToScan;
+    
+    // ask user what kind of scan they want to do
+    cout << "What kind of scan would you like to conduct?\n";
+    cout << "\t1. TCP\n";
+    cout << "\t2. UDP\n";
+    
+    userAnswer = getValidInput(1,2);
+    
+    // have user enter the IP address
+    cout << "Enter IP address, or URL, that you are targeting for the scan:\n";
+    getline(cin,targetToScan);
+    
+    // check IP validity
+    
+    
+    // have user enter the port to scan
+    cout << "Enter 1 port number to scan:\n";
+    portToScan = getValidInput(1,65535);
+    
+    // run the scan
+    
+    return NoobCodes::fail;
 }
 
 void ScanAddress::debug(){

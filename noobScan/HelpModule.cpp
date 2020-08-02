@@ -62,16 +62,30 @@ void HelpModule::displayOptions(){
 
 // returns help results based on the user request
 void HelpModule::returnInfo(string userString){
+    
+    // ensure the string is lowercase to minimize errors
     convertToLowerCase(userString);
+    
+    // confirm the item is in the dictionary
     if(helpDirectory.count(userString)!=0){
+        
+        // print out the word and definition, formatted to screen
         cout << "\t" << helpDirectory.find(userString)->first << ": ";
         cout << helpDirectory.find(userString)->second << endl << endl;
     }
+    
+    // if the term isn't defined, and is a number
     else if(isdigit(userString[0])){
+        
+        // explain that the port is undefined
         cout << "\t" << userString << " is undefined. It looks like you may be searching for port. If so, this port is unassigned.\n"
             << "\tPorts typically number from 0 to 65535.\n" << endl;
     }
+    
+    // if the term isn't defined and isn't a number
     else{
+        
+        // display generic "undefined term" script, and direct user to add the item in the future if they wish
         cout << "\t" << userString << " is an undefined term! Want to add items to the dictionary? You can do that manually through settings.\n" << endl;
     }
     return;

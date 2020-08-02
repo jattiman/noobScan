@@ -89,26 +89,39 @@ void NoobScan::systemCheck(){
     // check user operating system for compatibility
     this->opCheck();
     
+    // confirm user IP is retrievable (will be useful for certain scans)
+    this->hostIPCheck();
+    
     // mentally prepare user
     cout << "Please choose your next commands carefully ... \n\n";
 }
 
 void NoobScan::adminCheck(){
-    uid_t ourID = getuid();
-
-    struct passwd *userInfo = getpwuid(ourID);
-    cout << userInfo->pw_gecos << " (neat username).\n\n";
     
+    // store getuid to eventually determine root
+    uid_t ourID = getuid();
+    
+    // create structure to pull host machine user account info
+    struct passwd *userInfo = getpwuid(ourID);
+    
+    // output username/full name to user. If they're logged in as root, it should be obvious through this output ("root" and "system administrator" will likely appear unless their defaults were changed). Otherwise, it'll be whatever their default username is for non-root profiles.
+    cout << userInfo->pw_name << " (or should we call you " << userInfo->pw_gecos << "?).\n\n";
+    
+    // see if they are in the admin group
     cout << "Checking admin/root privileges ... \n\n";
-
+    
+    // a pointer to the group structure will allow you to see if "admin" privileges are there
     struct group *adminCheck = getgrnam("admin");
     
+    // rotate through group member list for user
     while(*adminCheck->gr_mem != NULL) {
         
-        // if you find the admin code in titles, note that they're admin
+        // if you find the admin code under our username, they are likely an admin. Break out of the loop.
         if (strcmp(userInfo->pw_name, *adminCheck->gr_mem) == 0) {
             setAdmin(true);
+            break;
         }
+        // otherwise, keep cycling through the list to see if admin credentials pop up
         adminCheck->gr_mem++;
     }
     
@@ -130,8 +143,33 @@ void NoobScan::adminCheck(){
 
 // confirm user host IP is retrievable
 void NoobScan::hostIPCheck(){
+    cout << "Retrieving your IP address ... \n";
     
+    string hostIP = ourScanner->getHostIP(ourScanner->getInterface());
+    
+    // if the user isn't using wireless
+    if(hostIP.empty()){
+        
+        // see if their IP can be read through their wired port
+        hostIP=ourScanner->getHostIP("eth0");
+        if(hostIP.empty()){
+            cout << "\tWe're having problems retrieving your IP address, which means the scans may have some issues.\n\tPerhaps you aren't connected to the internet, or perhaps we aren't trying the correct interface name.\n\tThink you know what interface you're connecting under? Try entering it in the settings. Typically we check for en0 and eth0.\n\n";
+            
+            // TODO: (stretch) prompt user to enter in additional IP interface
+            
+            return;
+        }
+        else{
+            // change port to wired for future scans
+            ourScanner->setInterface("eth0");
+        }
+    }
+    
+    // output the user's IP address
+    cout << "\tYour IP address is: " << hostIP << "\n";
+    cout << "\tRemember: your IP address may change, but you should still always keep it private.\n\n";
     return;
+    
 }
 
 // check user operating system to ensure it's the right one for this program
@@ -637,7 +675,7 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
                     settings=NoobCodes::settingsForScanGroups;
                     break;
                 case 5:
-                    settings=NoobCodes::settingsForTimeouts;
+                    settings=NoobCodes::settingsForDelay;
                     break;
                 case 6:
                     settings=NoobCodes::settingsForDebugText;
@@ -677,11 +715,15 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
         }
         // if the user wants to change the delay between scanning ports
         else if(settings == NoobCodes::settingsForDelay){
+            
             // display delay time options (variable, or enter specific number)
             cout << "Your current delay time between ports is " << this->ourScanner->getSleepTimer() << endl << endl;
             cout << "\t1. Set specific delay time\n"
             << "\t2. Enable variable delay time between scans.\n"
             << "\t3. Exit (keep current delay setting)\n";
+            userAnswer = getValidInput(1,3);
+            // TODO: follow up with 1-3 answers
+            
             break;
         }
         else if(settings == NoobCodes::settingsForRecorder){
@@ -700,13 +742,16 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             userAnswer = getValidInput(1,3);
             if(userAnswer==1){
                 this->userRecorder->setRecorderStatus(true);
+                cout << "\tRecorder: on.\n";
                 return NoobCodes::restart;
             }
             else if(userAnswer==2){
                 this->userRecorder->setRecorderStatus(false);
+                cout << "\tRecorder: off.\n";
                 return NoobCodes::restart;
             }
             else{
+                cout << "\tExiting settings: on.\n";
                 return NoobCodes::restart;
             }
         }

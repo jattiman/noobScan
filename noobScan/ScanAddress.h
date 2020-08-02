@@ -47,6 +47,9 @@ public:
     
     ScanAddress();
     
+    // confirm user input is valid
+    int getValidInput(int minNum=0, int maxNum=65535);
+    
     // confirm the scan type being requested
     char checkScanType(string scanCommand);
     
@@ -79,14 +82,27 @@ public:
     
     // get port retry number
     int getRetries();
+        
+    // get the user interface
+    string getInterface();
+    
+    // variable delay status
+    bool getVariableDelayStatus();
     
     // set the retry number
     void setRetries(int newRetryAmount);
     
-    void debug();
+    // set the user interface
+    void setInterface(string ifType);
+    
+    // set variable delay
+    void setVariableDelayStatus(bool variableDelayStatus);
     
     // training wheels scan to prompt user step by step
+    NoobCodes assistedScan();
     
+    // print debug statement
+    void debug();
     
     
 private:
@@ -105,11 +121,17 @@ private:
     // output to screen
     bool screenOutput;
     
+    // variable delay between scans
+    bool variableDelay;
+    
     // vector of ports to scan
     vector<int> portsToScan;
     
     // sleep timer
     useconds_t sleepTimer;
+    
+    // interface the use
+    string ourInterface;
     
     // our mac address
     char ourMac[32]={0};
