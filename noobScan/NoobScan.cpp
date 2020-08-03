@@ -649,18 +649,19 @@ NoobCodes NoobScan::findSettingsRequestType(string userRequest){
 NoobCodes NoobScan::displaySettings(NoobCodes settings){
     
     int userAnswer = 0;
-    while(true){
+    while(settings != NoobCodes::exitRequest){ // previously while true
         // if a general settings request came in
-        if(settings == NoobCodes::settingsRequest){
+        if(settings == NoobCodes::settingsRequest || settings == NoobCodes::restart){
             // display default menu and get input
             cout << "\t1. Assisted Scan\n"
             << "\t2. Dictionary\n"
             << "\t3. Recorder Settings\n"
             << "\t4. Scan groups\n"
-            << "\t5. Timeouts\n"
-            << "\t6. Toggle feedback text\n"
-            << "\t7. Exit settings\n\n";
-            userAnswer=getValidInput(1,7);
+            << "\t5. Scan delay time\n"
+            << "\t6. Scan timeout time\n"
+            << "\t7. Toggle feedback text\n"
+            << "\t8. Exit settings\n\n";
+            userAnswer=getValidInput(1,8);
             switch (userAnswer) {
                 case 1:
                     settings=NoobCodes::settingsForAssistedScan;
@@ -678,10 +679,13 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
                     settings=NoobCodes::settingsForDelay;
                     break;
                 case 6:
+                    settings=NoobCodes::settingsForTimeouts;
+                    break;
+                case 7:
                     settings=NoobCodes::settingsForDebugText;
                     break;
                 default:
-                    return NoobCodes::restart;
+                    settings=NoobCodes::exitRequest;
             }
             // restart the settings menu with the new setting in place
             continue;
@@ -695,7 +699,9 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             userAnswer = getValidInput(1,3);
             if(userAnswer==1){
                 this->ourHelper->addToDictionary();
-                return NoobCodes::restart;
+                //return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
             }
             else if(userAnswer==2){
                 
@@ -707,10 +713,14 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
                 cout << "Please enter the term you'd like to look up: ";
                 getline(cin,viewEntry);
                 this->ourHelper->returnInfo(viewEntry);
-                return NoobCodes::restart;
+//                return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
             }
             else{
-                return NoobCodes::restart;
+                //return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
             }
         }
         // if the user wants to change the delay between scanning ports
@@ -723,6 +733,7 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             << "\t3. Exit (keep current delay setting)\n";
             userAnswer = getValidInput(1,3);
             // TODO: follow up with 1-3 answers
+            
             
             break;
         }
@@ -743,21 +754,27 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             if(userAnswer==1){
                 this->userRecorder->setRecorderStatus(true);
                 cout << "\tRecorder: on.\n";
-                return NoobCodes::restart;
+//                return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
             }
             else if(userAnswer==2){
                 this->userRecorder->setRecorderStatus(false);
                 cout << "\tRecorder: off.\n";
-                return NoobCodes::restart;
+//                return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
             }
             else{
-                cout << "\tExiting settings: on.\n";
-                return NoobCodes::restart;
+                cout << "\tExiting recorder settings.\n";
+//                return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
             }
         }
         else if(settings == NoobCodes::settingsForTimeouts){
             // TODO: figure out how long to wait until timeout between pings, and update variables here.
-            cout << "The current timeout limit for server response is: ";
+            cout << "The current timeout limit for server response is: " << this->ourScanner->getSleepTimer() << " seconds.";
             cout << endl;
             break;
         }
@@ -766,18 +783,46 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             
             // display recorder on/off status
             cout << "Feedback text is currently ";
+            if(this->getSystemFeedback()){
+                cout << "on.\n\n";
+            }
+            else{
+                cout << "off.\n\n";
+            }
             
-            cout << "\n\n";
-            
-            cout << "\t1. Ensure feedback on.\n"
-            << "\t2. Ensure feedback off.\n"
+            cout << "\t1. Turn feedback on.\n"
+            << "\t2. Turn feedback off.\n"
             << "\t3. Exit (keep current feedback setting)\n";
+            userAnswer = getValidInput(1,3);
+            if(userAnswer==1){
+                this->setSystemFeedback(true);
+                cout << "\tFeedback: on.\n";
+//                return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;            }
+            else if(userAnswer==2){
+                this->setSystemFeedback(false);
+                cout << "\tFeedback: off.\n";
+//                return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
+            }
+            else{
+                cout << "\tExiting feedback settings.\n";
+//                return NoobCodes::restart;
+                settings = NoobCodes::restart;
+                continue;
+            }
             break;
         }
         else if(settings == NoobCodes::settingsForScanGroups){
             cout << "Select your scan group to learn more:\n";
             // display scan groups
-            
+            cout << "\t1. Popular \n";
+            cout << "\t2. \n";
+            cout << "\t3. \n";
+            cout << "\t4. \n";
+            cout << "\t5. Make your own.\n";
             // allow edit of scan groups
             
             // exit
@@ -791,6 +836,7 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
         }
         else if(settings == NoobCodes::exitRequest){
             cout << "Exiting settings ... \n";
+            settings = NoobCodes::exitRequest;
             break;
         }
         else{
@@ -846,7 +892,7 @@ void NoobScan::clearUserCommand(){
 }
 
 void NoobScan::displayUserCommands(){
-    cout << "\n\tCommands input:\t";
+    cout << "\tCommands input:\t";
     for(const auto & i: this->parsedCommand){
         cout << i << " ";
     }
@@ -855,7 +901,7 @@ void NoobScan::displayUserCommands(){
 }
 
 void NoobScan::displayUserPortRequests(){
-    cout << "\n\tPorts requested:\t";
+    cout << "\tPorts requested:\t";
     if(portsToScan.empty()){
         cout << "none.";
     }

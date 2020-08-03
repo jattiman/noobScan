@@ -106,6 +106,8 @@ public:
     
     NoobCodes displaySettings(NoobCodes settings=NoobCodes::settingsRequest);
     
+    
+    
     NoobCodes checkScanType();
     
     void setSystemFeedback(bool isOn);

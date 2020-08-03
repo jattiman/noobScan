@@ -140,11 +140,11 @@ NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
     return NoobCodes::success;
 }
 
-useconds_t ScanAddress::getSleepTimer(){
+unsigned int ScanAddress::getSleepTimer(){
     return this->sleepTimer;
 }
 
-void ScanAddress::setSleepTimer(useconds_t newSleepTime){
+void ScanAddress::setSleepTimer(unsigned int newSleepTime){
     this->sleepTimer=newSleepTime;
     return;
 }

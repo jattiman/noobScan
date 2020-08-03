@@ -72,10 +72,7 @@ public:
     NoobCodes portValidityCheck(int portNumToCheck);//0 and 65535
     
     // get sleep time
-    useconds_t getSleepTimer();
-    
-    // set sleep time
-    void setSleepTimer(useconds_t newSleepTime);
+    unsigned int getSleepTimer();
     
     // get host MAC address
     string getHostMac(string ifaNamePreference = "en0");
@@ -88,6 +85,9 @@ public:
     
     // variable delay status
     bool getVariableDelayStatus();
+    
+    // set sleep time
+    void setSleepTimer(unsigned int newSleepTime);
     
     // set the retry number
     void setRetries(int newRetryAmount);
@@ -128,7 +128,7 @@ private:
     vector<int> portsToScan;
     
     // sleep timer
-    useconds_t sleepTimer;
+    unsigned int sleepTimer;
     
     // interface the use
     string ourInterface;

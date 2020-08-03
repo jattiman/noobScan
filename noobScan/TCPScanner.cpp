@@ -9,9 +9,7 @@
 #include "TCPScanner.h"
 
 TCPScanner::TCPScanner(){
-    //this->openPorts.clear();
     this->openPorts.reserve(1000);
-    //this->closedPorts.clear();
 }
 
 void TCPScanner::addOpenPorts(int newOpenPort){
@@ -37,7 +35,7 @@ void TCPScanner::printOpenPorts(){
     return;
 }
 
-
+// runs a TCP scan on a single port
 NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     
     // make a socket to scan ports
@@ -81,7 +79,7 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     return NoobCodes::success;
 }
 
-// scan multiple ports at once
+// runs TCP scan on multiple ports 
 NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPToScan){
     
     // placeholder for scanning socket

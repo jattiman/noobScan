@@ -103,8 +103,6 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
     // set time out length of 3 seconds
     struct timeval timeout = {this->getSleepTimer(),0};
     
-    
-    
     // if root status is present, you can use ICMP and raw sockets to assist with the scan
     if(isAdmin){
         
