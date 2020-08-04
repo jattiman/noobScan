@@ -102,11 +102,26 @@ public:
     // respond to settings requests
     void settingsRequestCheck();
     
+    // interprets userRequest to display appropriate settings menu
     NoobCodes findSettingsRequestType(string userRequest);
     
+    // the settings hub goes here
     NoobCodes displaySettings(NoobCodes settings=NoobCodes::settingsRequest);
     
+    // displays the general settings options menu
+    void settingsOptions(int & userAnswer, NoobCodes & settings);
     
+    // displays the dictionary options menu
+    void settingsDictionary(int & userAnswer, NoobCodes & settings);
+    
+    // displays the recorder options
+    void settingsRecorder(int & userAnswer, NoobCodes & settings);
+    
+    // displays the timeouts options
+    void settingsTimeouts(int & userAnswer, NoobCodes & settings);
+    
+    // displays the debug options
+    void settingsDebug(int & userAnswer, NoobCodes & settings);
     
     NoobCodes checkScanType();
     

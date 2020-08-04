@@ -86,7 +86,7 @@ public:
     // variable delay status
     bool getVariableDelayStatus();
     
-    // set sleep time
+    // set sleep time - the time between retries (how long you wait for a timeout)
     void setSleepTimer(unsigned int newSleepTime);
     
     // set the retry number
