@@ -124,8 +124,26 @@ private:
     // variable delay between scans
     bool variableDelay;
     
-    // vector of ports to scan
+    // vector of ports to scan (defined by user)
     vector<int> portsToScan;
+    
+    // vector of popular ports to scan (predefined)
+    vector<int> popularPorts {21, 22, 23, 25, 53, 80, 110, 111, 135, 139, 143, 443, 445, 993, 995, 1723, 3306, 3389, 5900, 8080};
+    
+    // vector of chat-type ports to scan (predefined)
+    vector<int> chatPorts {1863, 5050, 5190, 5222, 5223, 6665, 6666, 6667, 6668, 6669, 6679, 6697, 6891, 6892, 6893, 6894, 6895, 6896, 6897, 6898, 6899, 6900, 6901, 7648, 7649, 8767, 9119, 25999};
+    
+    // vector of typical gaming-type ports to scan (predefined)
+    vector<int> gamingPorts {1725, 2302, 3074, 3724, 6112, 6500, 12035, 12036, 14567, 15118, 27015, 28960};
+    
+    // vector of typical P2P (peer to peer) ports to scan (predefined)
+    vector<int> peerPorts {411, 412, 1214, 1337, 4672, 6257, 6346, 6347, 6699, 6881, 6999};
+    
+    // vector of typical streaming ports to scan (predefined)
+    vector<int> streamingPorts {1755, 3784, 3785, 5001, 5004, 5005, 5060, 6970, 8000, 24800};
+    
+    // vector of historical malicious ports to scan (predefined)
+    vector<int> maliciousPorts {1080, 2745, 3127, 4444, 5554, 8866, 9898, 9988, 12345, 27374, 31337};
     
     // sleep timer
     unsigned int sleepTimer;
