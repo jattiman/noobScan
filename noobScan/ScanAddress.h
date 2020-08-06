@@ -145,6 +145,9 @@ private:
     // vector of historical malicious ports to scan (predefined)
     vector<int> maliciousPorts {1080, 2745, 3127, 4444, 5554, 8866, 9898, 9988, 12345, 27374, 31337};
     
+    // vector holding custom port list
+    vector<int> customList;
+    
     // sleep timer
     unsigned int sleepTimer;
     

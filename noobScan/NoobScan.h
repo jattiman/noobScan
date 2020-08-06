@@ -123,6 +123,11 @@ public:
     // displays the debug options
     void settingsDebug(int & userAnswer, NoobCodes & settings);
     
+    // displays scan groups options
+    void settingsGroups(int & userAnswer, NoobCodes & settings);
+    
+    void getNums(vector<unsigned> & ourNums);
+    
     NoobCodes checkScanType();
     
     void setSystemFeedback(bool isOn);
@@ -183,7 +188,7 @@ private:
     
     // string holding the URL (if no IP) from the user command
     vector<string> siteToScan;
-    
+        
 };
 
 #endif /* NoobScan_h */

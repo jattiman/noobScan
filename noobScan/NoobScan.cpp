@@ -802,6 +802,97 @@ void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings){
     return;
 }
 
+void NoobScan::getNums(vector<unsigned> & ourNums){
+    string ourLine;
+    smatch matches;
+    regex portHunter("[^\\.]\\b[0-9]+\\b(?!\\.)");
+    bool firstError=true;
+    
+    cout << endl;
+    // TODO: figure out why this is being skipped
+    getline(cin,ourLine);
+    
+    while(regex_search(ourLine, matches, portHunter)){
+        // for all matches
+        
+        for(auto i:matches){
+            // once a match is found, push it to the port list (remember to convert to number, so the program doesn't implode)
+            try {
+                // TODO: make check for good unsigned conversion
+                // convert the string to an unsigned number
+                unsigned long ourPort = stoul(i);
+                ourNums.push_back((unsigned int)ourPort);
+            } catch (const std::invalid_argument) {
+                if(firstError){
+                    ourNums.pop_back();
+                    firstError=false;
+                }
+                cout << "Your formatting is off (misreading for " << i << "). Results may be unexpected.\n";
+            }
+            // trim the found match from the string, and continue searching for matches
+            ourLine=matches.suffix().str();
+        }
+    }
+    
+    cout << "You entered: ";
+    for(auto & a: ourNums){
+        cout << a << " ";
+    }
+    
+    return;
+}
+
+// displays scan groups options
+void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
+
+    // display scan groups
+    cout << "Select your scan group to learn more:\n";
+    cout << "\t1. Chat\n";
+    cout << "\t2. Gaming\n";
+    cout << "\t3. Malicious\n";
+    cout << "\t4. Peer\n";
+    cout << "\t5. Popular \n";
+    cout << "\t6. Streaming\n";
+    cout << "\t7. Make your own.\n";
+    cout << "\t8. Exit\n";
+    
+    // allow edit of scan groups
+    userAnswer=getValidInput(1,8);
+    
+    switch (userAnswer) {
+        case 1:
+            this->ourHelper->returnInfo("chat");
+            break;
+        case 2:
+            this->ourHelper->returnInfo("gaming");
+            break;
+        case 3:
+            this->ourHelper->returnInfo("malicious");
+            break;
+        case 4:
+            this->ourHelper->returnInfo("peer");
+            break;
+        case 5:
+            this->ourHelper->returnInfo("popular");
+            break;
+        case 6:
+            this->ourHelper->returnInfo("streaming");
+            break;
+        case 7:
+            cout << "\tPlease enter the ports you want to add to your own group:\n";
+            getNums(portsToScan);
+            break;
+        case 8:
+            cout << "Exiting ... \n";
+            settings = NoobCodes::restart;
+            break;
+        default:
+            break;
+    }
+    
+    return;
+}
+
 NoobCodes NoobScan::displaySettings(NoobCodes settings){
     
     int userAnswer = 0;
@@ -859,20 +950,13 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             // allow user to turn debug text on/off
             settingsDebug(userAnswer, settings);
             
-            // jupm to top of menu
+            // jump to top of menu
             continue;
         }
         else if(settings == NoobCodes::settingsForScanGroups){
             
-            // TODO: update scan groups
-            cout << "Select your scan group to learn more:\n";
-            // display scan groups
-            cout << "\t1. Popular \n";
-            cout << "\t2. \n";
-            cout << "\t3. \n";
-            cout << "\t4. \n";
-            cout << "\t5. Make your own.\n";
-            // allow edit of scan groups
+            // take them to the settings page.
+            settingsGroups(userAnswer, settings);
             
             // exit
             continue;
