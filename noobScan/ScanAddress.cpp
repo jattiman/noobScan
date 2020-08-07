@@ -144,6 +144,11 @@ unsigned int ScanAddress::getSleepTimer(){
     return this->sleepTimer;
 }
 
+void ScanAddress::setCustomList(vector<unsigned int> newList){
+    this->customList.clear();
+    this->customList = newList;
+}
+
 void ScanAddress::setSleepTimer(unsigned int newSleepTime){
     this->sleepTimer=newSleepTime;
     return;

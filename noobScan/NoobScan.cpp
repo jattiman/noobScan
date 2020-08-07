@@ -802,42 +802,71 @@ void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings){
     return;
 }
 
+// split input to strings
+void NoobScan::splitString(string originString, vector<string> & splitString){
+    
+    // set create a holder for the pieces of the string
+    string stringToken;
+    
+    // stringstream to parse the string
+    stringstream ourStream(originString);
+    
+    // move each individual entry, with whitespace as a delimiter, into the referenced string vector
+    while(getline(ourStream, stringToken, ' ')){
+        splitString.push_back(stringToken);
+    }
+    
+    return;
+}
+
+// pull all numbers from a string, and place them into a vector
 void NoobScan::getNums(vector<unsigned> & ourNums){
-    string ourLine;
+    // set up variables to capture numbers from string
+    vector<string> splitString;
+    unsigned portHolder;
+    string ourString;
     smatch matches;
-    regex portHunter("[^\\.]\\b[0-9]+\\b(?!\\.)");
-    bool firstError=true;
+    regex numberHunter("(\\d+)");
+    bool tryAgain = false;
     
-    cout << endl;
-    // TODO: figure out why this is being skipped
-    getline(cin,ourLine);
-    
-    while(regex_search(ourLine, matches, portHunter)){
-        // for all matches
-        
-        for(auto i:matches){
-            // once a match is found, push it to the port list (remember to convert to number, so the program doesn't implode)
-            try {
-                // TODO: make check for good unsigned conversion
-                // convert the string to an unsigned number
-                unsigned long ourPort = stoul(i);
-                ourNums.push_back((unsigned int)ourPort);
-            } catch (const std::invalid_argument) {
-                if(firstError){
-                    ourNums.pop_back();
-                    firstError=false;
-                }
-                cout << "Your formatting is off (misreading for " << i << "). Results may be unexpected.\n";
-            }
-            // trim the found match from the string, and continue searching for matches
-            ourLine=matches.suffix().str();
+    do{
+        if(tryAgain){
+            cout << "Please try entering your port numbers again: ";
         }
-    }
+        ourNums.clear();
+        ourString.clear();
+        splitString.clear();
+        
+        // intake the port numbers
+        cin.ignore();
+        getline(cin,ourString);
+        
+        // split the string
+        this->splitString(ourString, splitString);
+        
+        // take in only the entries that are full numbers
+        for(auto & splitElement: splitString){
+            if(regex_match(splitElement, numberHunter)){
+                portHolder=(unsigned)stoul(splitElement);
+                ourNums.push_back(portHolder);
+            }
+        }
+        
+        // have user confirm they entered the correct ports
+        cout << "\nAre you sure you want to add these ports?: ";
+        for(auto & aNumber: ourNums){
+            cout << aNumber << " ";
+        }
+        cout << endl;
+        cout << "\t1. yes\n";
+        cout << "\t2. no\n";
+        
+        // use a ternary operator to show that I can!
+        tryAgain = (this->getValidInput(1,2)==1)? false : true;
+        
+    }while(tryAgain);
     
-    cout << "You entered: ";
-    for(auto & a: ourNums){
-        cout << a << " ";
-    }
+    ourScanner->setCustomList(ourNums);
     
     return;
 }
@@ -879,8 +908,8 @@ void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
             this->ourHelper->returnInfo("streaming");
             break;
         case 7:
-            cout << "\tPlease enter the ports you want to add to your own group:\n";
-            getNums(portsToScan);
+            cout << "Please enter the ports you want to add to your own group (press enter when done): ";
+            getNums(this->portsToScan);
             break;
         case 8:
             cout << "Exiting ... \n";
@@ -1051,6 +1080,10 @@ void NoobScan::displayUserPortRequests(){
 void NoobScan::debug(int debugPort){
     
     userRecorder->showHistory();
+    
+    // other porthunter option
+//    regex rx(R"((?:^|\s)([+-]?[[:digit:]]+(?:\.[[:digit:]]+)?)(?=$|\s))");
+
 
 /*
     // get IP from URL

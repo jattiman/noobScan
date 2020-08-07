@@ -126,7 +126,11 @@ public:
     // displays scan groups options
     void settingsGroups(int & userAnswer, NoobCodes & settings);
     
+    // get numbers only from input
     void getNums(vector<unsigned> & ourNums);
+    
+    // split input to strings
+    void splitString(string originString, vector<string> & splitString);
     
     NoobCodes checkScanType();
     
