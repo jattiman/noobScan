@@ -295,9 +295,9 @@ void NoobScan::parseUserArgument(string userCommand){
     
     // this searches for words only (no numbers/white space)
     /* breakdown of Regex info, for those curious:
-    \\b
-     [^\\d\\W]+
-     \\b
+    \\b word boundary at the start (non-word before word)
+     [^\\d\\W]+ no digits or whitespace
+     \\b word boundary at the end (space after word)
     */
     regex commandHunter("\\b[^\\d\\W]+\\b");
     
@@ -826,6 +826,8 @@ void NoobScan::getNums(vector<unsigned> & ourNums){
     unsigned portHolder;
     string ourString;
     smatch matches;
+    
+    // a simple regex of all digits
     regex numberHunter("(\\d+)");
     bool tryAgain = false;
     
@@ -861,7 +863,7 @@ void NoobScan::getNums(vector<unsigned> & ourNums){
         cout << "\t1. yes\n";
         cout << "\t2. no\n";
         
-        // use a ternary operator to show that I can!
+        // use a ternary operator to show that I can (even though they're less readable)!
         tryAgain = (this->getValidInput(1,2)==1)? false : true;
         
     }while(tryAgain);
