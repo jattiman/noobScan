@@ -14,7 +14,7 @@ NoobScan::NoobScan(){
     this->userRecorder = new Recorder();
     this->ourScanner = new ScanAddress();
     this->ourTCPScan = new TCPScanner();
-    this->ourUDPScan = new UDPScanner();
+    //this->ourUDPScan = new UDPScanner();
     this->ourSYNScan = new SYNScanner();
     
     // clear any noise in out command strings
@@ -470,6 +470,7 @@ void NoobScan::IPRequestCheck(){
     
     // If user potentially input a URL
     if(parsedCommand.size()==2){
+        
         // copy URL input (for later output)
         userURL = parsedCommand[1];
         
@@ -574,8 +575,15 @@ void NoobScan::scanRequestCheck(){
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
         }
         else if(scanType==NoobCodes::udp){
+            // instantiate UDP scanner
+            this->ourUDPScan = new UDPScanner();
+            
+            // run the scan
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
             this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
+            
+            // delete the instance of our scanner
+            delete this->ourUDPScan;
         }
         else{
             cout << "Scan type currently unavailable.\n";
@@ -595,8 +603,15 @@ void NoobScan::scanRequestCheck(){
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
         }
         else if(scanType==NoobCodes::udp){
+            // instantiate UDP scanner
+            this->ourUDPScan = new UDPScanner();
+            
+            // run the scan
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
             this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
+            
+            // delete the instance of our scanner
+            delete this->ourUDPScan;
         }
         else{
             cout << "Scan type currently unavailable.\n";
@@ -1026,6 +1041,8 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             << "\t3. Exit (keep current delay setting)\n";
             userAnswer = getValidInput(1,3);
             // TODO: follow up with 1-3 answers
+            
+            settings = NoobCodes::restart;
             
             continue;
         }

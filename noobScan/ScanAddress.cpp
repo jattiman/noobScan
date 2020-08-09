@@ -8,7 +8,7 @@
 #include "ScanAddress.h"
 
 ScanAddress::ScanAddress(){
-    this->sleepTimer=2;
+    this->sleepTimer=1;
     this->retries=2;
     this->ourInterface="en0";
 }

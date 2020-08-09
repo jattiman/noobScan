@@ -10,7 +10,6 @@
 #define MAXRETURN 1024
 
 UDPScanner::UDPScanner(){
-    this->ourSleepTimer=getSleepTimer();
     return;
 }
 
@@ -33,6 +32,7 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
     
     // if root status isn't present, inform the user that their scan will not be as powerful
     if(!isAdmin){
+
         cout << "As you are not root, you cannot access ICMP/raw sockets. Your UDP scan will be more limited.\n";
     }
 
@@ -62,46 +62,13 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
         return NoobCodes::portSendDenied;
     }
     
-    /*
-//    if(portCheck<0){
-//        // if there is a connection error, the port is likely closed
-//        // review error status, and report why it's closed
-//        if(errno == EAGAIN || errno == EWOULDBLOCK){
-//            cout << "Port " << portNum << " closed: nonblocking port blocked by request\n";
-//        }
-//        else if(errno == EBADF){
-//            cout << "Port " << portNum << " file descriptor issue\n";
-//        }
-//        else if(errno == EFAULT){
-//            cout << "Port " << portNum << " rejected userspace address\n";
-//        }
-//        else if(errno == EINVAL){
-//            cout << "Port " << portNum << " received invalid argument\n";
-//        }
-//        else if(errno == EMSGSIZE){
-//            cout << "Port " << portNum << " issue: message size error \n";
-//        }
-//        else if(errno == ENOBUFS){
-//            cout << "Port " << portNum << " issue: output queue full\n";
-//        }
-//        else if(errno == EOPNOTSUPP){
-//            cout << "Port " << portNum << " had issue with flags\n";
-//        }
-//        else{
-//            cout << "Port " << portNum << " likely closed\n";
-//            addPortList(portNum, this->closedPorts);
-//            close(ourUDPSock);
-//        }
-//        return NoobCodes::portConnectionDenied;
-//    }
-     */
-    
     //ICMP unreachable: port is closed. ICMP is rate limited: might not get this reply. UDP reply: port open. No response: port is either open or filtered
     int length = sizeof(socketToScan);
     char ourBuffer[MAXRETURN];
     
-    // set time out length of 3 seconds
-    struct timeval timeout = {this->getSleepTimer(),0};
+    // set time out length
+    struct timeval timeout = {ScanAddress::getSleepTimer(),0};
+    
     
     // if root status is present, you can use ICMP and raw sockets to assist with the scan
     if(isAdmin){
@@ -141,11 +108,16 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
             if((ourICMP->icmp_type == ICMP_UNREACH) && (ourICMP->icmp_code == ICMP_UNREACH_PORT)){
                 cout << "ICMP port unreachable.\n";
                 cout << "\ttype: " <<ourICMP->icmp_type << endl << "\tcode: " << ourICMP->icmp_code << endl;
-                
+                addPortList(portNum, this->closedPorts);
+                close(ourUDPSock);
+                return NoobCodes::portConnectionDenied;
             }
             else{
                 cout << "Something else happened, I guess?\n";
                 cout << "\ttype: " <<ourICMP->icmp_type << endl << "\tcode: " << ourICMP->icmp_code << endl;
+                addPortList(portNum, this->closedPorts);
+                close(ourUDPSock);
+                return NoobCodes::portConnectionDenied;
             }
             
             
@@ -174,14 +146,17 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
 //            cout << "Sending packet " << i+1 << "\n";
             
             // wait between sends to give packets a chance
-            usleep(this->ourSleepTimer);
+            usleep(ScanAddress::getSleepTimer());
             
             // send another packet
             portCheck = sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
             
             // if send is denied, port is closed
             if(portCheck<0){
-                cout << "Send error. Port likely closed.";
+                cout << "Send error. Port likely closed.\n";
+                addPortList(portNum, this->closedPorts);
+                close(ourUDPSock);
+                return NoobCodes::portConnectionDenied;
             }
             
             // otherwise, check to see if we have a packet response, indicating an open port
@@ -250,6 +225,7 @@ NoobCodes UDPScanner::runMultiScan(vector<unsigned> portNumbers, string IPToScan
 // checks the sending socket to see if there are issues
 bool UDPScanner::sendCheck(ssize_t ourSocket, int ourPort){
     if(ourSocket<0){
+        cout << "oursocket < 0 \n";
         // if there is a connection error, the port is likely closed
         // review error status, and report why it's closed
         if(errno == EAGAIN || errno == EWOULDBLOCK){
@@ -276,7 +252,7 @@ bool UDPScanner::sendCheck(ssize_t ourSocket, int ourPort){
         else{
             cout << "Port " << ourPort << " likely closed\n";
         }
-        addPortList(ourPort, this->closedPorts);
+        //addPortList(ourPort, this->closedPorts);
         return false;
     }
     return true;

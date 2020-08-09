@@ -24,6 +24,9 @@ public:
     
     // confirms user entered valid int
     int getValidInput(int minNum=0, int maxNum=65535);
+    
+    // output additional feedback
+    void outputFeedback(string feedback);
 
     // displays opening prompt for the user to select info for
     void displayDirections();
@@ -58,10 +61,16 @@ public:
     
     // give a warning to the user if they're asking too much of the help function
     void helpWarning();
+    
+    void setSystemFeedback(bool isOn);
+    
+    bool getSystemFeedback();
 
     
 private:
     std::map<string,string> helpDirectory;
+    
+    bool systemFeedback = true;
 };
 
 #endif /* HelpModule_h */

@@ -24,6 +24,13 @@ int HelpModule::getValidInput(int minNum, int maxNum){
     return userInput;
 }
 
+void HelpModule::outputFeedback(string feedback){
+    if(this->systemFeedback){
+        cout << feedback << endl;
+    }
+    return;
+}
+
 // displays opening prompt for the user to select info for
 void HelpModule::displayDirections(){
     cout << "Type your command, or\n"
@@ -49,9 +56,9 @@ void HelpModule::displayOptions(){
     // scanning overview
     cout << "General scanning commands overview:\n"
         << "\tLooking to scan? Input \"scan [scan type] [scanning destination] [ports or port types]\" at the next prompt.\n"
-        << "\t\tExample:\n\t\t\tscan tcp www.google.com 22 4747 88 (to TCP scan www.google.com at ports 22, 4747, and 88.\n\n"
-        << "\t\tExample:\n\t\t\tscan syn chat (to syn scan common \"chat\" application ports (IRC, Discord, etc) on 127.0.0.1.\n\n"
-        << "\t\tNote: inputting the IP address of your destination is always preferred (plays nicer).\n"
+        << "\t\tExample:\n\t\t\tscan tcp www.google.com 22 4747 88 (to TCP scan www.google.com at ports 22, 4747, and 88).\n\n"
+        << "\t\tExample:\n\t\t\tscan syn chat (to syn scan common \"chat\" application ports (IRC, Discord, etc) on 127.0.0.1).\n\n"
+        << "\t\tNote: inputting the IP address of your destination is always preferred (plays nicer). Looking for the IP address to a URL? Enter \"ipcheck\" as a command.\n"
         << endl;
     
     // settings overview
@@ -278,3 +285,15 @@ void HelpModule::helpWarning(){
     cout << "We noticed you're asking for help for more than 1 term. We'll only help out with 1 term at a time, so please ask for each term individually. When multiple terms are requested, word-based terms (non-ports) are favored." << endl;
     return;
 }
+
+
+// turn on and off feedback
+void HelpModule::setSystemFeedback(bool isOn){
+    this->systemFeedback=isOn;
+}
+
+// check if feedback is on
+bool HelpModule::getSystemFeedback(){
+    return this->systemFeedback;
+}
+

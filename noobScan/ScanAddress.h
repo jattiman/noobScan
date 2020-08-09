@@ -39,6 +39,7 @@
 
 #include "NoobCodes.h"
 
+
 using namespace std;
 
 class ScanAddress{
@@ -109,6 +110,7 @@ public:
     
     
 private:
+    
     // array of ports
     unsigned short *portList;
     
