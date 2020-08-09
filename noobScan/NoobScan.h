@@ -93,6 +93,9 @@ public:
     // review sub (secondary) commands
     NoobCodes reviewSecondaryCommands(NoobCodes commandType);
     
+    // confirm IP for a website, if possible
+    void IPRequestCheck();
+    
     // respond to help requests
     void helpRequestCheck();
     
@@ -154,6 +157,7 @@ public:
     void displayUserPortRequests();
     
     
+    
     // debug (for testing purposes)
     void debug(int debugPort = 80);
     
@@ -179,7 +183,7 @@ private:
     bool isRoot = false;
     
     // bool reflecting if user wants more program feedback
-    bool systemFeedback = false;
+    bool systemFeedback = true;
     
     // vector holding the string-based user commands
     vector<string> parsedCommand;

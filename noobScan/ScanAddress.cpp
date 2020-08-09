@@ -55,10 +55,10 @@ string ScanAddress::getTargetIP(string targetHost){
     // convert (store) the URL accordingly
     ourHost=gethostbyname(targetHost.c_str());
         
-    // if issue with conversion, return NULL
+    // if issue with conversion, return blank string
     if(ourHost == NULL){
         //cout << "Null address.\n";
-        return NULL;
+        return {};
     }
     // otherwise, return the IP address
     else{

@@ -21,6 +21,7 @@ enum class NoobCodes{
     scanRequest,
     exitRequest,
     debugRequest,
+    IPRequest,
     settingsRequest,
     settingsForDelay,
     settingsForDictionary,

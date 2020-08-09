@@ -200,7 +200,7 @@ void NoobScan::intakeCommands(){
         this->ourCommand = promptUser();
         
         // if for some reason the command is empty (return issue), prompt again without the prompt notice.
-        if(ourCommand.empty()){
+        if(this->ourCommand.empty()){
             flush(cout);
             this->ourCommand = promptUser(false);
         }
@@ -225,6 +225,8 @@ void NoobScan::intakeCommands(){
         //TODO: make this interpret the noobcodes...
         cout << this->ourResult;
         
+        // clear user command
+        this->ourCommand.clear();
     }
     return;
 }
@@ -300,6 +302,8 @@ void NoobScan::parseUserArgument(string userCommand){
      \\b word boundary at the end (space after word)
     */
     regex commandHunter("\\b[^\\d\\W]+\\b");
+//    regex commandHunter(R"(?<=\s|^)(a-zA-Z)+(?=\s|$)");
+    //regex commandHunter("(?<!\\S)[A-Za-z]+(?!\\S)");
     
     // this searches for numbers only (it's how we identify ports)
     //regex portHunter("\\b[0-9]{1,}");
@@ -321,6 +325,14 @@ void NoobScan::parseUserArgument(string userCommand){
     */
     regex ipHunter(R"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
     
+    /* This searches for a URL
+     (?:http(s)?:\/\/) Looks for optional http(s):// prefixes
+     ?[\w.-]+ Looks for optional www.-esque entry
+     (?:\.[\w\.-]+)+
+     [\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+
+     */
+    regex URLHunter(R"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)");
+                     
     // save the userCommand string, because we're about to demolish it with 3 passes
     string passOne = userCommand;
     string passTwo = userCommand;
@@ -350,7 +362,7 @@ void NoobScan::parseUserArgument(string userCommand){
                 // convert the string to an unsigned number
                 unsigned long ourPort = stoul(i);
                 portsToScan.push_back((unsigned int)ourPort);
-            } catch (const std::invalid_argument) {
+            } catch (const invalid_argument) {
                 if(firstError){
                     portsToScan.pop_back();
                     firstError=false;
@@ -367,7 +379,7 @@ void NoobScan::parseUserArgument(string userCommand){
         // for all matches
         for(auto i:matches){
             // add in the IP address as the next command
-            parsedCommand.push_back(i);
+            this->parsedCommand.push_back(i);
             ipToScan.push_back(i);
             passThree=matches.suffix().str();
         }
@@ -412,6 +424,9 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
     else if(parsedCommand[0].compare("exit")==0){
         return NoobCodes::exitRequest;
     }
+    else if(parsedCommand[0].compare("ipcheck")==0){
+        return NoobCodes::IPRequest;
+    }
     else{
         cout << "Command not recognized. Try again.\n";
         return NoobCodes::fail;
@@ -433,6 +448,9 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
         case NoobCodes::debugRequest:
             this->debug();
             break;
+        case NoobCodes::IPRequest:
+            this->IPRequestCheck();
+            break;
         case NoobCodes::exitRequest:
             cout << "Exiting...\n";
             break;
@@ -441,6 +459,44 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
             break;
     }
     return NoobCodes::fail;
+}
+
+void NoobScan::IPRequestCheck(){
+    // set up temporary strings to hold the user URL, and the returning IP address
+    string userURL;
+    string foundIP;
+    
+    cout << "We're checking for an IP, now... \n";
+    
+    // If user potentially input a URL
+    if(parsedCommand.size()==2){
+        // copy URL input (for later output)
+        userURL = parsedCommand[1];
+        
+        // retrieve IP address
+        foundIP = this->ourScanner->getTargetIP(parsedCommand[1]);
+    }
+    
+    // If the user didn't put in a URL, prompt them
+    else{
+        
+        // prompt user for URL
+        cout << "\tYou're requesting an IP address for a URL, but have not provided a URL. Please enter the URL: ";
+        getline(cin,userURL);
+        
+        // transfer IP address in plaintext
+        foundIP = this->ourScanner->getTargetIP(userURL);
+    }
+    
+    // if the IP returned was NULL
+    if(foundIP.empty()){
+        cout << "\tIP could not be retrieved for " << userURL << ". Please confirm formatting, and try again.\n";
+    }
+    else{
+        // output IP to user
+        cout << "\tIP address result for " << userURL << ": " << foundIP << endl;
+    }
+    return;
 }
 
 void NoobScan::helpRequestCheck(){
@@ -505,8 +561,8 @@ void NoobScan::scanRequestCheck(){
     
     string scanTarget;
     
-    // if at least 3 arguments (scan [scan type] [destination]), the command is most likely sufficiently formed. Remember: ports are not part of the parsedCommand
-    if(parsedCount >= 3){
+    // if 3 arguments (scan [scan type] [destination]), the command is most likely sufficiently formed. Remember: ports are not part of the parsedCommand.
+    if(parsedCount == 3){
         // check scan type
         scanType=checkScanType();
         
@@ -526,23 +582,36 @@ void NoobScan::scanRequestCheck(){
         }
         
     }
+    
+    // if 4 arguments (scan [scan type] [destination] [port group]), the command is most likely sufficiently formed. Remember: ports are not part of the parsedCommand. Port groups, however, are, since we interpret this as a string.
+    else if(parsedCount==4){
+        // check scan type
+        scanType=checkScanType();
+        
+        // confirm sub arguments called correctly
+        
+        // run scan
+        if(scanType==NoobCodes::tcp){
+            this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
+        }
+        else if(scanType==NoobCodes::udp){
+            //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
+            this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
+        }
+        else{
+            cout << "Scan type currently unavailable.\n";
+        }
+    }
+    
     // if less than 3 arguments, the command is malformed
     else{
         cout << "It looks like you might be having some trouble formulating your scan. Please follow the scan directions:" << endl;
         this->ourHelper->returnInfo("scan");
     }
     
-    // If total (including scan request) is more than 2
+    // If total (including scan request) is more than 3
         // check the last command for special port selection
         // if 3 is a special and 2 is a specific scan type, send to scanner function
-    
-    // If total is 2
-        // confirm scan type is well formed,
-        // confirm that there are portsToScan (at least 1 port is entered)
-        // and send scan to scanner function (tcp/udp)
-    
-    // If total is less than 2, the command is malformed
-    // We COULD prompt the user to enter a scan type ...
     
     return;
 }
@@ -1077,6 +1146,7 @@ void NoobScan::displayUserPortRequests(){
     cout << endl;
     return;
 }
+
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
