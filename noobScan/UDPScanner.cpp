@@ -10,6 +10,13 @@
 #define MAXRETURN 1024
 
 UDPScanner::UDPScanner(){
+    this->sleepTimer=getSleepTimer();
+    return;
+}
+
+UDPScanner::UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer){
+    this->sleepTimer=newSleepTimer;
+    this->timeoutTimer=newTimeoutTimer;
     return;
 }
 
@@ -53,7 +60,7 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
     ssize_t portCheck=sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
     
     // sleep while we wait for port response
-    //usleep(this->ourSleepTimer);
+    //usleep(this->sleepTimer);
     
     // return status of scan
     // TODO: make send and receive checks their own functions, to review errno and report back
@@ -66,9 +73,12 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
     int length = sizeof(socketToScan);
     char ourBuffer[MAXRETURN];
     
-    // set time out length
-    struct timeval timeout = {ScanAddress::getSleepTimer(),0};
+    cout << "\nSleep time is: " << this->getSleepTimer() << endl;
     
+    // set time out length
+    struct timeval timeout = {this->getSleepTimer(),0};
+    
+    cout << "\nPassed sleep timer..\n";
     
     // if root status is present, you can use ICMP and raw sockets to assist with the scan
     if(isAdmin){
@@ -145,8 +155,12 @@ NoobCodes UDPScanner::runScan(int portNum, bool isAdmin, string IPToScan){
 //            cout << "attempt " << i+1 << "\n";
 //            cout << "Sending packet " << i+1 << "\n";
             
+            cout << "\nAt next sleep timer ...\n";
             // wait between sends to give packets a chance
-            usleep(ScanAddress::getSleepTimer());
+            usleep(this->getSleepTimer());
+            
+            cout << "\nPassed next sleep timer ...\n";
+
             
             // send another packet
             portCheck = sendto(ourUDPSock, testString.c_str(), testString.size()+1, 0, (sockaddr*)&socketToScan, sizeof(socketToScan));
@@ -256,4 +270,14 @@ bool UDPScanner::sendCheck(ssize_t ourSocket, int ourPort){
         return false;
     }
     return true;
+}
+
+// get sleep time
+unsigned int UDPScanner::getSleepTimer(){
+    return this->sleepTimer;
+}
+
+// get timeout time
+unsigned int UDPScanner::getTimeoutTimer(){
+    return this->timeoutTimer;
 }

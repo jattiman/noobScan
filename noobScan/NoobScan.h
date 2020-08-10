@@ -114,8 +114,14 @@ public:
     // displays the general settings options menu
     void settingsOptions(int & userAnswer, NoobCodes & settings);
     
+    // directs user to run an assisted scan
+    void settingsAssisted(int & userAnswer, NoobCodes & settings);
+    
     // displays the dictionary options menu
     void settingsDictionary(int & userAnswer, NoobCodes & settings);
+    
+    // displays the delay options menu
+    void settingsDelay(int & userAnswer, NoobCodes & settings);
     
     // displays the recorder options
     void settingsRecorder(int & userAnswer, NoobCodes & settings);
@@ -142,6 +148,10 @@ public:
     void setRoot(bool rootStatus);
     
     void setAdmin(bool adminStatus);
+    
+    void setVariableScan(bool isOn);
+    
+    bool getVariableScanStatus();
     
     bool getSystemFeedback();
     
@@ -184,6 +194,9 @@ private:
     
     // bool reflecting if user wants more program feedback
     bool systemFeedback = true;
+    
+    // bool reflecting if user wants to turn on variable scan time
+    bool variableTime = false;
     
     // vector holding the string-based user commands
     vector<string> parsedCommand;

@@ -9,6 +9,7 @@
 
 ScanAddress::ScanAddress(){
     this->sleepTimer=1;
+    this->timeOut=1;
     this->retries=2;
     this->ourInterface="en0";
 }
@@ -141,7 +142,12 @@ NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
 }
 
 unsigned int ScanAddress::getSleepTimer(){
-    return this->sleepTimer;
+    return sleepTimer;
+}
+
+// get timeout wait time
+unsigned int ScanAddress::getTimeoutTimer(){
+    return this->timeOut;
 }
 
 void ScanAddress::setCustomList(vector<unsigned int> newList){
@@ -152,6 +158,10 @@ void ScanAddress::setCustomList(vector<unsigned int> newList){
 void ScanAddress::setSleepTimer(unsigned int newSleepTime){
     this->sleepTimer=newSleepTime;
     return;
+}
+
+void ScanAddress::setTimeoutTimer(unsigned int newTimeout){
+    this->timeOut = newTimeout;
 }
 
 string ScanAddress::getHostMac(string ifaNamePreference){

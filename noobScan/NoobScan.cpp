@@ -576,7 +576,7 @@ void NoobScan::scanRequestCheck(){
         }
         else if(scanType==NoobCodes::udp){
             // instantiate UDP scanner
-            this->ourUDPScan = new UDPScanner();
+            this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer());
             
             // run the scan
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
@@ -604,7 +604,7 @@ void NoobScan::scanRequestCheck(){
         }
         else if(scanType==NoobCodes::udp){
             // instantiate UDP scanner
-            this->ourUDPScan = new UDPScanner();
+            this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer());
             
             // run the scan
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
@@ -771,6 +771,42 @@ void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
     return;
 }
 
+void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
+    int portToScan=1;
+    string targetToScan;
+    NoobCodes scanType;
+    
+    
+    // ask user what kind of scan they want to do
+    cout << "What kind of scan would you like to conduct?\n";
+    cout << "\t1. TCP\n";
+    cout << "\t2. UDP\n";
+    
+    userAnswer = getValidInput(1,2);
+    
+    // TODO:store scan result
+    
+    // ask user if they want to enter a URL or IP address
+    
+    cout << "What kind of scan would you like to conduct?\n";
+    cout << "\t1. IP\n";
+    cout << "\t2. URL\n";
+    
+    // TODO: process this
+    
+    // if URL, convert to IP
+    
+    // store the IP
+    
+    // have user enter the port to scan
+    cout << "Enter 1 port number to scan:\n";
+    portToScan = getValidInput(1,65535);
+    
+    // run the scan
+    
+    
+}
+
 void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){
     cout << "Would you like to add to the dictionary, or view an entry?\n"
         << "\t1. add\n"
@@ -800,6 +836,62 @@ void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){
     return;
 }
 
+void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
+    // display delay time options (variable, or enter specific number)
+    cout << "Your current delay time between ports is "
+        << this->ourScanner->getSleepTimer() << endl << endl;
+    cout << "\t1. Set specific delay time\n"
+        << "\t2. Enable variable delay time between scans.\n"
+        << "\t3. Exit (keep current delay setting)\n";
+    userAnswer = getValidInput(1,3);
+    if(userAnswer==1){
+        int delayTime;
+        cout << "Please enter new delay time between port scans (between 0 and 10): ";
+        delayTime = getValidInput(0,10);
+        this->ourScanner->setSleepTimer(delayTime);
+        cout << "Your new delay time between ports is "
+            << this->ourScanner->getSleepTimer() << endl;
+        settings = NoobCodes::settingsForDelay;
+    }
+    else if(userAnswer==2){
+        int variableAnswer;
+        // notify user of scan status
+        cout << "Variable scan is currently ";
+        if(this->getVariableScanStatus()){
+            cout << "on.\n";
+        }
+        else{
+            cout << "off.\n";
+        }
+        
+        // prompt user to enable or disable the status
+        cout << "\t1. Turn variable scan times on.\n"
+            << "\t2. Turn variable scan times off.\n"
+            << "\t3. Exit (keep current setting)\n";
+        variableAnswer = getValidInput(1,3);
+        if(variableAnswer==1){
+            this->setVariableScan(true);
+        }
+        if(variableAnswer==2){
+            this->setVariableScan(false);
+        }
+        cout << "Variable scan is currently ";
+        if(this->getVariableScanStatus()){
+            cout << "on.\n";
+        }
+        else{
+            cout << "off.\n";
+        }
+        settings = NoobCodes::settingsForDelay;
+    }
+    else{
+        settings = NoobCodes::restart;
+    }
+    
+    return;
+    
+}
+
 void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
     // display recorder on/off status
     cout << "The recorder is currently ";
@@ -812,8 +904,8 @@ void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
     
     // prompt user to modify recorder
     cout << "\t1. Turn recorder on.\n"
-    << "\t2. Turn recorder off.\n"
-    << "\t3. Exit (keep current recorder setting)\n";
+        << "\t2. Turn recorder off.\n"
+        << "\t3. Exit (keep current recorder setting)\n";
     userAnswer = getValidInput(1,3);
     
     // react accordingly
@@ -837,14 +929,14 @@ void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
 
 // displays the timeouts options
 void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings){
-    cout << "The current timeout limit for server response is: " << this->ourScanner->getSleepTimer() << " seconds.\n";
-    cout << "Please enter your new time (between 0 and 10 seconds): " << endl;
+    cout << "The current timeout limit for server response is: " << this->ourScanner->getTimeoutTimer() << " seconds.\n";
+    cout << "Please enter your new time (between 1 and 10 seconds): " << endl;
     
-    unsigned int newTime = getValidInput(0,10);
+    unsigned int newTime = getValidInput(1,10);
     
-    this->ourScanner->setSleepTimer(newTime);
+    this->ourScanner->setTimeoutTimer(newTime);
     
-    cout << "The new timeout limit for server response is: " << this->ourScanner->getSleepTimer() << " seconds.\n";
+    cout << "The new timeout limit for server response is: " << this->ourScanner->getTimeoutTimer() << " seconds.\n";
     
     settings = NoobCodes::restart;
     
@@ -1034,16 +1126,10 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
         // if the user wants to change the delay between scanning ports
         else if(settings == NoobCodes::settingsForDelay){
             
-            // display delay time options (variable, or enter specific number)
-            cout << "Your current delay time between ports is " << this->ourScanner->getSleepTimer() << endl << endl;
-            cout << "\t1. Set specific delay time\n"
-            << "\t2. Enable variable delay time between scans.\n"
-            << "\t3. Exit (keep current delay setting)\n";
-            userAnswer = getValidInput(1,3);
-            // TODO: follow up with 1-3 answers
+            // allow user to adjust scan delays
+            settingsDelay(userAnswer, settings);
             
-            settings = NoobCodes::restart;
-            
+            // jump to the top of the menu
             continue;
         }
         else if(settings == NoobCodes::settingsForRecorder){
@@ -1081,8 +1167,12 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
         else if(settings == NoobCodes::settingsForAssistedScan){
             // TODO: create assisted scan system for user, where they enter the scan line by line. in new function: "what type of scan?" "scanning IP address or website?" "what IP address/website are you scanning?" "do you want to scan certain ports, or a port group?"
             cout << "Let's walk you through a scan ... \n";
+            
             // send to ScanAddress slow scan function
-            break;
+            this->settingsAssisted(userAnswer, settings);
+            
+            // exit this settings menu
+            continue;
         }
         else if(settings == NoobCodes::exitRequest){
             cout << "Exiting settings ... \n";
@@ -1120,6 +1210,15 @@ void NoobScan::setAdmin(bool adminStatus){
     this->isAdmin=adminStatus;
 }
 
+// turn on and off variable scan indicator
+void NoobScan::setVariableScan(bool isOn){
+    this->variableTime=isOn;
+}
+
+// check if variable scan is on
+bool NoobScan::getVariableScanStatus(){
+    return this->variableTime;
+}
 
 // check if feedback is on
 bool NoobScan::getSystemFeedback(){

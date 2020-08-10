@@ -75,6 +75,9 @@ public:
     // get sleep time
     unsigned int getSleepTimer();
     
+    // get timeout wait time
+    unsigned int getTimeoutTimer();
+    
     // get host MAC address
     string getHostMac(string ifaNamePreference = "en0");
     
@@ -92,6 +95,9 @@ public:
     
     // set sleep time - the time between retries (how long you wait for a timeout)
     void setSleepTimer(unsigned int newSleepTime);
+    
+    // set timeout time
+    void setTimeoutTimer(unsigned int newTimeout);
     
     // set the retry number
     void setRetries(int newRetryAmount);
@@ -118,7 +124,7 @@ private:
     char scanType;
     
     // time out time
-    int timeOut;
+    unsigned int timeOut;
     
     // save to file
     bool saveToFile;
