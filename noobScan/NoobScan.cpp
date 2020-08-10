@@ -722,7 +722,7 @@ NoobCodes NoobScan::findSettingsRequestType(string userRequest){
     else if(userRequest=="feedback"){
         return NoobCodes::settingsForDebugText;
     }
-    else if(userRequest=="scan"){
+    else if(userRequest=="scan" || userRequest=="assist"){
         return NoobCodes::settingsForAssistedScan;
     }
     else{
@@ -773,7 +773,8 @@ void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
 
 void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     int portToScan=1;
-    string targetToScan;
+    string targetURL;
+    string targetIP;
     NoobCodes scanType;
     
     
@@ -784,7 +785,13 @@ void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     
     userAnswer = getValidInput(1,2);
     
-    // TODO:store scan result
+    // store scan result
+    if(userAnswer==1){
+        scanType=NoobCodes::tcp;
+    }
+    else{
+        scanType=NoobCodes::udp;
+    }
     
     // ask user if they want to enter a URL or IP address
     
@@ -792,11 +799,21 @@ void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     cout << "\t1. IP\n";
     cout << "\t2. URL\n";
     
-    // TODO: process this
+    userAnswer = getValidInput(1,2);
     
     // if URL, convert to IP
-    
+    if(userAnswer==1){
+        cout << "Please enter the url: ";
+        getline(cin, targetURL);
+        // TODO: convert to IP, and loop if error
+    }
+    // if IP, store IP
+    else{
+        cout << "Please enter the IP: ";
+        getline(cin, targetIP);
+    }
     // store the IP
+    
     
     // have user enter the port to scan
     cout << "Enter 1 port number to scan:\n";
@@ -1165,7 +1182,6 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             continue;
         }
         else if(settings == NoobCodes::settingsForAssistedScan){
-            // TODO: create assisted scan system for user, where they enter the scan line by line. in new function: "what type of scan?" "scanning IP address or website?" "what IP address/website are you scanning?" "do you want to scan certain ports, or a port group?"
             cout << "Let's walk you through a scan ... \n";
             
             // send to ScanAddress slow scan function
@@ -1182,6 +1198,7 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
         else{
             //TODO: look into iomanip for formatting here
             cout << "Invalid settings choice. Please select from the following:\n"
+            << setw(11) << left << "\tassist" << "\t-\tcreate a step by step scan for 1 port\n"
             << setw(11) << left << "\tdelay" << "\t-\tset delay between ports to scan\n"
             << setw(11) << left << "\tdictionary" << "\t-\tadd terms to dictionary\n"
             << setw(11) << left << "\tfeedback" << "\t-\toutput additional text to console during command response\n"
