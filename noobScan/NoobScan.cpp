@@ -572,7 +572,9 @@ void NoobScan::scanRequestCheck(){
         
         // run scan
         if(scanType==NoobCodes::tcp){
+            this->ourTCPScan = new TCPScanner();
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
+            delete this->ourTCPScan;
         }
         else if(scanType==NoobCodes::udp){
             // instantiate UDP scanner
@@ -600,7 +602,9 @@ void NoobScan::scanRequestCheck(){
         
         // run scan
         if(scanType==NoobCodes::tcp){
+            this->ourTCPScan = new TCPScanner();
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
+            delete this->ourTCPScan;
         }
         else if(scanType==NoobCodes::udp){
             // instantiate UDP scanner
@@ -773,8 +777,11 @@ void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
 
 void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     int portToScan=1;
+    
     string targetURL;
+    
     string targetIP;
+    
     NoobCodes scanType;
     
     
@@ -795,33 +802,85 @@ void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     
     // ask user if they want to enter a URL or IP address
     
-    cout << "What kind of scan would you like to conduct?\n";
-    cout << "\t1. IP\n";
-    cout << "\t2. URL\n";
+    cout << "How would you like to identify your target?\n";
+    cout << "\t1. URL\n";
+    cout << "\t2. IP\n";
     
     userAnswer = getValidInput(1,2);
     
-    // if URL, convert to IP
+    // if URL, convert to IP and store
     if(userAnswer==1){
-        cout << "Please enter the url: ";
-        getline(cin, targetURL);
-        // TODO: convert to IP, and loop if error
+        do{
+            // clear the target URL for another try
+            targetURL.clear();
+            
+            // prompt user for a valid URL and convert it to an IP accordingly
+            cout << "Please enter a valid url, or type \"quit\" to quit:\n";
+            
+            // prompt user for the URL
+            targetURL=promptUser();
+            
+            // if there was an issue with the prompt (cin.ignore, getline issues, etc), ask again.
+            if(targetURL.empty()){
+                flush(cout);
+                targetURL = promptUser(false);
+            }
+            
+            cout << "\tYou entered: " << targetURL << endl;
+            
+            // convert it
+            targetIP=ourScanner->getTargetIP(targetURL);
+            
+            // if user aborts the process
+            if(targetURL.compare("quit")==0){
+                cout << "\tQuitting ... \n";
+                settings=NoobCodes::restart;
+                return;
+            }
+            // confirm a proper IP came back
+            if(targetIP.empty()){
+                cout << "\tURL does not lead to an IP address. Please check formatting." << endl;
+            }
+            flush(cout);
+        }while(targetIP.empty());
+        
+        
+        cout << "\tIP for " << targetURL << " is " << targetIP << endl;
     }
-    // if IP, store IP
-    else{
-        cout << "Please enter the IP: ";
-        getline(cin, targetIP);
-    }
-    // store the IP
     
+    // if IP, store IP (we'll trust the user here)
+    else{
+        cout << "Please enter the IP:\n";
+        
+        // prompt user for IP
+        targetIP=promptUser();
+        
+        // if there was an issue with the prompt (cin.ignore, getline issues, etc), ask again.
+        if(targetIP.empty()){
+            flush(cout);
+            targetIP = promptUser(false);
+        }
+    }
     
     // have user enter the port to scan
     cout << "Enter 1 port number to scan:\n";
     portToScan = getValidInput(1,65535);
     
     // run the scan
+    if(scanType==NoobCodes::tcp){
+        this->ourTCPScan = new TCPScanner();
+        this->ourTCPScan->runScan(portToScan, targetIP);
+        delete this->ourTCPScan;
+    }
+    else{
+        this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer());
+        this->ourUDPScan->runScan(portToScan, this->getIsAdmin());
+        delete this->ourUDPScan;
+    }
     
+    settings = NoobCodes::restart;
     
+    return;
 }
 
 void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){

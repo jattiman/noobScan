@@ -12,6 +12,11 @@ TCPScanner::TCPScanner(){
     this->openPorts.reserve(1000);
 }
 
+TCPScanner::TCPScanner(unsigned int sleep){
+    this->openPorts.reserve(1000);
+    
+}
+
 void TCPScanner::addOpenPorts(int newOpenPort){
     this->openPorts.emplace_back(newOpenPort);
     return;

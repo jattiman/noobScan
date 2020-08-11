@@ -19,6 +19,8 @@ class TCPScanner : public ScanAddress{
 
 public:
     TCPScanner();
+    
+    TCPScanner(unsigned int sleep);
 
     // add open port to list
     void addOpenPorts(int newOpenPort);
