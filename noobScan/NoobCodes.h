@@ -11,6 +11,9 @@
 
 enum class NoobCodes{
     fail,
+    failURL,
+    failIP,
+    failPort,
     success,
     restart,
     tcp,

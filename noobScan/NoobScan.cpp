@@ -259,12 +259,16 @@ void NoobScan::commandResponse(string userCommand){
     return;
 }
 
-//TODO: give this a noobcodes
 void NoobScan::inspectArgs(string userCommand){
     NoobCodes userRequest;
     
     // parse the argument into commands and ports
-    this->parseUserArgument(userCommand);
+    userRequest = this->parseUserArgument(userCommand);
+    
+    // confirm the original parsing went through without error
+    if(userRequest!=NoobCodes::success){
+        reportError(userRequest);
+    }
     
     // identify first argument
     userRequest = this->reviewPrimaryCommand();
@@ -284,7 +288,7 @@ void NoobScan::inspectArgs(string userCommand){
     return;
 }
 
-void NoobScan::parseUserArgument(string userCommand){
+NoobCodes NoobScan::parseUserArgument(string userCommand){
     
     // vector to hold user command, split by whitespace
     
@@ -315,10 +319,10 @@ void NoobScan::parseUserArgument(string userCommand){
      \\b[0-9]+ look for numbers 0-9 (as many in a row as you'd like) at the start
      \\b(?!\\.) Ensure the number doesn't end with a '.' to avoid IP confusion
      */
-    regex portHunter("[^\\.]\\b[0-9]+\\b(?!\\.)");
+    regex portHunterOLD("[^\\.]\\b[0-9]+\\b(?!\\.)");
     
     // alternative to portHunter if we're going the split route
-    regex numberHunter("(\\d+)");
+    regex portHunter("(\\d+)");
     
     // This searches for our IP address, if it's there (if not, we assume a URL is being used)
     /* breakdown of Regex info, for those curious:
@@ -340,81 +344,53 @@ void NoobScan::parseUserArgument(string userCommand){
     regex URLHunter(R"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)");
                      
     //split user command to act on individually spaced words
-    cout << "\n\tParsing the user command ... \n";
     this->splitString(userCommand, userCommandParsed);
-    cout << "\n\tParsed ... \n";
     
+    bool firstError=true;
     for(auto const & commandEntry: userCommandParsed){
         if(regex_match(commandEntry, commandHunter)){
-            cout << commandEntry << ": word command\n";
+            cout << "\t" << commandEntry << ": word command\n";
+            this->parsedCommand.push_back(commandEntry);
         }
         else if(regex_match(commandEntry, ipHunter)){
-            cout << commandEntry << ": IP command\n";
+            cout << "\t" << commandEntry << ": IP command\n";
+            this->parsedCommand.push_back(commandEntry);
+            this->ipToScan.push_back(commandEntry);
         }
         else if(regex_match(commandEntry, URLHunter)){
-            cout << commandEntry << ": URL command\n";
+            cout << "\t" << commandEntry << ": URL command\n";
+            string URLtoIP = ourScanner->getTargetIP(commandEntry);
+            if(URLtoIP.empty()){
+                cout << "Your formatting is off (URL to IP conversion issue for " << commandEntry << "). Please try again\n";
+                return NoobCodes::failURL;
+            }
+            else{
+                this->parsedCommand.push_back(URLtoIP);
+                this->siteToScan.push_back(commandEntry);
+                this->ipToScan.push_back(URLtoIP);
+            }
         }
-        else if(regex_match(commandEntry, numberHunter)){
-            cout << commandEntry << ": port command\n";
-        }
-        else{
-            cout << commandEntry << ": not caught\n";
-        }
-    }
-    
-    /*
-    // save the userCommand string, because we're about to demolish it with 3 passes
-    string passOne = userCommand;
-    string passTwo = userCommand;
-    string passThree = userCommand;
-    
-    // first pass: check for word-only commands
-    while(regex_search(passOne, matches, commandHunter)){
-        // for all matches
-        for(auto i:matches){
-            // once a match is found, push it back
-            this->parsedCommand.push_back(i);
-            // trim the found match from the string being searched
-            passOne=matches.suffix().str();
-        }
-    }
-    
-    // second pass: check for number-only commands (ports)
-    // bool holding whether or not an error was encountered
-    bool firstError=true;
-    while(regex_search(passTwo, matches, portHunter)){
-        // for all matches
-        
-        for(auto i:matches){
-            // once a match is found, push it to the port list (remember to convert to number, so the program doesn't implode)
+        else if(regex_match(commandEntry, portHunter)){
+            cout << "\t" << commandEntry << ": port command\n";
             try {
-                // TODO: make check for good unsigned conversion
                 // convert the string to an unsigned number
-                unsigned long ourPort = stoul(i);
+                unsigned long ourPort = stoul(commandEntry);
                 portsToScan.push_back((unsigned int)ourPort);
             } catch (const invalid_argument) {
                 if(firstError){
                     portsToScan.pop_back();
                     firstError=false;
                 }
-                cout << "Your formatting is off (misreading for " << i << "). Results may be unexpected.\n";
+                cout << "Your formatting is off (misreading for " << commandEntry << "). Please try again\n";
+                return NoobCodes::failPort;
             }
-            // trim the found match from the string, and continue searching for matches
-            passTwo=matches.suffix().str();
+        }
+        else{
+            cout << "\t" << commandEntry << ": not caught\n";
         }
     }
-    
-    // third pass: check for IP addresses
-    while(regex_search(passThree, matches, ipHunter)){
-        // for all matches
-        for(auto i:matches){
-            // add in the IP address as the next command
-            this->parsedCommand.push_back(i);
-            ipToScan.push_back(i);
-            passThree=matches.suffix().str();
-        }
-    }
-     */
+
+    return NoobCodes::success;
     
 }
 
@@ -491,6 +467,60 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
             break;
     }
     return commandType;
+}
+
+// report errors to user screen
+void NoobScan::reportError(NoobCodes programError){
+    cout << "\n\t";
+    switch(programError){
+        case NoobCodes::fail:
+            cout << "Miscellaneous failure reported\n";
+            break;
+        case NoobCodes::failURL:
+            cout << "URL-related failure reported\n";
+            break;
+        case NoobCodes::failIP:
+            cout << "IP-related failure reported\n";
+            break;
+        case NoobCodes::failPort:
+            cout << "Port-related failure reported\n";
+            break;
+        case NoobCodes::socketError:
+            cout << "Miscellaneous error with socket\n";
+            break;
+        case NoobCodes::socketCreationError:
+            cout << "Socket creation error\n";
+            break;
+        case NoobCodes::socketCreationErrorICMP:
+            cout << "ICMP socket creation error\n";
+            break;
+        case NoobCodes::socketCreationErrorDGRAM:
+            cout << "DGRAM (UDP) socket creation error\n";
+            break;
+        case NoobCodes::socketCreationErrorSTREAM:
+            cout << "TCP socket creation error\n";
+            break;
+        case NoobCodes::portConnectionError:
+            cout << "Error establishing port connection\n";
+            break;
+        case NoobCodes::portNumberInvalid:
+            cout << "Port number formatting issue\n";
+            break;
+        case NoobCodes::portSendError:
+            cout << "Error sending to port\n";
+            break;
+        case NoobCodes::portReceiveError:
+            cout << "Error receiving from port\n";
+            break;
+        case NoobCodes::IPBindingIssue:
+            cout << "Error binding to IP\n";
+            break;
+        case NoobCodes::hostNameIssue:
+            cout << "Error with host name\n";
+            break;
+        default:
+            cout << "\n\tUnknown error. Sorry!\n";
+    }
 }
 
 void NoobScan::IPRequestCheck(){
@@ -1374,10 +1404,10 @@ void NoobScan::displayUserPortRequests(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
-    string testOne = "scan udp 127.0.0.1 20 40 50";
+    string testOne = "scan udp 127.0.0.1.9.9.9 20 40 50";
     string testTwo = "scan udp www.google.com 20 40 50";
-    string testThree = "scan    udp 127.0.0.1 20 40 50";
-    string testFour = "scan    udp www.google.com 20 40 50";
+    string testThree = "scan    tcp 127.00.1 20 40 50";
+    string testFour = "scan    TCP   http://balls.dhusfdsiuh.com/ 20 40 50";
     
     cout << testOne << ": " << endl;
     this->parseUserArgument(testOne);

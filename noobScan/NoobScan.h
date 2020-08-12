@@ -85,13 +85,16 @@ public:
     void inspectArgs(string userCommand);
     
     // parse user command arguments
-    void parseUserArgument(string userCommand);
+    NoobCodes parseUserArgument(string userCommand);
     
     // review first command
     NoobCodes reviewPrimaryCommand();
     
     // review sub (secondary) commands
     NoobCodes reviewSecondaryCommands(NoobCodes commandType);
+    
+    // report errors to user screen
+    void reportError(NoobCodes programError);
     
     // confirm IP for a website, if possible
     void IPRequestCheck();
