@@ -152,3 +152,14 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
     
     return NoobCodes::success;
 }
+
+
+// get sleep time
+unsigned int TCPScanner::getSleepTimer(){
+    return this->sleepTimer;
+}
+
+// get timeout time
+unsigned int TCPScanner::getTimeoutTimer(){
+    return this->timeoutTimer;
+}

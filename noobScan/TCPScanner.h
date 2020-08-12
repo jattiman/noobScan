@@ -40,11 +40,18 @@ public:
     // scan multiple ports at once
     NoobCodes runMultiScan(vector<unsigned> portNumbers, std::string IPToScan="127.0.0.1");
     
+    // get sleep time
+    unsigned int getSleepTimer();
+       
+    // get timeout time
+    unsigned int getTimeoutTimer();
     
     
 private:
     vector<int> openPorts;
     vector<int> closedPorts;
+    unsigned int sleepTimer;
+    unsigned int timeoutTimer;
     
 };
 

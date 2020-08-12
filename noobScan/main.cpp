@@ -151,8 +151,9 @@ void debug(){
 int main(int argc, const char * argv[]) {
     
     NoobScan ourNoob;
-    ourNoob.initialPrompt();
+    //ourNoob.initialPrompt();
     
+    ourNoob.debug();
 //    debug();
     
 

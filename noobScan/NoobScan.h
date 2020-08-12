@@ -141,32 +141,41 @@ public:
     // split input to strings
     void splitString(string originString, vector<string> & splitString);
     
+    // confirms which type of scan is being requested
     NoobCodes checkScanType();
     
+    // sets system feedback
     void setSystemFeedback(bool isOn);
     
+    // sets if user is root
     void setRoot(bool rootStatus);
     
+    // sets if user is admin
     void setAdmin(bool adminStatus);
     
+    // sets variable scan timing indicator (on/off)
     void setVariableScan(bool isOn);
     
+    // returns variable scan time indicator
     bool getVariableScanStatus();
     
+    // returns system feedback status
     bool getSystemFeedback();
     
+    // returns root access
     bool getIsRoot();
     
+    // returns user admin status
     bool getIsAdmin();
     
     // clear commands for next round of questions
-    void clearUserCommand();
+    void clearCommandVectors();
     
+    // displays user commands (used with user feedback to show the user how the machine interprets what they entered)
     void displayUserCommands();
     
+    // displays the ports the user requested for scanning (used when user feedback is on)
     void displayUserPortRequests();
-    
-    
     
     // debug (for testing purposes)
     void debug(int debugPort = 80);

@@ -253,7 +253,7 @@ void NoobScan::commandResponse(string userCommand){
     // categorize base request
     inspectArgs(commandManip);
     
-    // update result string with answer to request
+    // TODO: update result string with answer to request
     
     
     return;
@@ -279,18 +279,21 @@ void NoobScan::inspectArgs(string userCommand){
     // TODO: change this function to have a return code, and use that to update the record with the appropriate command here
     this->reviewSecondaryCommands(userRequest);
     
-    
-    
     // run appropriate function based on argument results
 
     return;
 }
 
 void NoobScan::parseUserArgument(string userCommand){
+    
+    // vector to hold user command, split by whitespace
+    
+    vector<string> userCommandParsed;
+    
     // TODO: remove formatted URLs from the string
     
     // ensure any previous commands are empty
-    clearUserCommand();
+    clearCommandVectors();
     
     // set up regex to match commands with what we're looking for
     smatch matches;
@@ -314,6 +317,9 @@ void NoobScan::parseUserArgument(string userCommand){
      */
     regex portHunter("[^\\.]\\b[0-9]+\\b(?!\\.)");
     
+    // alternative to portHunter if we're going the split route
+    regex numberHunter("(\\d+)");
+    
     // This searches for our IP address, if it's there (if not, we assume a URL is being used)
     /* breakdown of Regex info, for those curious:
     R makes the regex more readable (raw string). Using it here to show variety. Note that we don't need to use double escape characters (\\) with this mode.
@@ -333,6 +339,30 @@ void NoobScan::parseUserArgument(string userCommand){
      */
     regex URLHunter(R"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)");
                      
+    //split user command to act on individually spaced words
+    cout << "\n\tParsing the user command ... \n";
+    this->splitString(userCommand, userCommandParsed);
+    cout << "\n\tParsed ... \n";
+    
+    for(auto const & commandEntry: userCommandParsed){
+        if(regex_match(commandEntry, commandHunter)){
+            cout << commandEntry << ": word command\n";
+        }
+        else if(regex_match(commandEntry, ipHunter)){
+            cout << commandEntry << ": IP command\n";
+        }
+        else if(regex_match(commandEntry, URLHunter)){
+            cout << commandEntry << ": URL command\n";
+        }
+        else if(regex_match(commandEntry, numberHunter)){
+            cout << commandEntry << ": port command\n";
+        }
+        else{
+            cout << commandEntry << ": not caught\n";
+        }
+    }
+    
+    /*
     // save the userCommand string, because we're about to demolish it with 3 passes
     string passOne = userCommand;
     string passTwo = userCommand;
@@ -384,6 +414,7 @@ void NoobScan::parseUserArgument(string userCommand){
             passThree=matches.suffix().str();
         }
     }
+     */
     
 }
 
@@ -456,9 +487,10 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
             break;
         default:
             cout << "No command type.\n";
+            return NoobCodes::fail;
             break;
     }
-    return NoobCodes::fail;
+    return commandType;
 }
 
 void NoobScan::IPRequestCheck(){
@@ -1309,8 +1341,8 @@ bool NoobScan::getIsAdmin(){
     return this->isAdmin;
 }
 
-// clears the user command
-void NoobScan::clearUserCommand(){
+// clears the user commands between requests
+void NoobScan::clearCommandVectors(){
     this->parsedCommand.clear();
     this->portsToScan.clear();
     return;
@@ -1342,8 +1374,26 @@ void NoobScan::displayUserPortRequests(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
+    string testOne = "scan udp 127.0.0.1 20 40 50";
+    string testTwo = "scan udp www.google.com 20 40 50";
+    string testThree = "scan    udp 127.0.0.1 20 40 50";
+    string testFour = "scan    udp www.google.com 20 40 50";
     
-    userRecorder->showHistory();
+    cout << testOne << ": " << endl;
+    this->parseUserArgument(testOne);
+    
+    cout << testTwo << ": " << endl;
+    this->parseUserArgument(testTwo);
+    
+    cout << testThree << ": " << endl;
+    this->parseUserArgument(testThree);
+    
+    cout << testFour << ": " << endl;
+    this->parseUserArgument(testFour);
+    
+    
+    
+//    userRecorder->showHistory();
     
     // other porthunter option
 //    regex rx(R"((?:^|\s)([+-]?[[:digit:]]+(?:\.[[:digit:]]+)?)(?=$|\s))");
