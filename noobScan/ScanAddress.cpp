@@ -280,6 +280,34 @@ NoobCodes ScanAddress::assistedScan(){
     return NoobCodes::fail;
 }
 
+vector<unsigned> ScanAddress::returnPortGroup(string portGroup){
+    if(portGroup=="chat"){
+        return this->chatPorts;
+    }
+    else if(portGroup=="gaming"){
+        return this->gamingPorts;
+    }
+    else if(portGroup=="malicious"){
+        return this->maliciousPorts;
+    }
+    else if(portGroup=="peer"){
+        return this->peerPorts;
+    }
+    else if(portGroup=="popular"){
+        return this->popularPorts;
+    }
+    else if(portGroup=="streaming"){
+        return this->streamingPorts;
+    }
+    else if(portGroup=="custom"){
+        return this->customList;
+    }
+    else{
+        cout << "Your entered group name, " << portGroup << ", was not found. Try your command again.\n";
+    }
+    return this->portsToScan;
+}
+
 void ScanAddress::debug(){
     return;
 }

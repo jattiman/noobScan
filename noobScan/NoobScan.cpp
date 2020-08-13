@@ -308,7 +308,8 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
      [^\\d\\W]+ no digits or whitespace
      \\b word boundary at the end (space after word)
     */
-    regex commandHunter("\\b[^\\d\\W]+\\b");
+    //regex commandHunter("\\b[^\\d\\W]+\\b");
+    regex commandHunter("[a-zA-Z]+");
 //    regex commandHunter(R"(?<=\s|^)(a-zA-Z)+(?=\s|$)");
     //regex commandHunter("(?<!\\S)[A-Za-z]+(?!\\S)");
     
@@ -348,35 +349,47 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
     
     bool firstError=true;
     for(auto const & commandEntry: userCommandParsed){
+        
+        // if a word command is found
         if(regex_match(commandEntry, commandHunter)){
-            cout << "\t" << commandEntry << ": word command\n";
+            // add to the parsed user commands
             this->parsedCommand.push_back(commandEntry);
         }
+        
+        // if an IP address is recognized
         else if(regex_match(commandEntry, ipHunter)){
-            cout << "\t" << commandEntry << ": IP command\n";
+            // add the IP string to the commands
             this->parsedCommand.push_back(commandEntry);
             this->ipToScan.push_back(commandEntry);
         }
+        
+        // if a URL is recognized
         else if(regex_match(commandEntry, URLHunter)){
-            cout << "\t" << commandEntry << ": URL command\n";
+            // convert URL to IP
             string URLtoIP = ourScanner->getTargetIP(commandEntry);
+            // if conversion was not successful, output to user and exit
             if(URLtoIP.empty()){
                 cout << "Your formatting is off (URL to IP conversion issue for " << commandEntry << "). Please try again\n";
                 return NoobCodes::failURL;
             }
+            // if URL converted successfully, add to appropriate vectors
             else{
+                cout << "\t\tIP is " << URLtoIP << endl;
                 this->parsedCommand.push_back(URLtoIP);
                 this->siteToScan.push_back(commandEntry);
                 this->ipToScan.push_back(URLtoIP);
             }
         }
+        
+        // if a number (port) is recornized)
         else if(regex_match(commandEntry, portHunter)){
-            cout << "\t" << commandEntry << ": port command\n";
+            // attempt to convert string of port numbers to unsigned vector
             try {
-                // convert the string to an unsigned number
+                // if successful, push back to vector
                 unsigned long ourPort = stoul(commandEntry);
                 portsToScan.push_back((unsigned int)ourPort);
             } catch (const invalid_argument) {
+                // if unsuccessful, confirm that any extra ports were moved off, and note the error. This is more of a failsafe than anything else, in case we've miscalculated for something.
                 if(firstError){
                     portsToScan.pop_back();
                     firstError=false;
@@ -386,10 +399,10 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
             }
         }
         else{
-            cout << "\t" << commandEntry << ": not caught\n";
+            // no need to do anything here. If the item isn't caught, it's likely a space, or bad user formatting.
         }
     }
-
+    
     return NoobCodes::success;
     
 }
@@ -629,9 +642,6 @@ void NoobScan::scanRequestCheck(){
         // check scan type
         scanType=checkScanType();
         
-        // confirm sub arguments called correctly
-        //TODO: pull URL out and turn it into an IP address
-        
         // run scan
         if(scanType==NoobCodes::tcp){
             this->ourTCPScan = new TCPScanner();
@@ -656,11 +666,12 @@ void NoobScan::scanRequestCheck(){
     }
     
     // if 4 arguments (scan [scan type] [destination] [port group]), the command is most likely sufficiently formed. Remember: ports are not part of the parsedCommand. Port groups, however, are, since we interpret this as a string.
-    else if(parsedCount==4){
+    else if(parsedCount == 4){
         // check scan type
         scanType=checkScanType();
         
-        // confirm sub arguments called correctly
+        // adjust port group accordingly
+        this->portsToScan = ourScanner->returnPortGroup(parsedCommand[3]);
         
         // run scan
         if(scanType==NoobCodes::tcp){
@@ -753,16 +764,13 @@ void NoobScan::settingsRequestCheck(){
     // if user just entered "settings"
     else if(parsedCount==1){
         // general settings request - show all settings menu
-        cout << "You're asking for general settings.\n\n";
+        outputFeedback("You're asking for general settings.\n\n");
         this->displaySettings(NoobCodes::settingsRequest);
     }
+    // if there's some other type of issue with the user's settings request
     else{
-        // TODO: if additional entry (2 arg), check to see if it belongs to a sub-page on settings, and take the user there
-
-        
-        // incorrectly formed settings request
+        // output issue to user, and send them back
         cout << "Your settings request was formatted incorrectly. Either input \"settings\", or \"settings [specific setting topic]\"\n\n";
-        // dump them into the general settings menu
     }
     
     return;
@@ -1146,9 +1154,13 @@ void NoobScan::getNums(vector<unsigned> & ourNums){
     bool tryAgain = false;
     
     do{
+        // if this isn't our first time in the loop
         if(tryAgain){
+            // re-prompt user
             cout << "Please try entering your port numbers again: ";
         }
+        
+        // remove old values from strings/vectors
         ourNums.clear();
         ourString.clear();
         splitString.clear();
@@ -1226,6 +1238,9 @@ void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
         case 7:
             cout << "Please enter the ports you want to add to your own group (press enter when done): ";
             getNums(this->portsToScan);
+            if(!portsToScan.empty()){
+                ourScanner->setCustomList(this->portsToScan);
+            }
             break;
         case 8:
             cout << "Exiting ... \n";
@@ -1375,6 +1390,8 @@ bool NoobScan::getIsAdmin(){
 void NoobScan::clearCommandVectors(){
     this->parsedCommand.clear();
     this->portsToScan.clear();
+    this->ipToScan.clear();
+    this->siteToScan.clear();
     return;
 }
 
@@ -1404,10 +1421,10 @@ void NoobScan::displayUserPortRequests(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
-    string testOne = "scan udp 127.0.0.1.9.9.9 20 40 50";
-    string testTwo = "scan udp www.google.com 20 40 50";
-    string testThree = "scan    tcp 127.00.1 20 40 50";
-    string testFour = "scan    TCP   http://balls.dhusfdsiuh.com/ 20 40 50";
+    string testOne = "sc4an -udp 20a 4a0 50a";
+    string testTwo = "scan5 udp_ 127.0.0 20 40 50";
+    string testThree = "6scan    t_cp 127.00.1 20 40 50";
+    string testFour = "scan    TC-P   http://balls.dhusfdsiuh.com/ 20 40 50";
     
     cout << testOne << ": " << endl;
     this->parseUserArgument(testOne);

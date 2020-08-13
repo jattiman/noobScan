@@ -111,6 +111,9 @@ public:
     // training wheels scan to prompt user step by step
     NoobCodes assistedScan();
     
+    // gets port group based on prompt
+    vector<unsigned> returnPortGroup(string portGroup);
+    
     // print debug statement
     void debug();
     
@@ -135,7 +138,7 @@ private:
     // variable delay between scans
     bool variableDelay;
     
-    // vector of ports to scan (defined by user)
+    // vector of ports to scan (placeholder)
     vector<unsigned> portsToScan;
     
     // vector of popular ports to scan (predefined)

@@ -35,10 +35,10 @@ public:
     void printOpenPorts();
     
     // run scan - default value is own IP
-    NoobCodes runScan(int portNum, std::string IPToScan="127.0.0.1");
+    NoobCodes runScan(int portNum, string IPToScan);
     
     // scan multiple ports at once
-    NoobCodes runMultiScan(vector<unsigned> portNumbers, std::string IPToScan="127.0.0.1");
+    NoobCodes runMultiScan(vector<unsigned> portNumbers, string IPToScan);
     
     // get sleep time
     unsigned int getSleepTimer();
