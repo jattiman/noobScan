@@ -18,12 +18,12 @@ class UDPScanner : public ScanAddress{
 public:
     UDPScanner();
     
-    UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer=1);
+    UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan);
     
     // run scan - default value is own IP
-    NoobCodes runScan(int portNum, bool isAdmin, string IPToScan="127.0.0.1");
+    NoobCodes runScan(int portNum, bool isRoot, string IPToScan="127.0.0.1");
     
-    NoobCodes runMultiScan(vector<unsigned> portNumbers, string IPToScan="127.0.0.1");
+    NoobCodes runMultiScan(vector<unsigned> portNumbers, bool isRoot, string IPToScan="127.0.0.1");
     
     bool sendCheck(ssize_t ourSocket, int ourPort);
     
@@ -33,12 +33,15 @@ public:
     // get timeout time
     unsigned int getTimeoutTimer();
     
+    bool getVariableScanStatus();
+    
 private:
     vector<int> openPorts;
     vector<int> closedPorts;
     struct timeval ourWaitTimer;
     unsigned int sleepTimer;
     unsigned int timeoutTimer;
+    bool variableScanTime;
 };
 
 #endif /* UDPScanner_h */

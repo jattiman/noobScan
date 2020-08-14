@@ -20,7 +20,7 @@ class TCPScanner : public ScanAddress{
 public:
     TCPScanner();
     
-    TCPScanner(unsigned int sleep);
+    TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan);
 
     // add open port to list
     void addOpenPorts(int newOpenPort);
@@ -46,13 +46,19 @@ public:
     // get timeout time
     unsigned int getTimeoutTimer();
     
+    // get variable scan status
+    bool getVariableScanStatus();
+    
+    
+    
     
 private:
     vector<int> openPorts;
     vector<int> closedPorts;
     unsigned int sleepTimer;
     unsigned int timeoutTimer;
-    
+    bool variableScanTime;
+    unsigned seed;
 };
 
 #endif /* TCPScanner_h */

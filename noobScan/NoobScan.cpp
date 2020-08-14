@@ -9,12 +9,12 @@
 #include "NoobScan.h"
 
 NoobScan::NoobScan(){
-    // instantiate member objects
+    // instantiate member objects where appropriate
     this->ourHelper = new HelpModule();
     this->userRecorder = new Recorder();
     this->ourScanner = new ScanAddress();
-    this->ourTCPScan = new TCPScanner();
-    //this->ourUDPScan = new UDPScanner();
+//    this->ourTCPScan = new TCPScanner();
+//    this->ourUDPScan = new UDPScanner();
     this->ourSYNScan = new SYNScanner();
     
     // clear any noise in out command strings
@@ -644,13 +644,13 @@ void NoobScan::scanRequestCheck(){
         
         // run scan
         if(scanType==NoobCodes::tcp){
-            this->ourTCPScan = new TCPScanner();
+            this->ourTCPScan = new TCPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
             delete this->ourTCPScan;
         }
         else if(scanType==NoobCodes::udp){
             // instantiate UDP scanner
-            this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer());
+            this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
             
             // run the scan
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
@@ -675,13 +675,13 @@ void NoobScan::scanRequestCheck(){
         
         // run scan
         if(scanType==NoobCodes::tcp){
-            this->ourTCPScan = new TCPScanner();
+            this->ourTCPScan = new TCPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
             this->ourTCPScan->runMultiScan(portsToScan,ipToScan[0]);
             delete this->ourTCPScan;
         }
         else if(scanType==NoobCodes::udp){
             // instantiate UDP scanner
-            this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer());
+            this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
             
             // run the scan
             //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
@@ -938,12 +938,12 @@ void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     
     // run the scan
     if(scanType==NoobCodes::tcp){
-        this->ourTCPScan = new TCPScanner();
+        this->ourTCPScan = new TCPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
         this->ourTCPScan->runScan(portToScan, targetIP);
         delete this->ourTCPScan;
     }
     else{
-        this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer());
+        this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
         this->ourUDPScan->runScan(portToScan, this->getIsAdmin());
         delete this->ourUDPScan;
     }
@@ -992,8 +992,8 @@ void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
     userAnswer = getValidInput(1,3);
     if(userAnswer==1){
         int delayTime;
-        cout << "Please enter new delay time between port scans (between 0 and 10): ";
-        delayTime = getValidInput(0,10);
+        cout << "Please enter new delay time between port scans (microseconds between 0 and 100000): ";
+        delayTime = getValidInput(0,100000);
         this->ourScanner->setSleepTimer(delayTime);
         cout << "Your new delay time between ports is "
             << this->ourScanner->getSleepTimer() << endl;
@@ -1003,7 +1003,7 @@ void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
         int variableAnswer;
         // notify user of scan status
         cout << "Variable scan is currently ";
-        if(this->getVariableScanStatus()){
+        if(ourScanner->getVariableDelayStatus()){
             cout << "on.\n";
         }
         else{
@@ -1016,13 +1016,13 @@ void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
             << "\t3. Exit (keep current setting)\n";
         variableAnswer = getValidInput(1,3);
         if(variableAnswer==1){
-            this->setVariableScan(true);
+            ourScanner->setVariableDelayStatus(true);
         }
         if(variableAnswer==2){
-            this->setVariableScan(false);
+            ourScanner->setVariableDelayStatus(false);
         }
         cout << "Variable scan is currently ";
-        if(this->getVariableScanStatus()){
+        if(ourScanner->getVariableDelayStatus()){
             cout << "on.\n";
         }
         else{

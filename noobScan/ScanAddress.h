@@ -114,6 +114,9 @@ public:
     // gets port group based on prompt
     vector<unsigned> returnPortGroup(string portGroup);
     
+    // set seed with random number
+    unsigned generateNewSeed();
+    
     // print debug statement
     void debug();
     
@@ -161,6 +164,9 @@ private:
     
     // vector holding custom port list
     vector<unsigned> customList;
+    
+    // vector holding all ports
+    vector<unsigned> allPorts;
     
     // sleep timer
     unsigned int sleepTimer;

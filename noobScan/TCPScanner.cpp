@@ -10,11 +10,14 @@
 
 TCPScanner::TCPScanner(){
     this->openPorts.reserve(1000);
+    this->variableScanTime = false;
 }
 
-TCPScanner::TCPScanner(unsigned int sleep){
+TCPScanner::TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan){
     this->openPorts.reserve(1000);
-    
+    this->sleepTimer=newSleepTimer;
+    this->timeoutTimer=newTimeoutTimer;
+    this->variableScanTime=variableScan;
 }
 
 void TCPScanner::addOpenPorts(int newOpenPort){
@@ -34,8 +37,11 @@ vector<int> TCPScanner::getOpenPorts(){
 
 // output the open ports
 void TCPScanner::printOpenPorts(){
-    for(auto const & portValue: this->openPorts){
-        cout << portValue << endl;
+    if(!this->openPorts.empty()){
+        cout << "Open ports: \n";
+        for(auto const & portValue: this->openPorts){
+            cout << portValue << endl;
+        }
     }
     return;
 }
@@ -109,11 +115,22 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
         
         // if the socket wasn't unsuccessful
         if(ourTCPSock == -1){
-            return NoobCodes::socketCreationError;
+            return NoobCodes::socketCreationErrorDGRAM;
         }
         
         socketToScan.sin_port = htons(nextPort);
     
+        // if variable scan is on, wait a variable amount of time between each scan
+        if(this->getVariableScanStatus()){
+            cout << "Variable scan is on\n";
+            usleep(this->getSleepTimer() + generateNewSeed());
+        }
+        // if it's off, wait however long the user selected to wait between scans
+        else{
+            cout << "Variable scan is off\n";
+            usleep(this->getSleepTimer());
+        }
+        
         // check port
         int checkConnect = connect(ourTCPSock, (sockaddr*)&socketToScan, sizeof(socketToScan));
         
@@ -162,4 +179,8 @@ unsigned int TCPScanner::getSleepTimer(){
 // get timeout time
 unsigned int TCPScanner::getTimeoutTimer(){
     return this->timeoutTimer;
+}
+
+bool TCPScanner::getVariableScanStatus(){
+    return this->variableScanTime;
 }

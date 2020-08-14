@@ -56,6 +56,7 @@ private:
     vector<string> ourRecord;
     unordered_map<char, vector<string>> commandMap;
     unordered_map<char, vector<std::pair <string, string>>> commandMapTwo;
+    unordered_map<string, unsigned int> tallyMap;
     bool isRecorderOn;
 };
 

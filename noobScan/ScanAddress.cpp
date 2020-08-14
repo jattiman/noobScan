@@ -8,7 +8,7 @@
 #include "ScanAddress.h"
 
 ScanAddress::ScanAddress(){
-    this->sleepTimer=1;
+    this->sleepTimer=0;
     this->timeOut=1;
     this->retries=2;
     this->ourInterface="en0";
@@ -306,6 +306,13 @@ vector<unsigned> ScanAddress::returnPortGroup(string portGroup){
         cout << "Your entered group name, " << portGroup << ", was not found. Try your command again.\n";
     }
     return this->portsToScan;
+}
+
+// set seed with random number
+unsigned ScanAddress::generateNewSeed(){
+    // pull the time since epoch, and then mod it by 10000 (variable time up to 1 second)
+    unsigned seed = (unsigned) std::chrono::system_clock::now().time_since_epoch().count();
+    return (seed%1000000);
 }
 
 void ScanAddress::debug(){
