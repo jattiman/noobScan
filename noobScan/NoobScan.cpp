@@ -653,8 +653,8 @@ void NoobScan::scanRequestCheck(){
             this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
             
             // run the scan
-            //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
-            this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
+            this->ourUDPScan->runMultiScan(portsToScan, this->getIsRoot(), ipToScan[0]);
+            //this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
             
             // delete the instance of our scanner
             delete this->ourUDPScan;
@@ -684,8 +684,8 @@ void NoobScan::scanRequestCheck(){
             this->ourUDPScan = new UDPScanner(ourScanner->getSleepTimer(), ourScanner->getTimeoutTimer(), ourScanner->getVariableDelayStatus());
             
             // run the scan
-            //this->ourUDPScan->runMultiScan(portsToScan,ipToScan[0]);
-            this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
+            this->ourUDPScan->runMultiScan(portsToScan, this->getIsRoot(), ipToScan[0]);
+//            this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
             
             // delete the instance of our scanner
             delete this->ourUDPScan;
