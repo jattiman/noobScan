@@ -130,10 +130,17 @@ void HelpModule::convertToLowerCase(string & ourString){
 }
 
 void HelpModule::populateDirectory(){
+    
     // holds each line of the file (once we get to it)
     string fileLine;
+    
+    // holds the word for the dictionary entry
     string dictionaryTerm;
+    
+    // holds the definition for the dictionary entry
     string definition;
+    
+    // holds the position of the token separating the word from the definition
     unsigned long tokenHunter=0;
     
     // open dictionary file for input
@@ -151,6 +158,8 @@ void HelpModule::populateDirectory(){
         // instead of using regex (robust), we'll manually hunt for the delimiter and split each file line into word and definition
         tokenHunter=fileLine.find(':');
         dictionaryTerm = fileLine.substr(0,tokenHunter);
+        
+        // when pulling the definition, we're accounting for the space after the token to avoid moving whitespace/symbols
         definition = fileLine.substr(tokenHunter+2,string::npos);
         
         // add this to the map

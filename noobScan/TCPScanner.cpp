@@ -122,16 +122,17 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
     
         // if variable scan is on, wait a variable amount of time between each scan
         if(this->getVariableScanStatus()){
-            cout << "Variable scan is on\n";
+            //cout << "Variable scan is on\n";
             usleep(this->getSleepTimer() + generateNewSeed());
         }
         // if it's off, wait however long the user selected to wait between scans
         else{
-            cout << "Variable scan is off\n";
+            //cout << "Variable scan is off\n";
             usleep(this->getSleepTimer());
         }
         
         // check port
+        // TODO: set timeout time for this so it doesn't hang much longer. Use setsockopt (already doing this for UDP)
         int checkConnect = connect(ourTCPSock, (sockaddr*)&socketToScan, sizeof(socketToScan));
         
         // if connection denied, return that info

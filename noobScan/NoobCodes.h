@@ -11,6 +11,7 @@
 
 enum class NoobCodes{
     fail,
+    failPartial,
     failURL,
     failIP,
     failPort,
@@ -48,6 +49,5 @@ enum class NoobCodes{
     IPBindingIssue,
     hostNameIssue
 };
-
 
 #endif /* NoobCodes_h */

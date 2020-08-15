@@ -110,6 +110,7 @@ NoobCodes UDPScanner::runScan(int portNum, bool isRoot, string IPToScan){
             struct icmp* ourICMP = (struct icmp * ) (ourBuffer + ipLength);
             
             // If the ICMP reports unreachable, then the port is closed. ICMP is rate limited: might not get this reply.
+            // TODO: convert to function to review replies. This is sufficient for now, though.
             if((ourICMP->icmp_type == ICMP_UNREACH) && (ourICMP->icmp_code == ICMP_UNREACH_PORT)){
                 cout << "ICMP port unreachable (closed).\n";
                 cout << "\ttype: " << ourICMP->icmp_type << "\tcode: " << ourICMP->icmp_code << endl;

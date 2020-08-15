@@ -315,7 +315,76 @@ unsigned ScanAddress::generateNewSeed(){
     return (seed%1000000);
 }
 
+// translate NoobCode to char
+char ScanAddress::translateNoob(NoobCodes ourCode){
+    char noobCategory = 'x';
+    
+    // translate noobcodes into pass/fail/scan type/etc
+    switch (ourCode) {
+        case NoobCodes::fail:
+        case NoobCodes::failPartial:
+        case NoobCodes::failURL:
+        case NoobCodes::failIP:
+        case NoobCodes::failPort:
+        case NoobCodes::socketError:
+        case NoobCodes::socketCreationError:
+        case NoobCodes::socketCreationErrorICMP:
+        case NoobCodes::socketCreationErrorDGRAM:
+        case NoobCodes::socketCreationErrorSTREAM:
+        case NoobCodes::portConnectionError:
+        case NoobCodes::portConnectionDenied:
+        case NoobCodes::portNumberInvalid:
+        case NoobCodes::portSendError:
+        case NoobCodes::portReceiveError:
+        case NoobCodes::IPBindingIssue:
+        case NoobCodes::hostNameIssue:
+        case NoobCodes::portSendDenied:
+            noobCategory = 'f';
+            break;
+        case NoobCodes::success:
+        case NoobCodes::portConnectionSuccess:
+            noobCategory = 'g';
+            break;
+        case NoobCodes::helpRequest:
+            noobCategory = 'h';
+            break;
+        case NoobCodes::scanRequest:
+            noobCategory = 's';
+            break;
+        case NoobCodes::IPRequest:
+            noobCategory = 'i';
+            break;
+        case NoobCodes::debugRequest:
+            noobCategory = 'd';
+            break;
+        case NoobCodes::settingsRequest:
+            noobCategory = 'v';
+            break;
+        case NoobCodes::exitRequest:
+        case NoobCodes::tcp:
+        case NoobCodes::udp:
+        case NoobCodes::fin:
+        case NoobCodes::syn:
+        case NoobCodes::settingsForDelay:
+        case NoobCodes::settingsForDictionary:
+        case NoobCodes::settingsForAssistedScan:
+        case NoobCodes::settingsForRecorder:
+        case NoobCodes::settingsForScanGroups:
+        case NoobCodes::settingsForTimeouts:
+        case NoobCodes::settingsForDebugText:
+        case NoobCodes::restart:
+            noobCategory = 'p';
+            break;
+        default:
+            //cout << "Unknown case - that's odd.\n";
+            noobCategory = 'z';
+            break;
+    }
+    return noobCategory;
+}
+
 void ScanAddress::debug(){
     return;
 }
+
 

@@ -8,11 +8,19 @@
 #ifndef Recorder_h
 #define Recorder_h
 
+
 #include <stdio.h>
 #include <vector>
 #include <unordered_map>
 #include <string>
 #include <iostream>
+#include <iomanip>
+
+// file manipulation
+#include <fstream>
+#include <sstream>
+
+#include "NoobCodes.h"
 
 using namespace std;
 
@@ -25,6 +33,8 @@ public:
     // records requests by type
     void categorizeRequest(string userRequest, char category='x');
     
+    void categorizeOutcome(string userRequest, char outcome, char category='x');
+    
     // records user request
 //    void recordRequest(std::string userRequest);
     
@@ -35,16 +45,10 @@ public:
     void showHistory(char historyType='a');
     
     // shows history by type
-    void showTypeHistory(char category='x');
-    
-    // shows all user commands
-    void showAllRequests();
-    
-    // shows only successfull user commands
-    void showSuccessfulRequests();
+    string writeHistoryByType(char historyType='a');
     
     // copy commands to file (class controls file)
-    void copyAllHistory();
+    void moveHistoryToFile();
     
     // set the recorder on/off status
     void setRecorderStatus(bool recorderStatus);
@@ -55,7 +59,7 @@ public:
 private:
     vector<string> ourRecord;
     unordered_map<char, vector<string>> commandMap;
-    unordered_map<char, vector<std::pair <string, string>>> commandMapTwo;
+    unordered_map<char, vector<std::pair <string, char>>> outcomeMap;
     unordered_map<string, unsigned int> tallyMap;
     bool isRecorderOn;
 };

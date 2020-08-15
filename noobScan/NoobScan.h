@@ -79,10 +79,10 @@ public:
     void intakeCommands();
     
     // respond to the user command
-    void commandResponse(string userCommand);
+    NoobCodes commandResponse(string userCommand, NoobCodes & category);
     
     // inspect user command arguments
-    void inspectArgs(string userCommand);
+    NoobCodes inspectArgs(string userCommand, NoobCodes & category);
     
     // parse user command arguments
     NoobCodes parseUserArgument(string userCommand);
@@ -97,16 +97,16 @@ public:
     void reportError(NoobCodes programError);
     
     // confirm IP for a website, if possible
-    void IPRequestCheck();
+    NoobCodes IPRequestCheck();
     
     // respond to help requests
-    void helpRequestCheck();
+    NoobCodes helpRequestCheck();
     
     // respond to scan requests
-    void scanRequestCheck();
+    NoobCodes scanRequestCheck();
     
     // respond to settings requests
-    void settingsRequestCheck();
+    NoobCodes settingsRequestCheck();
     
     // interprets userRequest to display appropriate settings menu
     NoobCodes findSettingsRequestType(string userRequest);

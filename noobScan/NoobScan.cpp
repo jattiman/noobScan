@@ -195,7 +195,14 @@ void NoobScan::opCheck(){
 
 // intakes all commands from user - main function of this class
 void NoobScan::intakeCommands(){
+    
+    NoobCodes category;
+    NoobCodes resultCode;
     while(true){
+        
+        // ensure our command string is clear to avoid string/buffer issues
+        this->ourCommand.clear();
+
         // prompt user for command
         this->ourCommand = promptUser();
         
@@ -206,7 +213,7 @@ void NoobScan::intakeCommands(){
         }
         
         // act on the command
-        this->commandResponse(ourCommand);
+        resultCode = this->commandResponse(ourCommand, category);
         
         if(ourCommand.compare("exit")==0){
             return;
@@ -215,15 +222,11 @@ void NoobScan::intakeCommands(){
         // if Recorder is on
         if(userRecorder->getRecorderStatus()){
         
-            // categorize the request
-            userRecorder->categorizeRequest(ourCommand);
+            cout << "\t\t" << this->ourCommand << "\tcode: " << ourScanner->translateNoob(resultCode) <<"\t: cat: " << ourScanner->translateNoob(category) << endl;
             
-            // categorize the answer
-        
+            // categorize the request and result
+            userRecorder->categorizeOutcome(this->ourCommand, ourScanner->translateNoob(resultCode), ourScanner->translateNoob(category));
         }
-        // output the answer
-        //TODO: make this interpret the noobcodes...
-        cout << this->ourResult;
         
         // clear user command
         this->ourCommand.clear();
@@ -243,7 +246,11 @@ string NoobScan::promptUser(bool sign){
 }
 
 // respond to user commands by initiating the appropriate functions
-void NoobScan::commandResponse(string userCommand){
+NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category){
+    
+    // create a code to hold the final outcome result of the request
+    NoobCodes finalOutcome = NoobCodes::success;
+    
     // clear result string
     this->ourResult.clear();
     
@@ -251,15 +258,12 @@ void NoobScan::commandResponse(string userCommand){
     string commandManip = userCommand;
     
     // categorize base request
-    inspectArgs(commandManip);
+    finalOutcome = inspectArgs(commandManip, category);
     
-    // TODO: update result string with answer to request
-    
-    
-    return;
+    return finalOutcome;
 }
 
-void NoobScan::inspectArgs(string userCommand){
+NoobCodes NoobScan::inspectArgs(string userCommand, NoobCodes & category){
     NoobCodes userRequest;
     
     // parse the argument into commands and ports
@@ -268,30 +272,33 @@ void NoobScan::inspectArgs(string userCommand){
     // confirm the original parsing went through without error
     if(userRequest!=NoobCodes::success){
         reportError(userRequest);
+        return userRequest;
     }
     
     // identify first argument
     userRequest = this->reviewPrimaryCommand();
     
-    // if first argument doesn't match, return a fail command
+    // regardless of outcome, categorize the overall request
+    category = userRequest;
+    
+    // if first argument doesn't match, return a fail code
     if(userRequest==NoobCodes::fail){
-        // TODO: update record with fail command here
-        return;
+        return userRequest;
     }
     
     // confirm secondary arguments are well formed, and act accordingly
-    // TODO: change this function to have a return code, and use that to update the record with the appropriate command here
-    this->reviewSecondaryCommands(userRequest);
-    
-    // run appropriate function based on argument results
+    userRequest = this->reviewSecondaryCommands(userRequest);
 
-    return;
+    return userRequest;
 }
 
 NoobCodes NoobScan::parseUserArgument(string userCommand){
     
-    // vector to hold user command, split by whitespace
+    // string holding feedback to the user, when feedback text is on
+    string userFeedback;
+    userFeedback.clear();
     
+    // vector to hold user command, split by whitespace
     vector<string> userCommandParsed;
     
     // TODO: remove formatted URLs from the string
@@ -310,8 +317,6 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
     */
     //regex commandHunter("\\b[^\\d\\W]+\\b");
     regex commandHunter("[a-zA-Z]+");
-//    regex commandHunter(R"(?<=\s|^)(a-zA-Z)+(?=\s|$)");
-    //regex commandHunter("(?<!\\S)[A-Za-z]+(?!\\S)");
     
     // this searches for numbers only (it's how we identify ports)
     //regex portHunter("\\b[0-9]{1,}");
@@ -339,8 +344,8 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
     /* This searches for a URL
      (?:http(s)?:\/\/) Looks for optional http(s):// prefixes
      ?[\w.-]+ Looks for optional www.-esque entry
-     (?:\.[\w\.-]+)+
-     [\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+
+     (?:\.[\w\.-]+)+ words with dots or dashes after them (snanme.nmap.org)
+     [\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+ words with other symbols and backslashes
      */
     regex URLHunter(R"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)");
                      
@@ -369,12 +374,14 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
             string URLtoIP = ourScanner->getTargetIP(commandEntry);
             // if conversion was not successful, output to user and exit
             if(URLtoIP.empty()){
-                cout << "Your formatting is off (URL to IP conversion issue for " << commandEntry << "). Please try again\n";
+                userFeedback = "Your formatting is off (URL to IP conversion issue for " + commandEntry + "). Please try again\n";
+                outputFeedback(userFeedback);
                 return NoobCodes::failURL;
             }
             // if URL converted successfully, add to appropriate vectors
             else{
-                cout << "\t\tIP is " << URLtoIP << endl;
+                userFeedback = "\t\tIP is " + URLtoIP + "\n";
+                outputFeedback(userFeedback);
                 this->parsedCommand.push_back(URLtoIP);
                 this->siteToScan.push_back(commandEntry);
                 this->ipToScan.push_back(URLtoIP);
@@ -394,7 +401,8 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
                     portsToScan.pop_back();
                     firstError=false;
                 }
-                cout << "Your formatting is off (misreading for " << commandEntry << "). Please try again\n";
+                userFeedback = "Your formatting is off (misreading for " + commandEntry + "). Please try again\n";
+                outputFeedback(userFeedback);
                 return NoobCodes::failPort;
             }
         }
@@ -457,25 +465,27 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
 NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
     switch (commandType) {
         case NoobCodes::helpRequest:
-            this->helpRequestCheck();
+            commandType = this->helpRequestCheck();
             break;
         case NoobCodes::scanRequest:
-            this->scanRequestCheck();
+            commandType = this->scanRequestCheck();
             break;
         case NoobCodes::settingsRequest:
-            this->settingsRequestCheck();
+            commandType = this->settingsRequestCheck();
             break;
         case NoobCodes::debugRequest:
             this->debug();
+            commandType=NoobCodes::success;
             break;
         case NoobCodes::IPRequest:
-            this->IPRequestCheck();
+            commandType = this->IPRequestCheck();
             break;
         case NoobCodes::exitRequest:
             cout << "Exiting...\n";
+            commandType=NoobCodes::success;
             break;
         default:
-            cout << "No command type.\n";
+            cout << "Unknown command type.\n";
             return NoobCodes::fail;
             break;
     }
@@ -536,29 +546,31 @@ void NoobScan::reportError(NoobCodes programError){
     }
 }
 
-void NoobScan::IPRequestCheck(){
+NoobCodes NoobScan::IPRequestCheck(){
+    NoobCodes IPOutcome = NoobCodes::success;
     // set up temporary strings to hold the user URL, and the returning IP address
-    string userURL;
-    string foundIP;
+    string userURL="";
+    string foundIP="";
     
     cout << "We're checking for an IP, now... \n";
     
     // If user potentially input a URL
-    if(parsedCommand.size()==2){
+    if(!siteToScan.empty()){
         
         // copy URL input (for later output)
-        userURL = parsedCommand[1];
+        userURL = siteToScan[0];
         
         // retrieve IP address
-        foundIP = this->ourScanner->getTargetIP(parsedCommand[1]);
+        foundIP = this->ourScanner->getTargetIP(siteToScan[0]);
     }
     
     // If the user didn't put in a URL, prompt them
     else{
         
         // prompt user for URL
-        cout << "\tYou're requesting an IP address for a URL, but have not provided a URL. Please enter the URL: ";
-        getline(cin,userURL);
+        cout << "\tPlease enter the URL: ";
+        userURL = this->promptUser(false);
+//        getline(cin,userURL);
         
         // transfer IP address in plaintext
         foundIP = this->ourScanner->getTargetIP(userURL);
@@ -567,15 +579,18 @@ void NoobScan::IPRequestCheck(){
     // if the IP returned was NULL
     if(foundIP.empty()){
         cout << "\tIP could not be retrieved for " << userURL << ". Please confirm formatting, and try again.\n";
+        IPOutcome = NoobCodes::failPartial;
     }
     else{
         // output IP to user
         cout << "\tIP address result for " << userURL << ": " << foundIP << endl;
     }
-    return;
+    return IPOutcome;
 }
 
-void NoobScan::helpRequestCheck(){
+NoobCodes NoobScan::helpRequestCheck(){
+    NoobCodes helpOutcome = NoobCodes::success;
+    
     size_t parsedCount=0;
     
     // count parsedCommand entries
@@ -590,6 +605,7 @@ void NoobScan::helpRequestCheck(){
                 // display warning, and define only the first
                 this->ourHelper->helpWarning();
                 this->ourHelper->returnInfo(portsToScan[0]);
+                helpOutcome=NoobCodes::failPartial;
             }
             // if only 1 port, define that port
             else if(portsToScan.size()>0){
@@ -605,6 +621,7 @@ void NoobScan::helpRequestCheck(){
             // if there are also ports requested, display warning
             if(portsToScan.size()>0){
                 this->ourHelper->helpWarning();
+                helpOutcome=NoobCodes::failPartial;
             }
             // define the non-port item requested
             this->ourHelper->returnInfo(parsedCommand[1]);
@@ -615,24 +632,28 @@ void NoobScan::helpRequestCheck(){
         case 6:
             this->ourHelper->helpWarning();
             this->ourHelper->returnInfo(parsedCommand[1]);
+            helpOutcome=NoobCodes::failPartial;
             break;
         default:
             break;
     }
     
-    return;
+    return helpOutcome;
 }
 
 
-
-void NoobScan::scanRequestCheck(){
-    cout << "Scan request registered\n";
+NoobCodes NoobScan::scanRequestCheck(){
+    outputFeedback("Scan request registered\n");
+    
+    // holder for outcome of request
+    NoobCodes outcome = NoobCodes::success;
     
     // holder for scan type
     NoobCodes scanType;
     
-    // count parsedCommand entries
+    // holds count for parsedCommand entries
     size_t parsedCount=0;
+    
     parsedCount=parsedCommand.size();
     
     string scanTarget;
@@ -672,6 +693,10 @@ void NoobScan::scanRequestCheck(){
         
         // adjust port group accordingly
         this->portsToScan = ourScanner->returnPortGroup(parsedCommand[3]);
+        if(portsToScan.empty()){
+            outcome = NoobCodes::fail;
+            return outcome;
+        }
         
         // run scan
         if(scanType==NoobCodes::tcp){
@@ -685,13 +710,13 @@ void NoobScan::scanRequestCheck(){
             
             // run the scan
             this->ourUDPScan->runMultiScan(portsToScan, this->getIsRoot(), ipToScan[0]);
-//            this->ourUDPScan->runScan(portsToScan[0], getIsRoot());
             
             // delete the instance of our scanner
             delete this->ourUDPScan;
         }
         else{
             cout << "Scan type currently unavailable.\n";
+            outcome = NoobCodes::fail;
         }
     }
     
@@ -699,13 +724,10 @@ void NoobScan::scanRequestCheck(){
     else{
         cout << "It looks like you might be having some trouble formulating your scan. Please follow the scan directions:" << endl;
         this->ourHelper->returnInfo("scan");
+        outcome=NoobCodes::fail;
     }
     
-    // If total (including scan request) is more than 3
-        // check the last command for special port selection
-        // if 3 is a special and 2 is a specific scan type, send to scanner function
-    
-    return;
+    return outcome;
 }
 
 // processes scan type and acts accordingly
@@ -728,16 +750,16 @@ NoobCodes NoobScan::checkScanType(){
         return NoobCodes::fin;
     }
     else{
-        cout << "Something went wrong ... \n";
+        outputFeedback("Something went wrong ... \n");
         return NoobCodes::fail;
     }
 }
 
-void NoobScan::settingsRequestCheck(){
+NoobCodes NoobScan::settingsRequestCheck(){
     outputFeedback("Settings request registered\n");
     
     // NoobCodes return for settings response
-    // NoobCodes settingsHolder;
+    NoobCodes settingsOutcome = NoobCodes::success;
     
     // count parsedCommand entries
     size_t parsedCount=0;
@@ -748,18 +770,20 @@ void NoobScan::settingsRequestCheck(){
         // Inform them they have formatted their request incorrectly
         cout << "Port numbers do not apply to settings.\n\n";
         
+        // note that they did not format their original argument perfectly
+        settingsOutcome = NoobCodes::failPartial;
+        
         // dump to general settings menu.
         displaySettings();
     }
     // if user is requesting a specific setting to toggle
     else if(parsedCount==2){
         // let the user know the setting they're requesting info for.
-        string debugString = "You're asking specifically to access the setting for: " + parsedCommand[1];
+        string debugString = "You're asking specifically to access the setting for: " + parsedCommand[1] + "\n";
         outputFeedback(debugString);
-        cout << endl;
         
-        this->displaySettings(findSettingsRequestType(parsedCommand[1]));
         // check if user's command corresponds to a setting, and react appropriately
+        settingsOutcome = this->displaySettings(findSettingsRequestType(parsedCommand[1]));
     }
     // if user just entered "settings"
     else if(parsedCount==1){
@@ -771,9 +795,10 @@ void NoobScan::settingsRequestCheck(){
     else{
         // output issue to user, and send them back
         cout << "Your settings request was formatted incorrectly. Either input \"settings\", or \"settings [specific setting topic]\"\n\n";
+        settingsOutcome=NoobCodes::fail;
     }
     
-    return;
+    return settingsOutcome;
 }
 
 // interprets userRequest to display appropriate settings menu
@@ -1254,7 +1279,7 @@ void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
 }
 
 NoobCodes NoobScan::displaySettings(NoobCodes settings){
-    
+    NoobCodes displaySettingsResult = NoobCodes::success;
     int userAnswer = 0;
     while(settings != NoobCodes::exitRequest){
         
@@ -1331,8 +1356,10 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             settings = NoobCodes::exitRequest;
             break;
         }
+        
+        // otherwise, output the correct options for the user to use
         else{
-            //TODO: look into iomanip for formatting here
+            // output other settings options for user to retry
             cout << "Invalid settings choice. Please select from the following:\n"
             << setw(11) << left << "\tassist" << "\t-\tcreate a step by step scan for 1 port\n"
             << setw(11) << left << "\tdelay" << "\t-\tset delay between ports to scan\n"
@@ -1342,10 +1369,12 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
             << setw(11) << left << "\trecorder" << "\t-\tenable or disable the recorder\n"
             << setw(11) << left << "\tscan" << "\t-\tcreate an assisted scan\n"
             << setw(11) << left << "\ttimeout" << "\t-\tset timeout length when waiting for server to respond\n" << endl;
+            displaySettingsResult = NoobCodes::fail;
             break;
         }
     }
-    return NoobCodes::restart;
+    //return NoobCodes::restart;
+    return displaySettingsResult;
 }
 
 // turn on and off feedback
@@ -1421,6 +1450,11 @@ void NoobScan::displayUserPortRequests(){
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
+
+    userRecorder->showHistory();
+    userRecorder->moveHistoryToFile();
+
+/*
     string testOne = "sc4an -udp 20a 4a0 50a";
     string testTwo = "scan5 udp_ 127.0.0 20 40 50";
     string testThree = "6scan    t_cp 127.00.1 20 40 50";
@@ -1440,29 +1474,9 @@ void NoobScan::debug(int debugPort){
     
     
     
-//    userRecorder->showHistory();
     
     // other porthunter option
 //    regex rx(R"((?:^|\s)([+-]?[[:digit:]]+(?:\.[[:digit:]]+)?)(?=$|\s))");
-
-
-/*
-    // get IP from URL
-//    string ourString = ourScanner->getTargetIP("Scanme.Nmap.Org");
-//    cout << "-" << ourString << "-" << endl;
-    
-    // get host machine IPs
-    string test;
-    test = ourScanner->getHostIP();
-    cout << test << endl;
-    
-    test.clear();
-    
-    // get host machine's MAC
-    test = ourScanner->getHostMac();
-    cout << test << endl;
-    
-    // alt get host machine MAC
-    ourScanner->debug();
 */
+
 }

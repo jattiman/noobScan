@@ -117,6 +117,9 @@ public:
     // set seed with random number
     unsigned generateNewSeed();
     
+    // translate NoobCode to char
+    char translateNoob(NoobCodes ourCode);
+    
     // print debug statement
     void debug();
     
