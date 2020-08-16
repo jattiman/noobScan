@@ -23,7 +23,11 @@ void Recorder::categorizeOutcome(string userRequest, char outcome, char category
     
     // update separate tally for the request as well as the outcome, which will allow us to view stats later
     tallyUpdate(category);
-    tallyUpdate(outcome);
+    
+    // confirm there is no duplicate request (we don't want to double count fails)
+    if(category!=outcome){
+        tallyUpdate(outcome);
+    }
     
     // add request to the overall record
     if(category!='a'){
@@ -36,7 +40,7 @@ void Recorder::categorizeOutcome(string userRequest, char outcome, char category
 void Recorder::tallyUpdate(char category){
     // add request to the map, and increment as needed
     tallyMap[category]+=1;
-    cout << "\t\tnew tally for " << category << " is ";
+    cout << "\t\tnew tally for " << category << " is " <<tallyMap[category] << endl;
     return;
 }
 
@@ -44,20 +48,23 @@ void Recorder::tallyUpdate(char category){
 string Recorder::tallyRetrieval(char category){
     stringstream ourStream;
     string tallyString;
+    tallyString.clear();
     
-    // search for a map entry with the category valie
-    for(auto mapIt = tallyMap.find(category); mapIt!=tallyMap.end(); mapIt++){
-        ourStream << mapIt->second;
+    // search for a map entry with the category value
+    // if found,
+    if(tallyMap.count(category)>0){
+        // add tally value to stream
+        ourStream << tallyMap[category];
+    }
+    // if not found,
+    else{
+        // insert a 0 count
+        ourStream << "0";
     }
     
-    // convert to string
+    // convert stream to string
     tallyString=ourStream.str();
-    
-    // if no values found (string empty)
-    if(tallyString.empty()){
-        // change it to 0, so stream output won't be blank
-        tallyString+="0";
-    }
+
     
     return tallyString;
 }
@@ -161,19 +168,20 @@ void Recorder::moveHistoryToFile(){
     historyFile << "Outputting history on " << 1 + readableTime->tm_mon << "/" << readableTime->tm_mday << "/" << 1900 + readableTime->tm_year << ", at " << readableTime->tm_hour << ":" << readableTime->tm_min << "\n";
     historyFile << "\n\n---SCAN commands ...\n";
     historyFile << writeHistoryByType('s');
-//    historyFile << "\nTotal scan commands: " << tallyRetrieval('s');
+    historyFile << "\nTotal scan commands: " << tallyRetrieval('s');
     historyFile << "\n\n---SETTINGS commands ...\n";
     historyFile << writeHistoryByType('v');
-//    historyFile << "\nTotal settings commands: " << tallyRetrieval('v');
+    historyFile << "\nTotal settings commands: " << tallyRetrieval('v');
     historyFile << "\n\n---HELP commands ...\n";
     historyFile << writeHistoryByType('h');
-//    historyFile << "\nTotal help commands: " << tallyRetrieval('h');
+    historyFile << "\nTotal help commands: " << tallyRetrieval('h');
     historyFile << "\n\n---IP CHECK commands ...\n";
     historyFile << writeHistoryByType('i');
-//    historyFile << "\nTotal IP Check commands: " << tallyRetrieval('i');
+    historyFile << "\nTotal IP Check commands: " << tallyRetrieval('i');
     historyFile << "\n\n---ALL commands in order...\n";
     historyFile << writeHistoryByType();
-//    historyFile << "\nTotal successful commands: " << tallyRetrieval('g');
+    historyFile << "\nTotal successful commands: " << tallyRetrieval('g') << "\n";
+    historyFile << "\nTotal failed commands: " << tallyRetrieval('f') << "\n";
 //    historyFile << "\nTotal failed/partially failed commands: " << tallyRetrieval('f');
 
     historyFile.close();
