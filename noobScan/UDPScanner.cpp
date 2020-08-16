@@ -1,10 +1,11 @@
-//
-//  UDPScanner.cpp
-//  noobScan
-//
-//  Created by John Atti on 4/26/20.
-//  Copyright © 2020 John Atti. All rights reserved.
-//
+/**/
+/*
+ UDPScanner.cpp of NoobScan, a novice portscanner
+ Author: John Atti
+ Finished 8/16/2020
+*/
+/**/
+
 
 #include "UDPScanner.h"
 #define MAXRETURN 1024

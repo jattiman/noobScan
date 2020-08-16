@@ -1,7 +1,8 @@
 /**/
 /*
-   scanaddress.cpp of noobScan, a novice port scanner
-   scanaddress.cpp
+ ScanAddress.cpp of noobScan, a novice port scanner
+ Author: John Atti
+ Completed 8/16/2020
 */
 /**/
 

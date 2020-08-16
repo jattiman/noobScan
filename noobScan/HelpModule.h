@@ -1,7 +1,9 @@
 /**/
 /*
    HelpModule.h of noobScan, a novice port scanner
-   HelpModule.h
+   HelpModule.h is responsible for mantaining (reading from / writing to) the dictionary that informs users about the commands, ports, and functions of the program. It also updates a map with dictionary terms for easy user viewing, and to minimize file access time.
+ Author: John Atti
+ Finished 8/16/2020
 */
 /**/
 

@@ -1,7 +1,8 @@
 /**/
 /*
-   HelpModule.cpp of noobScan, a novice port scanner
-   HelpModule.cpp provides information to the user about commands
+ HelpModule.cpp of noobScan, a novice port scanner
+ Author: John Atti
+ Finished 8/16/2020
 */
 /**/
 

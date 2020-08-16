@@ -1,7 +1,9 @@
 /**/
 /*
-   main.cpp of noobScan, a novice port scanner
-   main.cpp welcomes the user and runs scan options
+ NoobScan.h of NoobScan, a novice portscanner
+ NoobScan.h is responsible for organizing user interactions. It instantiates the scanner classes (TCP and UDP for this example), retrieves user information, such as their MAC and IP address (which will be used for more advanced scanning in the future), and allows the user to access settings, help functions, and recorder variables. This is the class that controls the flow of everything, essentially.
+ Author: John Atti
+ Finished 8/16/2020
 */
 /**/
 

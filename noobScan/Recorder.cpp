@@ -1,7 +1,8 @@
 /**/
 /*
-   Recorder.cpp of noobScan, a novice port scanner
-   Recorder.cpp records all of the users commands for educational purposes
+ Recorder.cpp of noobScan, a novice port scanner
+ Author: John Atti
+ Finished 8/16/2020
 */
 /**/
 

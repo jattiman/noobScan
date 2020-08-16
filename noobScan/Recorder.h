@@ -1,7 +1,9 @@
 /**/
 /*
    Recorder.h of noobScan, a novice port scanner
-   Recorder.h
+   Recorder.h records all user input when turned on, and categorizes it based on type (scan, help, etc) and outcome (if it succeeded perfectly, or failed even partially). Note that failure means that the command wasn't written correctly, or resulted in an error related to user input. The Recorder also manages output to a file summarizing the user commands and statistics, which the user can use to retrace their steps and see how they did.
+ Author: John Atti
+ Finished 8/16/2020
 */
 /**/
 
@@ -35,9 +37,6 @@ public:
     
     // with recorder status
     Recorder(bool isOn);
-    
-    // records requests by type
-//    void categorizeRequest(string userRequest, char category='x');
     
     void categorizeOutcome(string userRequest, char outcome, char category='x');
     

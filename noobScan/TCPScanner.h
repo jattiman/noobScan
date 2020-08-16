@@ -1,11 +1,11 @@
-//
-//  TCPScanner.h
-//  noobScan
-//
-//  Created by John Atti on 4/22/20.
-//  Copyright © 2020 John Atti. All rights reserved.
-//
-
+/**/
+/*
+ TCPScanner.h of NoobScan, a novice portscanner
+ TCPScanner.h is in charge of the functions pertaining to a TCP Scanner. It scans ports based on input, and outputs to user the open and closed ports encountered. 
+ Author: John Atti
+ Finished 8/16/2020
+*/
+/**/
 #ifndef TCPScanner_h
 #define TCPScanner_h
 

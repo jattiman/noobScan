@@ -1,8 +1,9 @@
 /**/
 /*
-   Scanaddress.h of noobScan, a novice port scanner
-   Scanaddress.h
- Controls the settings of the scanner
+ Scanaddress.h of noobScan, a novice port scanner
+ Scanaddress.h controls the main settings of the scanner. When the separate scanners are instantiated, they are fed information from this class which controls delay times between ports and timeouts while waiting for ports to respond (etc). This class also is in charge of some of the heavy lifting when it comes to pulling MACs, IPs, and other things.
+ Author: John Atti
+ Finished 8/16/2020
 */
 /**/
 

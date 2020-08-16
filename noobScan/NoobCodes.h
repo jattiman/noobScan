@@ -1,10 +1,11 @@
-//
-//  NoobCodes.h
-//  noobScan
-//
-//  Created by John Atti on 4/14/20.
-//  Copyright © 2020 John Atti. All rights reserved.
-//
+/**/
+/*
+ NoobCodes.h of NoobScan, a novice portscanner
+ NoobCodes.h contains the enum class essential for communicating throughout the NoobScan program. 
+ Author: John Atti
+ Finished 8/16/2020
+*/
+/**/
 
 #ifndef NoobCodes_h
 #define NoobCodes_h
