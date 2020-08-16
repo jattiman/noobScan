@@ -145,18 +145,29 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
         // attempt to connect to the port (this would hang on some ports if the timeout system above was not used
         int checkConnect = connect(ourTCPSock, (sockaddr*)&socketToScan, sizeof(socketToScan));
         
-        // determine if socket is open based on select, as the above call will be passed even if it's "hanging" until our select timeout passes, or a response is received. NOTE: some sites (like mine) will still ignore an attempt to connect as a security feature, and the below code will not result in output, even though it passes. This program is not made to bypass this, and will play nice with the response style of the IP.
+        // clear the file descriptor (helpful since this is in a loop)
         FD_ZERO(&ourFD);
+        
+        // add our TCP socket into the set we'll be reviewing (a set of one, in this case)
         FD_SET(ourTCPSock, &ourFD);
         
+        // determine if socket is open, based on select, as the above connect call will be "passed" even if it's "hanging" until our select timeout passes, or a response is received. NOTE: some sites (like mine) will still ignore an attempt to connect as a security feature, and the below code will not result in output, even though it passes. This program is not made to bypass this, and will play nice with the response style of the IP.
         if(select(ourTCPSock+1, NULL, &ourFD, NULL, &timeout) == 1){
+            
+            // int which will point to the returned buffer size in our TCP socket
             int errorCheck;
             socklen_t errorLen = sizeof(errorCheck);
+            
+            // check the result of our select call (which will move forward if the timeout hits, or if there's a connection response)
             getsockopt(ourTCPSock, SOL_SOCKET, SO_ERROR, &errorCheck, &errorLen);
+            
+            // If no error is present, confirm the port is open
             if(errorCheck==0){
                 cout << "\tPort " << nextPort << " open\n";
                 addOpenPorts(nextPort);
             }
+            
+            // If there's been an error, review the connectCheck response and act accordingly
             else{
                 connectCheck(checkConnect, nextPort);
             }
@@ -218,44 +229,8 @@ unsigned int TCPScanner::getTimeoutTimer(){
     return this->timeoutTimer;
 }
 
+// retrieve whether or not variable scanning is on
 bool TCPScanner::getVariableScanStatus(){
     return this->variableScanTime;
 }
 
-//void debug(){
-//    switch(errno){
-//        case EBADF:
-//            cout << "EBADF\n";
-//            break;
-//        case EDOM:
-//            cout << "EDOM\n";
-//            break;
-//        case EINVAL:
-//            cout << "EINVAL\n";
-//            break;
-//        case EISCONN:
-//            cout << "EISCONN\n";
-//            break;
-//        case ENOPROTOOPT:
-//            cout << "ENOPROTOOPT\n";
-//            break;
-//        case ENOTSOCK:
-//            cout << "ENOTSOCK\n";
-//            break;
-//        default:
-//            cout << "FUCK";
-//    }
-//        if(setsockopt(ourTCPSock, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout))<0){
-//            cout << "setsockopt fail\n";
-//        }
-//        struct sigaction stopSignal;
-        
-//        long nonBlock;
-//        if((nonBlock = fcntl(ourTCPSock, F_GETFL, NULL))<0){
-//            cout << "fcntl fucked you.\n";
-//        }
-//        nonBlock |= O_NONBLOCK;
-//        if(fcntl(ourTCPSock, F_SETFL, nonBlock)<0){
-//            cout << "setting nonblock FUCKED YOU.\n";
-//        }
-//}

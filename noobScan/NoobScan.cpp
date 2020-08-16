@@ -222,7 +222,7 @@ void NoobScan::intakeCommands(){
         // if Recorder is on
         if(userRecorder->getRecorderStatus()){
         
-            cout << "\t\t" << this->ourCommand << "\tcode: " << ourScanner->translateNoob(resultCode) <<"\t: cat: " << ourScanner->translateNoob(category) << endl;
+            //cout << "\t\t" << this->ourCommand << "\tcode: " << ourScanner->translateNoob(resultCode) <<"\t: cat: " << ourScanner->translateNoob(category) << endl;
             
             // categorize the request and result
             userRecorder->categorizeOutcome(this->ourCommand, ourScanner->translateNoob(resultCode), ourScanner->translateNoob(category));

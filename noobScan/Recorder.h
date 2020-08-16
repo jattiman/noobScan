@@ -33,13 +33,19 @@ public:
     // class initialization
     Recorder();
     
+    // with recorder status
+    Recorder(bool isOn);
+    
     // records requests by type
 //    void categorizeRequest(string userRequest, char category='x');
     
     void categorizeOutcome(string userRequest, char outcome, char category='x');
     
-    // records user request
-    void tallyRequest(char category);
+    // tallies the amount of times a user has run a command
+    void tallyUpdate(char category);
+    
+    // retrieve the count of tallies based on type
+    string tallyRetrieval(char category);
     
     // purges history fully
     void clearHistory();
@@ -63,7 +69,7 @@ private:
     vector<string> ourRecord;
     unordered_map<char, vector<string>> commandMap;
     unordered_map<char, vector<std::pair <string, char>>> outcomeMap;
-    unordered_map<string, unsigned int> tallyMap;
+    unordered_map<char, unsigned int> tallyMap;
     bool isRecorderOn;
 };
 
