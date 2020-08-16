@@ -40,7 +40,7 @@ void Recorder::categorizeOutcome(string userRequest, char outcome, char category
 void Recorder::tallyUpdate(char category){
     // add request to the map, and increment as needed
     tallyMap[category]+=1;
-    cout << "\t\tnew tally for " << category << " is " <<tallyMap[category] << endl;
+    //cout << "\t\tnew tally for " << category << " is " <<tallyMap[category] << endl;
     return;
 }
 
@@ -114,8 +114,11 @@ string Recorder::writeHistoryByType(char historyType){
 // copy all commands to file (class controls file)
 void Recorder::moveHistoryToFile(){
     
+    // int variable holding user selection choice, for prompts
     int userInput;
-    string ourEnvironment;
+    
+    // string that will hold the filePath
+    string ourFilePath;
     
     cout << "This file is set to save to the desktop as \"commandHistory.txt\". Would you prefer to place it elsewhere?"
         << "\n\t1. Desktop is fine."
@@ -130,27 +133,27 @@ void Recorder::moveHistoryToFile(){
     
     if(userInput == 1){
         // string to hold home directory file path
-        ourEnvironment = getenv("HOME");
+        ourFilePath = getenv("HOME");
         
-        if(ourEnvironment.empty()){
+        if(ourFilePath.empty()){
             // TODO: allow the user to write their own string
             cout << "Error retrieving home environment. Abandonining file creation.\n";
             return;
         }
         
-        ourEnvironment+="/Desktop/commandHistory.txt";
+        ourFilePath+="/Desktop/commandHistory.txt";
     }
     else{
         cout << "Please enter your folder path (do not include file name or extension):\n";
-        getline(cin,ourEnvironment);
-        if(ourEnvironment.empty()){
+        getline(cin,ourFilePath);
+        if(ourFilePath.empty()){
             flush(cout);
-            getline(cin,ourEnvironment);
+            getline(cin,ourFilePath);
         }
-        cout << "You entered: " << ourEnvironment << endl;
-        ourEnvironment+="/commandHistory.txt";
+        cout << "You entered: " << ourFilePath << endl;
+        ourFilePath+="/commandHistory.txt";
     }
-    ofstream historyFile(ourEnvironment);
+    ofstream historyFile(ourFilePath);
     
     // confirm file opened correctly
     if(historyFile.fail()){
@@ -166,24 +169,24 @@ void Recorder::moveHistoryToFile(){
     
     // output info to file
     historyFile << "Outputting history on " << 1 + readableTime->tm_mon << "/" << readableTime->tm_mday << "/" << 1900 + readableTime->tm_year << ", at " << readableTime->tm_hour << ":" << readableTime->tm_min << "\n";
-    historyFile << "\n\n---SCAN commands ...\n";
+    historyFile << "\n\nSCAN commands:\n";
     historyFile << writeHistoryByType('s');
     historyFile << "\nTotal scan commands: " << tallyRetrieval('s');
-    historyFile << "\n\n---SETTINGS commands ...\n";
+    historyFile << "\n\nSETTINGS commands:\n";
     historyFile << writeHistoryByType('v');
     historyFile << "\nTotal settings commands: " << tallyRetrieval('v');
-    historyFile << "\n\n---HELP commands ...\n";
+    historyFile << "\n\nHELP commands:\n";
     historyFile << writeHistoryByType('h');
     historyFile << "\nTotal help commands: " << tallyRetrieval('h');
-    historyFile << "\n\n---IP CHECK commands ...\n";
+    historyFile << "\n\nIP CHECK commands:\n";
     historyFile << writeHistoryByType('i');
     historyFile << "\nTotal IP Check commands: " << tallyRetrieval('i');
-    historyFile << "\n\n---ALL commands in order...\n";
+    historyFile << "\n\nALL commands in order:\n";
     historyFile << writeHistoryByType();
     historyFile << "\nTotal successful commands: " << tallyRetrieval('g') << "\n";
-    historyFile << "\nTotal failed commands: " << tallyRetrieval('f') << "\n";
-//    historyFile << "\nTotal failed/partially failed commands: " << tallyRetrieval('f');
-
+    historyFile << "\nTotal failed and partially failed commands: " << tallyRetrieval('f') << "\n";
+    
+    // close the file
     historyFile.close();
 }
 
