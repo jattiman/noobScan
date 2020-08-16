@@ -12,6 +12,12 @@
 //#include "NoobCodes.h"
 #include "ScanAddress.h"
 #include <vector>
+//#include <netinet/tcp.h>
+
+// for timeout
+#include <signal.h>
+#include <fcntl.h>
+//#include <sys/select.h>
 using namespace std;
 
 
@@ -39,6 +45,9 @@ public:
     
     // scan multiple ports at once
     NoobCodes runMultiScan(vector<unsigned> portNumbers, string IPToScan);
+    
+    // check if connection was successful
+    void connectCheck(int checkNum, unsigned int nextPort);
     
     // get sleep time
     unsigned int getSleepTimer();

@@ -13,20 +13,6 @@ Recorder::Recorder(){
     this->isRecorderOn=true;
 }
 
-// records requests by type
-void Recorder::categorizeRequest(string userRequest, char category){
-    
-    // add request and category to map
-    commandMap[category].emplace_back(userRequest);
-    
-    // if the "all" category was not entered
-    if(category!='a'){
-        // add request to the record of all commands
-        commandMap['a'].emplace_back(userRequest);
-    }
-    return;
-}
-
 void Recorder::categorizeOutcome(string userRequest, char outcome, char category){
     // add request and outcome to map, by category
     outcomeMap[category].emplace_back(make_pair(userRequest,outcome));
@@ -50,13 +36,16 @@ void Recorder::showHistory(char historyType){
 
     // look for the type of history that the user wants to print (default is all history). Using C++17 for if initialization, here.
     if(auto mapIt = this->outcomeMap.find(historyType); mapIt!=this->outcomeMap.end()){
-        // if found, output the commands under that history type. Use a little iomanip to make things a little easier to track
+        // if found, output the commands under that history type. Use a little iomanip to make things a lot easier to track
         cout << setw(60) << left << "Command" << setw(30) << right << " success: (g)ood/(f)ail\n";
         for(auto & element: mapIt->second){
-            cout << setfill('_') << setw(60) << left << element.first << setfill('_') << setw(30) << right << element.second << "\n";
+            cout << setfill('_') << setw(60) << left << element.first
+                << setfill('_') << setw(30) << right << element.second << "\n";
         }
     }
-    
+    else{
+        cout << "No such history exists.\n";
+    }
 }
 
 // writes history to a file by type
@@ -81,16 +70,42 @@ string Recorder::writeHistoryByType(char historyType){
 // copy all commands to file (class controls file)
 void Recorder::moveHistoryToFile(){
     
-    // string to hold home directory file path
-    string ourEnvironment(getenv("HOME"));
+    int userInput;
+    string ourEnvironment;
     
-    if(ourEnvironment.empty()){
-        // TODO: allow the user to write their own string
-        cout << "Error retrieving home environment. Abandonining file creation.\n";
-        return;
+    cout << "This file is set to save to the desktop as \"commandHistory.txt\". Would you prefer to place it elsewhere?"
+        << "\n\t1. Desktop is fine."
+        << "\n\t2. Elsewhere (I'll enter my own folder path).\n";
+    
+    cout << ">: ";
+    while(!(cin >> userInput) || userInput < 1 || userInput > 2){
+        cin.clear();
+        cin.ignore(500,'\n');
+        cout << "Please select a valid option.\n>: " << endl;
     }
     
-    ourEnvironment+="/Desktop/commandHistory.txt";
+    if(userInput == 1){
+        // string to hold home directory file path
+        ourEnvironment = getenv("HOME");
+        
+        if(ourEnvironment.empty()){
+            // TODO: allow the user to write their own string
+            cout << "Error retrieving home environment. Abandonining file creation.\n";
+            return;
+        }
+        
+        ourEnvironment+="/Desktop/commandHistory.txt";
+    }
+    else{
+        cout << "Please enter your folder path (do not include file name or extension):\n";
+        getline(cin,ourEnvironment);
+        if(ourEnvironment.empty()){
+            flush(cout);
+            getline(cin,ourEnvironment);
+        }
+        cout << "You entered: " << ourEnvironment << endl;
+        ourEnvironment+="/commandHistory.txt";
+    }
     ofstream historyFile(ourEnvironment);
     
     // confirm file opened correctly
@@ -99,21 +114,24 @@ void Recorder::moveHistoryToFile(){
         return;
     }
     
-    historyFile << "---SCAN commands ...\n";
+    // pull time to output to file
+    time_t ourTime = time(0);
+    
+    // convert into structure
+    struct tm * readableTime = localtime(&ourTime);
+    
+    // output info to file
+    historyFile << "Outputting history on " << 1 + readableTime->tm_mon << "/" << readableTime->tm_mday << "/" << 1900 + readableTime->tm_year << ", at " << readableTime->tm_hour << ":" << readableTime->tm_min << "\n";
+    historyFile << "\n\n---SCAN commands ...\n";
     historyFile << writeHistoryByType('s');
-    historyFile << "--------------------\n";
-    historyFile << "---SETTINGS commands ...\n";
+    historyFile << "\n\n---SETTINGS commands ...\n";
     historyFile << writeHistoryByType('v');
-    historyFile << "--------------------\n";
-    historyFile << "---HELP commands ...\n";
+    historyFile << "\n\n---HELP commands ...\n";
     historyFile << writeHistoryByType('h');
-    historyFile << "--------------------\n";
-    historyFile << "---IP CHECK commands ...\n";
+    historyFile << "\n\n---IP CHECK commands ...\n";
     historyFile << writeHistoryByType('i');
-    historyFile << "--------------------\n";
-    historyFile << "---ALL commands in order...\n";
+    historyFile << "\n\n---ALL commands in order...\n";
     historyFile << writeHistoryByType();
-    historyFile << "--------------------\n";
     historyFile.close();
 }
 

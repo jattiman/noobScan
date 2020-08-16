@@ -1076,8 +1076,10 @@ void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
     // prompt user to modify recorder
     cout << "\t1. Turn recorder on.\n"
         << "\t2. Turn recorder off.\n"
-        << "\t3. Exit (keep current recorder setting)\n";
-    userAnswer = getValidInput(1,3);
+        << "\t3. Exit (keep current recorder setting).\n"
+        << "\t4. Output record to screen.\n"
+        << "\t5. Output record to file.\n";
+    userAnswer = getValidInput(1,5);
     
     // react accordingly
     if(userAnswer==1){
@@ -1088,6 +1090,15 @@ void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
     else if(userAnswer==2){
         this->userRecorder->setRecorderStatus(false);
         cout << "\tRecorder: off.\n";
+        settings = NoobCodes::restart;
+    }
+    else if(userAnswer==4){
+        this->userRecorder->showHistory();
+        settings = NoobCodes::restart;
+    }
+    else if(userAnswer==5){
+        this->userRecorder->moveHistoryToFile();
+        cout << "\tHistory attempt sent to destination (desktop default).\n";
         settings = NoobCodes::restart;
     }
     else{

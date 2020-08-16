@@ -20,6 +20,9 @@
 #include <fstream>
 #include <sstream>
 
+// time
+#include <ctime>
+
 #include "NoobCodes.h"
 
 using namespace std;
@@ -31,12 +34,12 @@ public:
     Recorder();
     
     // records requests by type
-    void categorizeRequest(string userRequest, char category='x');
+//    void categorizeRequest(string userRequest, char category='x');
     
     void categorizeOutcome(string userRequest, char outcome, char category='x');
     
     // records user request
-//    void recordRequest(std::string userRequest);
+    void tallyRequest(char category);
     
     // purges history fully
     void clearHistory();

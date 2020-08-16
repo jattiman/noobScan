@@ -93,6 +93,9 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
 // runs TCP scan on multiple ports 
 NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPToScan){
     
+    // fd variables for modifying wait time
+    fd_set ourFD;
+    
     // placeholder for scanning socket
     int ourTCPSock = 0;
     
@@ -131,44 +134,77 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
             usleep(this->getSleepTimer());
         }
         
-        // check port
-        // TODO: set timeout time for this so it doesn't hang much longer. Use setsockopt (already doing this for UDP)
+        // set time out length variable to ensure we don't wait forever when checking a port, later
+        struct timeval timeout;
+        timeout.tv_sec=this->getTimeoutTimer();
+        timeout.tv_usec=0;
+
+        // ensure our TCP socket is not blocking (essential for timeout check). Here, fcntl sets the file descriptor flag of our TCP connecting socket to nonblock.
+        fcntl(ourTCPSock, F_SETFL, O_NONBLOCK);
+        
+        // attempt to connect to the port (this would hang on some ports if the timeout system above was not used
         int checkConnect = connect(ourTCPSock, (sockaddr*)&socketToScan, sizeof(socketToScan));
         
-        // if connection denied, return that info
-        if(checkConnect==-1){
-            if(errno==ECONNREFUSED){
-                cout << "\tPort " << nextPort << " closed\n";
-            }
-            else if(errno==ETIMEDOUT){
-                cout << "\tPort " << nextPort << " closed: timeout (perhaps try later)\n";
-            }
-            else if(errno==EACCES || errno==EPERM){
-                cout << "\tPort " << nextPort << " closed: permissions issue\n";
-            }
-            else if(errno==EAGAIN){
-                cout << "\tPort " << nextPort << " closed: nonblocking/busy, or routing cache issue\n";
-            }
-            else if(errno==ENETUNREACH){
-                cout << "\tPort " << nextPort << " closed: network reachability issue\n";
+        // determine if socket is open based on select, as the above call will be passed even if it's "hanging" until our select timeout passes, or a response is received. NOTE: some sites (like mine) will still ignore an attempt to connect as a security feature, and the below code will not result in output, even though it passes. This program is not made to bypass this, and will play nice with the response style of the IP.
+        FD_ZERO(&ourFD);
+        FD_SET(ourTCPSock, &ourFD);
+        
+        if(select(ourTCPSock+1, NULL, &ourFD, NULL, &timeout) == 1){
+            int errorCheck;
+            socklen_t errorLen = sizeof(errorCheck);
+            getsockopt(ourTCPSock, SOL_SOCKET, SO_ERROR, &errorCheck, &errorLen);
+            if(errorCheck==0){
+                cout << "\tPort " << nextPort << " open\n";
+                addOpenPorts(nextPort);
             }
             else{
-                cout << "\tPort " << nextPort << " closed\n";
+                connectCheck(checkConnect, nextPort);
             }
-            
         }
         
-        // if the connection succeeded, add to open port list, close socket, and return success
-        else{
-            cout << "\tPort " << nextPort << " open\n";
-            // close the port
-            addOpenPorts(nextPort);
-        }
-        
+        // close the socket, and step to the next one if there are more left
         close(ourTCPSock);
     }
     
     return NoobCodes::success;
+}
+
+// check if connection was successful
+void TCPScanner::connectCheck(int checkNum, unsigned int nextPort){
+    
+    // if connection denied, return that info
+//    if(checkNum==-1){
+    if(checkNum<0){
+        addClosedPorts(nextPort);
+        switch (errno) {
+            case ECONNREFUSED:
+                cout << "\tPort " << nextPort << " closed\n";
+                break;
+            case ETIMEDOUT:
+                cout << "\tPort " << nextPort << " closed: timeout (perhaps try later)\n";
+                break;
+            case EACCES:
+            case EPERM:
+                cout << "\tPort " << nextPort << " closed: permissions issue\n";
+                break;
+            case EAGAIN:
+                cout << "\tPort " << nextPort << " closed: nonblocking/busy, or routing cache issue\n";
+                break;
+            case ENETUNREACH:
+                cout << "\tPort " << nextPort << " closed: network reachability issue\n";
+                break;
+            default:
+                cout << "\tPort " << nextPort << " closed\n";
+                break;
+        }
+    }
+    
+    // if the connection succeeded, add to open port list, close socket, and return success
+    else{
+        cout << "\tPort " << nextPort << " open\n";
+        addOpenPorts(nextPort);
+    }
+    return;
 }
 
 
@@ -185,3 +221,41 @@ unsigned int TCPScanner::getTimeoutTimer(){
 bool TCPScanner::getVariableScanStatus(){
     return this->variableScanTime;
 }
+
+//void debug(){
+//    switch(errno){
+//        case EBADF:
+//            cout << "EBADF\n";
+//            break;
+//        case EDOM:
+//            cout << "EDOM\n";
+//            break;
+//        case EINVAL:
+//            cout << "EINVAL\n";
+//            break;
+//        case EISCONN:
+//            cout << "EISCONN\n";
+//            break;
+//        case ENOPROTOOPT:
+//            cout << "ENOPROTOOPT\n";
+//            break;
+//        case ENOTSOCK:
+//            cout << "ENOTSOCK\n";
+//            break;
+//        default:
+//            cout << "FUCK";
+//    }
+//        if(setsockopt(ourTCPSock, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout))<0){
+//            cout << "setsockopt fail\n";
+//        }
+//        struct sigaction stopSignal;
+        
+//        long nonBlock;
+//        if((nonBlock = fcntl(ourTCPSock, F_GETFL, NULL))<0){
+//            cout << "fcntl fucked you.\n";
+//        }
+//        nonBlock |= O_NONBLOCK;
+//        if(fcntl(ourTCPSock, F_SETFL, nonBlock)<0){
+//            cout << "setting nonblock FUCKED YOU.\n";
+//        }
+//}

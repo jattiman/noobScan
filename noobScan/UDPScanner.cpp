@@ -328,26 +328,32 @@ NoobCodes UDPScanner::runMultiScan(vector<unsigned> portNumbers, bool isRoot, st
             struct icmp* ourICMP = (struct icmp * ) (ourBuffer + ipLength);
             
             // If the ICMP reports unreachable, then the port is closed. If ICMP is rate limited, we might not get this reply.
-            if((ourICMP->icmp_type == ICMP_UNREACH) && (ourICMP->icmp_code == ICMP_UNREACH_PORT)){
-                cout << "\tICMP port " << nextPort << " unreachable (closed).\n";
-                addPortList(nextPort, this->closedPorts);
-                close(ourUDPSock);
-                // resetting structs for next loop ...
-                memset(&ourBuffer[0], 0, sizeof(ourBuffer));
-                // start over at the next port
-                continue;
-            }
-            
-            // we assume the port is open or filtered, otherwise
-            else{
-                cout << "\tPort " << nextPort << " open / filtered\n";
-                addPortList(nextPort, this->openPorts);
-                close(ourUDPSock);
-                // resetting structs for next loop ...
-                memset(&ourBuffer[0], 0, sizeof(ourBuffer));
-                // start over at the next port
-                continue;
-            }
+            ICMPCheck(ourICMP, nextPort);
+            close(ourUDPSock);
+            memset(&ourBuffer[0], 0, sizeof(ourBuffer));
+            continue;
+            /*
+//            if((ourICMP->icmp_type == ICMP_UNREACH) && (ourICMP->icmp_code == ICMP_UNREACH_PORT)){
+//                cout << "\tICMP port " << nextPort << " unreachable (closed).\n";
+//                addPortList(nextPort, this->closedPorts);
+//                close(ourUDPSock);
+//                // resetting structs for next loop ...
+//                memset(&ourBuffer[0], 0, sizeof(ourBuffer));
+//                // start over at the next port
+//                continue;
+//            }
+//
+//            // we assume the port is open or filtered, otherwise
+//            else{
+//                cout << "\tPort " << nextPort << " open / filtered\n";
+//                addPortList(nextPort, this->openPorts);
+//                close(ourUDPSock);
+//                // resetting structs for next loop ...
+//                memset(&ourBuffer[0], 0, sizeof(ourBuffer));
+//                // start over at the next port
+//                continue;
+//            }
+             */
             
         }
         
@@ -484,6 +490,25 @@ bool UDPScanner::sendCheck(ssize_t ourSocket, int ourPort){
         return false;
     }
     return true;
+}
+
+// check ICMP status to determine port outcome
+bool UDPScanner::ICMPCheck(struct icmp* checkICMP, unsigned int nextPort){
+    bool possibleOpen = false;
+    
+    if((checkICMP->icmp_type == ICMP_UNREACH) && (checkICMP->icmp_code == ICMP_UNREACH_PORT)){
+        cout << "\tICMP port " << nextPort << " unreachable (closed).\n";
+        addPortList(nextPort, this->closedPorts);
+    }
+    
+    // we assume the port is open or filtered, otherwise
+    else{
+        cout << "\tPort " << nextPort << " open / filtered\n";
+        addPortList(nextPort, this->openPorts);
+        possibleOpen=true;
+    }
+    
+    return possibleOpen;
 }
 
 // get sleep time

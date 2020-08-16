@@ -27,6 +27,11 @@ public:
     
     bool sendCheck(ssize_t ourSocket, int ourPort);
     
+    bool receiveCheck();
+    
+    // check ICMP status to determine port outcome
+    bool ICMPCheck(struct icmp* checkICMP, unsigned int nextPort);
+    
     // get sleep time
     unsigned int getSleepTimer();
     
