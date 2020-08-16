@@ -15,6 +15,7 @@ UDPScanner::UDPScanner(){
     this->variableScanTime=false;
     return;
 }
+/*UDPScanner();*/
 
 UDPScanner::UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan){
     this->sleepTimer=newSleepTimer;
@@ -22,6 +23,7 @@ UDPScanner::UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer,
     this->variableScanTime=variableScan;
     return;
 }
+/*UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan);*/
 
 NoobCodes UDPScanner::runScan(int portNum, bool isRoot, string IPToScan){
     
@@ -225,6 +227,7 @@ NoobCodes UDPScanner::runScan(int portNum, bool isRoot, string IPToScan){
     
     return NoobCodes::success;
 }
+/*NoobCodes runScan(int portNum, bool isRoot, string IPToScan="127.0.0.1");*/
 
 NoobCodes UDPScanner::runMultiScan(vector<unsigned> portNumbers, bool isRoot, string IPToScan){
     
@@ -333,28 +336,6 @@ NoobCodes UDPScanner::runMultiScan(vector<unsigned> portNumbers, bool isRoot, st
             close(ourUDPSock);
             memset(&ourBuffer[0], 0, sizeof(ourBuffer));
             continue;
-            /*
-//            if((ourICMP->icmp_type == ICMP_UNREACH) && (ourICMP->icmp_code == ICMP_UNREACH_PORT)){
-//                cout << "\tICMP port " << nextPort << " unreachable (closed).\n";
-//                addPortList(nextPort, this->closedPorts);
-//                close(ourUDPSock);
-//                // resetting structs for next loop ...
-//                memset(&ourBuffer[0], 0, sizeof(ourBuffer));
-//                // start over at the next port
-//                continue;
-//            }
-//
-//            // we assume the port is open or filtered, otherwise
-//            else{
-//                cout << "\tPort " << nextPort << " open / filtered\n";
-//                addPortList(nextPort, this->openPorts);
-//                close(ourUDPSock);
-//                // resetting structs for next loop ...
-//                memset(&ourBuffer[0], 0, sizeof(ourBuffer));
-//                // start over at the next port
-//                continue;
-//            }
-             */
             
         }
         
@@ -456,6 +437,7 @@ NoobCodes UDPScanner::runMultiScan(vector<unsigned> portNumbers, bool isRoot, st
     }
     return NoobCodes::success;
 }
+/*NoobCodes runMultiScan(vector<unsigned> portNumbers, bool isRoot, string IPToScan="127.0.0.1");*/
 
 // checks the sending socket to see if there are issues
 bool UDPScanner::sendCheck(ssize_t ourSocket, int ourPort){
@@ -492,6 +474,7 @@ bool UDPScanner::sendCheck(ssize_t ourSocket, int ourPort){
     }
     return true;
 }
+/*bool sendCheck(ssize_t ourSocket, int ourPort);*/
 
 // check ICMP status to determine port outcome
 bool UDPScanner::ICMPCheck(struct icmp* checkICMP, unsigned int nextPort){
@@ -511,17 +494,21 @@ bool UDPScanner::ICMPCheck(struct icmp* checkICMP, unsigned int nextPort){
     
     return possibleOpen;
 }
+/*bool ICMPCheck(struct icmp* checkICMP, unsigned int nextPort);*/
 
 // get sleep time
 unsigned int UDPScanner::getSleepTimer(){
     return this->sleepTimer;
 }
+/*unsigned int getSleepTimer();*/
 
 // get timeout time
 unsigned int UDPScanner::getTimeoutTimer(){
     return this->timeoutTimer;
 }
+/*unsigned int getTimeoutTimer();*/
 
 bool UDPScanner::getVariableScanStatus(){
     return this->variableScanTime;
 }
+/*bool getVariableScanStatus();*/

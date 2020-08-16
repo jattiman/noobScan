@@ -12,6 +12,7 @@ TCPScanner::TCPScanner(){
     this->openPorts.reserve(1000);
     this->variableScanTime = false;
 }
+/*TCPScanner();*/
 
 TCPScanner::TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan){
     this->openPorts.reserve(1000);
@@ -19,21 +20,25 @@ TCPScanner::TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer,
     this->timeoutTimer=newTimeoutTimer;
     this->variableScanTime=variableScan;
 }
+/*TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan);*/
 
 void TCPScanner::addOpenPorts(int newOpenPort){
     this->openPorts.emplace_back(newOpenPort);
     return;
 }
+/*void addOpenPorts(int newOpenPort);*/
 
 void TCPScanner::addClosedPorts(int newClosedPort){
     this->closedPorts.emplace_back(newClosedPort);
     return;
 }
+/*void addClosedPorts(int newClosedPort);*/
 
 // return vector of open ports
 vector<int> TCPScanner::getOpenPorts(){
     return this->openPorts;
 }
+/*vector<int> getOpenPorts();*/
 
 // output the open ports
 void TCPScanner::printOpenPorts(){
@@ -45,6 +50,7 @@ void TCPScanner::printOpenPorts(){
     }
     return;
 }
+/*void printOpenPorts();*/
 
 // runs a TCP scan on a single port
 NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
@@ -89,6 +95,7 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     
     return NoobCodes::success;
 }
+/*NoobCodes runScan(int portNum, string IPToScan);*/
 
 // runs TCP scan on multiple ports 
 NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPToScan){
@@ -179,6 +186,7 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
     
     return NoobCodes::success;
 }
+/*NoobCodes runMultiScan(vector<unsigned> portNumbers, string IPToScan);*/
 
 // check if connection was successful
 void TCPScanner::connectCheck(int checkNum, unsigned int nextPort){
@@ -217,20 +225,24 @@ void TCPScanner::connectCheck(int checkNum, unsigned int nextPort){
     }
     return;
 }
+/*void connectCheck(int checkNum, unsigned int nextPort);*/
 
 
 // get sleep time
 unsigned int TCPScanner::getSleepTimer(){
     return this->sleepTimer;
 }
+/*unsigned int getSleepTimer();*/
 
 // get timeout time
 unsigned int TCPScanner::getTimeoutTimer(){
     return this->timeoutTimer;
 }
+/*unsigned int getTimeoutTimer();*/
 
 // retrieve whether or not variable scanning is on
 bool TCPScanner::getVariableScanStatus(){
     return this->variableScanTime;
 }
+/*bool getVariableScanStatus();*/
 

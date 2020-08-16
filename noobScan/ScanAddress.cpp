@@ -14,6 +14,7 @@ ScanAddress::ScanAddress(){
     this->retries=2;
     this->ourInterface="en0";
 }
+/*ScanAddress();*/
 
 // confirm user input is valid
 int ScanAddress::getValidInput(int minNum, int maxNum){
@@ -26,11 +27,13 @@ int ScanAddress::getValidInput(int minNum, int maxNum){
     }
     return userInput;
 }
+/*int getValidInput(int minNum=0, int maxNum=65535);*/
 
 // confirm the scan type being requested
 char ScanAddress::checkScanType(std::string scanCommand){
     return 'a';
 }
+/*char checkScanType(string scanCommand);*/
 
 // initiate scan, report results and output to screen
 string ScanAddress::initiateScan(char ourScanType){
@@ -44,6 +47,7 @@ string ScanAddress::initiateScan(char ourScanType){
     }
     return "string";
 }
+/*string initiateScan(char ourScanType);*/
 
 // resolve host name to IP address
 string ScanAddress::getTargetIP(string targetHost){
@@ -68,6 +72,7 @@ string ScanAddress::getTargetIP(string targetHost){
         return targetIPAddress;
     }
 }
+/*string getTargetIP(string targetHost);*/
 
 // retrieve our IP address
 string ScanAddress::getHostIP(string ifaNamePreference){
@@ -103,12 +108,14 @@ string ScanAddress::getHostIP(string ifaNamePreference){
         return ourHostIP;
     }
 }
+/*string getHostIP(string ifaNamePreference = "en0");*/
 
 // add a port to the port list
 void ScanAddress::addPortList(int newPortNumber, vector<int> portVector){
     portVector.emplace_back(newPortNumber);
     return;
 }
+/*void addPortList(int newPortNumber, vector<int> portVector);*/
 
 // list ports being scanned
 void ScanAddress::getPortList(){
@@ -133,6 +140,7 @@ void ScanAddress::getPortList(){
     }
     return;
 }
+/*void getPortList();*/
 
 // check port number validity
 NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
@@ -141,29 +149,18 @@ NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
     }
     return NoobCodes::success;
 }
+/*NoobCodes portValidityCheck(int portNumToCheck);*/
 
 unsigned int ScanAddress::getSleepTimer(){
     return sleepTimer;
 }
+/*unsigned int getSleepTimer();*/
 
 // get timeout wait time
 unsigned int ScanAddress::getTimeoutTimer(){
     return this->timeOut;
 }
-
-void ScanAddress::setCustomList(vector<unsigned int> newList){
-    this->customList.clear();
-    this->customList = newList;
-}
-
-void ScanAddress::setSleepTimer(unsigned int newSleepTime){
-    this->sleepTimer=newSleepTime;
-    return;
-}
-
-void ScanAddress::setTimeoutTimer(unsigned int newTimeout){
-    this->timeOut = newTimeout;
-}
+/*unsigned int getTimeoutTimer();*/
 
 string ScanAddress::getHostMac(string ifaNamePreference){
     
@@ -215,26 +212,48 @@ string ScanAddress::getHostMac(string ifaNamePreference){
         return {};
     }
 }
+/*string getHostMac(string ifaNamePreference = "en0");*/
 
 // get the number of times the port will be retried
 int ScanAddress::getRetries(){
     return this->retries;
 }
+/*int getRetries();*/
 
 string ScanAddress::getInterface(){
     return this->ourInterface;
 }
+/*string getInterface();*/
 
 // variable delay status
 bool ScanAddress::getVariableDelayStatus(){
     return this->variableDelay;
 }
+/*bool getVariableDelayStatus();*/
+
+void ScanAddress::setCustomList(vector<unsigned int> newList){
+    this->customList.clear();
+    this->customList = newList;
+}
+/*void setCustomList(vector<unsigned> newList);*/
+
+void ScanAddress::setSleepTimer(unsigned int newSleepTime){
+    this->sleepTimer=newSleepTime;
+    return;
+}
+/*void setSleepTimer(unsigned int newSleepTime);*/
+
+void ScanAddress::setTimeoutTimer(unsigned int newTimeout){
+    this->timeOut = newTimeout;
+}
+/*void setTimeoutTimer(unsigned int newTimeout);*/
 
 // set the number of times the port will be retried
 void ScanAddress::setRetries(int newRetryAmount){
     this->retries = newRetryAmount;
     return;
 }
+/*void setRetries(int newRetryAmount);*/
 
 // set the user interface
 void ScanAddress::setInterface(string ifType){
@@ -245,14 +264,15 @@ void ScanAddress::setInterface(string ifType){
     // assign new interface string
     this->ourInterface = ifType;
 }
+/*void setInterface(string ifType);*/
 
 void ScanAddress::setVariableDelayStatus(bool variableDelayStatus){
     this->variableDelay = variableDelayStatus;
     return;
 }
+/*void setVariableDelayStatus(bool variableDelayStatus);*/
 
 // training wheels scan to prompt user step by step
-//TODO: most to noobscan main?
 NoobCodes ScanAddress::assistedScan(){
     int userAnswer=0;
     int portToScan=1;
@@ -280,6 +300,7 @@ NoobCodes ScanAddress::assistedScan(){
     
     return NoobCodes::fail;
 }
+/*NoobCodes assistedScan();*/
 
 vector<unsigned> ScanAddress::returnPortGroup(string portGroup){
     if(portGroup=="chat"){
@@ -308,6 +329,7 @@ vector<unsigned> ScanAddress::returnPortGroup(string portGroup){
     }
     return this->portsToScan;
 }
+/*vector<unsigned> returnPortGroup(string portGroup);*/
 
 // set seed with random number
 unsigned ScanAddress::generateNewSeed(){
@@ -315,6 +337,7 @@ unsigned ScanAddress::generateNewSeed(){
     unsigned seed = (unsigned) std::chrono::system_clock::now().time_since_epoch().count();
     return (seed%1000000);
 }
+/*unsigned generateNewSeed();*/
 
 // translate NoobCode to char
 char ScanAddress::translateNoob(NoobCodes ourCode){
@@ -383,9 +406,11 @@ char ScanAddress::translateNoob(NoobCodes ourCode){
     }
     return noobCategory;
 }
+/*char translateNoob(NoobCodes ourCode);*/
 
 void ScanAddress::debug(){
     return;
 }
+/*void debug();*/
 
 

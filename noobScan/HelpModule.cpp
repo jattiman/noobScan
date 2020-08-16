@@ -13,6 +13,7 @@ HelpModule::HelpModule(){
     populateDirectory();
     return;
 }
+/*HelpModule();*/
 
 int HelpModule::getValidInput(int minNum, int maxNum){
     int userInput;
@@ -24,6 +25,7 @@ int HelpModule::getValidInput(int minNum, int maxNum){
     }
     return userInput;
 }
+/*int getValidInput(int minNum=0, int maxNum=65535);*/
 
 void HelpModule::outputFeedback(string feedback){
     if(this->systemFeedback){
@@ -31,6 +33,7 @@ void HelpModule::outputFeedback(string feedback){
     }
     return;
 }
+/*void outputFeedback(string feedback);*/
 
 // displays opening prompt for the user to select info for
 void HelpModule::displayDirections(){
@@ -41,6 +44,7 @@ void HelpModule::displayDirections(){
         << endl;
     return;
 }
+/*void displayDirections();*/
 
 // tells the user everything they can say
 void HelpModule::displayOptions(){
@@ -67,6 +71,7 @@ void HelpModule::displayOptions(){
     
     return;
 }
+/*void displayOptions();*/
 
 // returns help results based on the user request
 void HelpModule::returnInfo(string userString){
@@ -98,6 +103,7 @@ void HelpModule::returnInfo(string userString){
     }
     return;
 }
+/*void returnInfo(string userString);*/
 
 // returns help results based on the user request
 void HelpModule::returnInfo(int userNum){
@@ -120,6 +126,7 @@ void HelpModule::returnInfo(int userNum){
     }
     return;
 }
+/*void returnInfo(int userNum);*/
 
 // make string lowercase
 void HelpModule::convertToLowerCase(string & ourString){
@@ -129,6 +136,7 @@ void HelpModule::convertToLowerCase(string & ourString){
     }
     return;
 }
+/*void convertToLowerCase(string & ourString);*/
 
 void HelpModule::populateDirectory(){
     
@@ -171,6 +179,7 @@ void HelpModule::populateDirectory(){
     ourFile.close();
     return;
 }
+/*void populateDirectory();*/
 
 // prints the full dictionary
 void HelpModule::printFullDirectory(){
@@ -181,6 +190,7 @@ void HelpModule::printFullDirectory(){
     }
     return;
 }
+/*void printFullDirectory();*/
 
 void HelpModule::promptToAdd(){
     char userChoice;
@@ -191,6 +201,7 @@ void HelpModule::promptToAdd(){
     }
     return;
 }
+/*void promptToAdd();*/
 
 void HelpModule::addToDictionary(){
     // create holders for new word entry
@@ -229,6 +240,13 @@ void HelpModule::addToDictionary(){
     }
     return;
 }
+/*void addToDictionary();*/
+
+// add individual entry to help directory
+void HelpModule::addToHelpDirectory(string word, string definition){
+    this->helpDirectory[word] = definition;
+}
+/*void addToHelpDirectory(string word, string definition);*/
 
 // gets a new dictionary term from user
 string HelpModule::getNewEntry(){
@@ -285,25 +303,26 @@ string HelpModule::getNewEntry(){
         return "cancel";
     }
 }
+/*string getNewEntry();*/
 
-// add individual entry to help directory
-void HelpModule::addToHelpDirectory(string word, string definition){
-    this->helpDirectory[word] = definition;
-}
+
 
 void HelpModule::helpWarning(){
     cout << "We noticed you're asking for help for more than 1 term. We'll only help out with 1 term at a time, so please ask for each term individually. When multiple terms are requested, word-based terms (non-ports) are favored." << endl;
     return;
 }
+/*void helpWarning();*/
 
 
 // turn on and off feedback
 void HelpModule::setSystemFeedback(bool isOn){
     this->systemFeedback=isOn;
 }
+/*void setSystemFeedback(bool isOn);*/
 
 // check if feedback is on
 bool HelpModule::getSystemFeedback(){
     return this->systemFeedback;
 }
+/*bool getSystemFeedback();*/
 

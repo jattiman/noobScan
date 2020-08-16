@@ -12,14 +12,12 @@
 //#include "NoobCodes.h"
 #include "ScanAddress.h"
 #include <vector>
-//#include <netinet/tcp.h>
 
 // for timeout
 #include <signal.h>
 #include <fcntl.h>
-//#include <sys/select.h>
-using namespace std;
 
+using namespace std;
 
 class TCPScanner : public ScanAddress{
 
@@ -40,7 +38,7 @@ public:
     // print open ports
     void printOpenPorts();
     
-    // run scan - default value is own IP
+    // run scan on single port
     NoobCodes runScan(int portNum, string IPToScan);
     
     // scan multiple ports at once

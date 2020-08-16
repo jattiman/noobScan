@@ -14,14 +14,12 @@ NoobScan::NoobScan(){
     this->ourHelper = new HelpModule();
     this->userRecorder = new Recorder();
     this->ourScanner = new ScanAddress();
-//    this->ourTCPScan = new TCPScanner();
-//    this->ourUDPScan = new UDPScanner();
-    this->ourSYNScan = new SYNScanner();
     
     // clear any noise in out command strings
     this->ourResult.clear();
     this->ourCommand.clear();
 }
+/*NoobScan();*/
 
 int NoobScan::getValidInput(int minNum, int maxNum){
     int userInput;
@@ -33,6 +31,7 @@ int NoobScan::getValidInput(int minNum, int maxNum){
     }
     return userInput;
 }
+/*int getValidInput(int minNum=0, int maxNum=65535);*/
 
 void NoobScan::outputFeedback(string feedback){
     if(this->systemFeedback){
@@ -40,6 +39,7 @@ void NoobScan::outputFeedback(string feedback){
     }
     return;
 }
+/*void outputFeedback(string feedback);*/
 
 // output logo
 // http://patorjk.com/software/taag/#p=display&f=Ogre&t=NoobScan
@@ -54,6 +54,7 @@ void NoobScan::printLogo(){
         << endl;
     
 }
+/*void printLogo();*/
 
 // give user the welcome text
 void NoobScan::welcomeText(){
@@ -61,6 +62,7 @@ void NoobScan::welcomeText(){
     << "Please scan responsibly, and be ready to learn a thing or two.\n\n";
     return;
 }
+/*void welcomeText();*/
 
 
 //initial user prompt (only shown at startup)
@@ -80,6 +82,7 @@ void NoobScan::initialPrompt(){
     // act on user commands
     this->intakeCommands();
 }
+/*void initialPrompt();*/
 
 void NoobScan::systemCheck(){
     cout << "Before we get started, let's make sure you won't run into any trouble ... ";
@@ -96,6 +99,29 @@ void NoobScan::systemCheck(){
     // mentally prepare user
     cout << "Please choose your next commands carefully ... \n\n";
 }
+/*void systemCheck();*/
+
+// check user operating system to ensure it's the right one for this program
+void NoobScan::opCheck(){
+    cout << "Checking operating system...\n\n";
+    
+    // if the user is using an OSX (macOS) variant, let them know they shouldn't have trouble running the program. Otherwise, let them know they'll run into issues, based on their OS.
+    #if defined(__APPLE__)
+        cout << "\tYou're using an OSX variant. That's what this program was made for, so you should be ok!\n\n";
+    #elif defined(Macintosh)
+        cout << "\tYou're using an older MacOS, but I think things will work.\n\tTread carefully!\n\n";
+    #elif defined(_WIN32)
+        cout << "\tWindows, huh? This program is not going to run well for you. Sorry.\n\n";
+    #elif defined(__unix__)
+        cout << "\tLooks like you're using a unix system, but not OSX.\n\tCertain scans may not work for you.\n\n";
+    #elif defined(__gnu_linux__)
+        cout << "\tLooks like you're using Linux.\n\tYou'll probably run into some problems executing scans, but feel free to use the help commands.\n\n";
+    #else
+        cout << "\tHaven't come across your OS in a while.\n\tYou might encounter some problems with this program.\n\n";
+    #endif
+    return;
+}
+/*void opCheck();*/
 
 void NoobScan::adminCheck(){
     
@@ -141,6 +167,7 @@ void NoobScan::adminCheck(){
         cout <<"\tYou don't seem to be an admin.\n\tYou can try running commands, but you will run into trouble on some scans.\n\n\tStill, feel free to use this as a helper tool, to learn more about the wonderful world of port scanning.\n\n";
     }
 }
+/*void adminCheck();*/
 
 // confirm user host IP is retrievable
 void NoobScan::hostIPCheck(){
@@ -172,27 +199,19 @@ void NoobScan::hostIPCheck(){
     return;
     
 }
+/*void hostIPCheck();*/
 
-// check user operating system to ensure it's the right one for this program
-void NoobScan::opCheck(){
-    cout << "Checking operating system...\n\n";
-    
-    // if the user is using an OSX (macOS) variant, let them know they shouldn't have trouble running the program. Otherwise, let them know they'll run into issues, based on their OS.
-    #if defined(__APPLE__)
-        cout << "\tYou're using an OSX variant. That's what this program was made for, so you should be ok!\n\n";
-    #elif defined(Macintosh)
-        cout << "\tYou're using an older MacOS, but I think things will work.\n\tTread carefully!\n\n";
-    #elif defined(_WIN32)
-        cout << "\tWindows, huh? This program is not going to run well for you. Sorry.\n\n";
-    #elif defined(__unix__)
-        cout << "\tLooks like you're using a unix system, but not OSX.\n\tCertain scans may not work for you.\n\n";
-    #elif defined(__gnu_linux__)
-        cout << "\tLooks like you're using Linux.\n\tYou'll probably run into some problems executing scans, but feel free to use the help commands.\n\n";
-    #else
-        cout << "\tHaven't come across your OS in a while.\n\tYou might encounter some problems with this program.\n\n";
-    #endif
-    return;
+// prompt user
+string NoobScan::promptUser(bool sign){
+    // prompt user for their command
+    if(sign){
+        cout << ">: ";
+    }
+    string userCommand;
+    getline(cin, userCommand);
+    return userCommand;
 }
+/*string promptUser(bool sign=true);*/
 
 // intakes all commands from user - main function of this class
 void NoobScan::intakeCommands(){
@@ -234,17 +253,7 @@ void NoobScan::intakeCommands(){
     }
     return;
 }
-
-// prompt user
-string NoobScan::promptUser(bool sign){
-    // prompt user for their command
-    if(sign){
-        cout << ">: ";
-    }
-    string userCommand;
-    getline(cin, userCommand);
-    return userCommand;
-}
+/*void intakeCommands();*/
 
 // respond to user commands by initiating the appropriate functions
 NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category){
@@ -263,6 +272,7 @@ NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category){
     
     return finalOutcome;
 }
+/*NoobCodes commandResponse(string userCommand, NoobCodes & category);*/
 
 NoobCodes NoobScan::inspectArgs(string userCommand, NoobCodes & category){
     NoobCodes userRequest;
@@ -292,6 +302,7 @@ NoobCodes NoobScan::inspectArgs(string userCommand, NoobCodes & category){
 
     return userRequest;
 }
+/*NoobCodes inspectArgs(string userCommand, NoobCodes & category);*/
 
 NoobCodes NoobScan::parseUserArgument(string userCommand){
     
@@ -415,6 +426,7 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
     return NoobCodes::success;
     
 }
+/*NoobCodes parseUserArgument(string userCommand);*/
 
 NoobCodes NoobScan::reviewPrimaryCommand(){
     
@@ -461,6 +473,7 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
         return NoobCodes::fail;
     }
 }
+/*NoobCodes reviewPrimaryCommand();*/
 
 
 NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
@@ -492,6 +505,7 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
     }
     return commandType;
 }
+/*NoobCodes reviewSecondaryCommands(NoobCodes commandType);*/
 
 // report errors to user screen
 void NoobScan::reportError(NoobCodes programError){
@@ -546,6 +560,7 @@ void NoobScan::reportError(NoobCodes programError){
             cout << "\n\tUnknown error. Sorry!\n";
     }
 }
+/*void reportError(NoobCodes programError);*/
 
 NoobCodes NoobScan::IPRequestCheck(){
     NoobCodes IPOutcome = NoobCodes::success;
@@ -571,7 +586,6 @@ NoobCodes NoobScan::IPRequestCheck(){
         // prompt user for URL
         cout << "\tPlease enter the URL: ";
         userURL = this->promptUser(false);
-//        getline(cin,userURL);
         
         // transfer IP address in plaintext
         foundIP = this->ourScanner->getTargetIP(userURL);
@@ -588,6 +602,7 @@ NoobCodes NoobScan::IPRequestCheck(){
     }
     return IPOutcome;
 }
+/*NoobCodes IPRequestCheck();*/
 
 NoobCodes NoobScan::helpRequestCheck(){
     NoobCodes helpOutcome = NoobCodes::success;
@@ -641,6 +656,7 @@ NoobCodes NoobScan::helpRequestCheck(){
     
     return helpOutcome;
 }
+/*NoobCodes helpRequestCheck();*/
 
 
 NoobCodes NoobScan::scanRequestCheck(){
@@ -730,31 +746,7 @@ NoobCodes NoobScan::scanRequestCheck(){
     
     return outcome;
 }
-
-// processes scan type and acts accordingly
-NoobCodes NoobScan::checkScanType(){
-    string ourScanType = parsedCommand[1];
-    if(ourScanType=="tcp"){
-        outputFeedback("You're requesting a TCP scan\n");
-        return NoobCodes::tcp;
-    }
-    else if(ourScanType=="udp"){
-        outputFeedback("You're requesting a UDP scan\n");
-        return NoobCodes::udp;
-    }
-    else if(ourScanType=="syn"){
-        outputFeedback("You're requesting a SYN scan\n");
-        return NoobCodes::syn;
-    }
-    else if(ourScanType=="fin"){
-        outputFeedback("You're requesting a FIN scan\n");
-        return NoobCodes::fin;
-    }
-    else{
-        outputFeedback("Something went wrong ... \n");
-        return NoobCodes::fail;
-    }
-}
+/*NoobCodes scanRequestCheck();*/
 
 NoobCodes NoobScan::settingsRequestCheck(){
     outputFeedback("Settings request registered\n");
@@ -801,6 +793,7 @@ NoobCodes NoobScan::settingsRequestCheck(){
     
     return settingsOutcome;
 }
+/*NoobCodes settingsRequestCheck();*/
 
 // interprets userRequest to display appropriate settings menu
 NoobCodes NoobScan::findSettingsRequestType(string userRequest){
@@ -829,6 +822,107 @@ NoobCodes NoobScan::findSettingsRequestType(string userRequest){
         return NoobCodes::fail;
     }
 }
+/*NoobCodes findSettingsRequestType(string userRequest);*/
+
+NoobCodes NoobScan::displaySettings(NoobCodes settings){
+    NoobCodes displaySettingsResult = NoobCodes::success;
+    int userAnswer = 0;
+    while(settings != NoobCodes::exitRequest){
+        
+        // if a general settings request came in
+        if(settings == NoobCodes::settingsRequest || settings == NoobCodes::restart){
+            
+            // display default menu and get input
+            settingsOptions(userAnswer, settings);
+            
+            // restart the settings menu with the new setting in place
+            continue;
+        }
+        // if the user wants to adjust the dictionary
+        else if(settings == NoobCodes::settingsForDictionary){
+            
+            // send user to adjust/view the dictionary
+            settingsDictionary(userAnswer, settings);
+            
+            // restart from the top of the settings menu
+            continue;
+        }
+        // if the user wants to change the delay between scanning ports
+        else if(settings == NoobCodes::settingsForDelay){
+            
+            // allow user to adjust scan delays
+            settingsDelay(userAnswer, settings);
+            
+            // jump to the top of the menu
+            continue;
+        }
+        else if(settings == NoobCodes::settingsForRecorder){
+            
+            // allow user to adjust recorder
+            settingsRecorder(userAnswer, settings);
+            
+            // jump to the top of the menu
+            continue;
+        }
+        else if(settings == NoobCodes::settingsForTimeouts){
+            
+            // allow user to adjust settings
+            settingsTimeouts(userAnswer, settings);
+            
+            // jump to the top of the menu
+            continue;
+        }
+        else if(settings == NoobCodes::settingsForDebugText){
+            
+            // allow user to turn debug text on/off
+            settingsDebug(userAnswer, settings);
+            
+            // jump to top of menu
+            continue;
+        }
+        else if(settings == NoobCodes::settingsForScanGroups){
+            
+            // take them to the settings page.
+            settingsGroups(userAnswer, settings);
+            
+            // exit
+            continue;
+        }
+        else if(settings == NoobCodes::settingsForAssistedScan){
+            cout << "Let's walk you through a scan ... \n";
+            
+            // send to ScanAddress slow scan function
+            this->settingsAssisted(userAnswer, settings);
+            
+            // exit this settings menu
+            continue;
+        }
+        else if(settings == NoobCodes::exitRequest){
+            cout << "Exiting settings ... \n";
+            settings = NoobCodes::exitRequest;
+            break;
+        }
+        
+        // otherwise, output the correct options for the user to use
+        else{
+            // output other settings options for user to retry
+            cout << "Invalid settings choice. Please select from the following:\n"
+            << setw(11) << left << "\tassist" << "\t-\tcreate a step by step scan for 1 port\n"
+            << setw(11) << left << "\tdelay" << "\t-\tset delay between ports to scan\n"
+            << setw(11) << left << "\tdictionary" << "\t-\tadd terms to dictionary\n"
+            << setw(11) << left << "\tfeedback" << "\t-\toutput additional text to console during command response\n"
+            << setw(11) << left << "\tgroups" << "\t-\tview and change scan groups\n"
+            << setw(11) << left << "\trecorder" << "\t-\tenable or disable the recorder\n"
+            << setw(11) << left << "\tscan" << "\t-\tcreate an assisted scan\n"
+            << setw(11) << left << "\ttimeout" << "\t-\tset timeout length when waiting for server to respond\n" << endl;
+            displaySettingsResult = NoobCodes::fail;
+            break;
+        }
+    }
+    //return NoobCodes::restart;
+    return displaySettingsResult;
+}
+/*NoobCodes displaySettings(NoobCodes settings=NoobCodes::settingsRequest);*/
 
 void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
     // display default menu and get input
@@ -870,6 +964,7 @@ void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
 
     return;
 }
+/*void settingsOptions(int & userAnswer, NoobCodes & settings);*/
 
 void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     int portToScan=1;
@@ -978,6 +1073,7 @@ void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     
     return;
 }
+/*void settingsAssisted(int & userAnswer, NoobCodes & settings);*/
 
 void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){
     cout << "Would you like to add to the dictionary, or view an entry?\n"
@@ -1007,6 +1103,7 @@ void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){
     
     return;
 }
+/*void settingsDictionary(int & userAnswer, NoobCodes & settings);*/
 
 void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
     // display delay time options (variable, or enter specific number)
@@ -1063,6 +1160,7 @@ void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
     return;
     
 }
+/*void settingsDelay(int & userAnswer, NoobCodes & settings);*/
 
 void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
     // display recorder on/off status
@@ -1109,6 +1207,7 @@ void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
     
     return;
 }
+/*void settingsRecorder(int & userAnswer, NoobCodes & settings);*/
 
 // displays the timeouts options
 void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings){
@@ -1125,6 +1224,7 @@ void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings){
     
     return;
 }
+/*void settingsTimeouts(int & userAnswer, NoobCodes & settings);*/
 
 // displays the debug options
 void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings){
@@ -1160,23 +1260,62 @@ void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings){
     }
     return;
 }
+/*void settingsDebug(int & userAnswer, NoobCodes & settings);*/
 
-// split input to strings
-void NoobScan::splitString(string originString, vector<string> & splitString){
+// displays scan groups options
+void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
+
+    // display scan groups
+    cout << "Select your scan group to learn more:\n";
+    cout << "\t1. Chat\n";
+    cout << "\t2. Gaming\n";
+    cout << "\t3. Malicious\n";
+    cout << "\t4. Peer\n";
+    cout << "\t5. Popular \n";
+    cout << "\t6. Streaming\n";
+    cout << "\t7. Make your own.\n";
+    cout << "\t8. Exit\n";
     
-    // set create a holder for the pieces of the string
-    string stringToken;
+    // allow edit of scan groups
+    userAnswer=getValidInput(1,8);
     
-    // stringstream to parse the string
-    stringstream ourStream(originString);
-    
-    // move each individual entry, with whitespace as a delimiter, into the referenced string vector
-    while(getline(ourStream, stringToken, ' ')){
-        splitString.push_back(stringToken);
+    switch (userAnswer) {
+        case 1:
+            this->ourHelper->returnInfo("chat");
+            break;
+        case 2:
+            this->ourHelper->returnInfo("gaming");
+            break;
+        case 3:
+            this->ourHelper->returnInfo("malicious");
+            break;
+        case 4:
+            this->ourHelper->returnInfo("peer");
+            break;
+        case 5:
+            this->ourHelper->returnInfo("popular");
+            break;
+        case 6:
+            this->ourHelper->returnInfo("streaming");
+            break;
+        case 7:
+            cout << "Please enter the ports you want to add to your own group (press enter when done): ";
+            getNums(this->portsToScan);
+            if(!portsToScan.empty()){
+                ourScanner->setCustomList(this->portsToScan);
+            }
+            break;
+        case 8:
+            cout << "Exiting ... \n";
+            settings = NoobCodes::restart;
+            break;
+        default:
+            break;
     }
     
     return;
 }
+/*void settingsGroups(int & userAnswer, NoobCodes & settings);*/
 
 // pull all numbers from a string, and place them into a vector
 void NoobScan::getNums(vector<unsigned> & ourNums){
@@ -1235,197 +1374,99 @@ void NoobScan::getNums(vector<unsigned> & ourNums){
     
     return;
 }
+/*void getNums(vector<unsigned> & ourNums);*/
 
-// displays scan groups options
-void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
-
-    // display scan groups
-    cout << "Select your scan group to learn more:\n";
-    cout << "\t1. Chat\n";
-    cout << "\t2. Gaming\n";
-    cout << "\t3. Malicious\n";
-    cout << "\t4. Peer\n";
-    cout << "\t5. Popular \n";
-    cout << "\t6. Streaming\n";
-    cout << "\t7. Make your own.\n";
-    cout << "\t8. Exit\n";
+// split input to strings
+void NoobScan::splitString(string originString, vector<string> & splitString){
     
-    // allow edit of scan groups
-    userAnswer=getValidInput(1,8);
+    // set create a holder for the pieces of the string
+    string stringToken;
     
-    switch (userAnswer) {
-        case 1:
-            this->ourHelper->returnInfo("chat");
-            break;
-        case 2:
-            this->ourHelper->returnInfo("gaming");
-            break;
-        case 3:
-            this->ourHelper->returnInfo("malicious");
-            break;
-        case 4:
-            this->ourHelper->returnInfo("peer");
-            break;
-        case 5:
-            this->ourHelper->returnInfo("popular");
-            break;
-        case 6:
-            this->ourHelper->returnInfo("streaming");
-            break;
-        case 7:
-            cout << "Please enter the ports you want to add to your own group (press enter when done): ";
-            getNums(this->portsToScan);
-            if(!portsToScan.empty()){
-                ourScanner->setCustomList(this->portsToScan);
-            }
-            break;
-        case 8:
-            cout << "Exiting ... \n";
-            settings = NoobCodes::restart;
-            break;
-        default:
-            break;
+    // stringstream to parse the string
+    stringstream ourStream(originString);
+    
+    // move each individual entry, with whitespace as a delimiter, into the referenced string vector
+    while(getline(ourStream, stringToken, ' ')){
+        splitString.push_back(stringToken);
     }
     
     return;
 }
+/*void splitString(string originString, vector<string> & splitString);*/
 
-NoobCodes NoobScan::displaySettings(NoobCodes settings){
-    NoobCodes displaySettingsResult = NoobCodes::success;
-    int userAnswer = 0;
-    while(settings != NoobCodes::exitRequest){
-        
-        // if a general settings request came in
-        if(settings == NoobCodes::settingsRequest || settings == NoobCodes::restart){
-            
-            // display default menu and get input
-            settingsOptions(userAnswer, settings);
-            
-            // restart the settings menu with the new setting in place
-            continue;
-        }
-        // if the user wants to adjust the dictionary
-        else if(settings == NoobCodes::settingsForDictionary){
-            
-            // send user to adjust/view the dictionary
-            settingsDictionary(userAnswer, settings);
-            
-            // restart from the top of the settings menu
-            continue;
-        }
-        // if the user wants to change the delay between scanning ports
-        else if(settings == NoobCodes::settingsForDelay){
-            
-            // allow user to adjust scan delays
-            settingsDelay(userAnswer, settings);
-            
-            // jump to the top of the menu
-            continue;
-        }
-        else if(settings == NoobCodes::settingsForRecorder){
-            
-            // allow user to adjust recorder
-            settingsRecorder(userAnswer, settings);
-            
-            // jump to the top of the menu
-            continue;
-        }
-        else if(settings == NoobCodes::settingsForTimeouts){
-            
-            // allow user to adjust settings
-            settingsTimeouts(userAnswer, settings);
-            
-            // jump to the top of the menu
-            continue;
-        }
-        else if(settings == NoobCodes::settingsForDebugText){
-            
-            // allow user to turn debug text on/off
-            settingsDebug(userAnswer, settings);
-            
-            // jump to top of menu
-            continue;
-        }
-        else if(settings == NoobCodes::settingsForScanGroups){
-            
-            // take them to the settings page.
-            settingsGroups(userAnswer, settings);
-            
-            // exit
-            continue;
-        }
-        else if(settings == NoobCodes::settingsForAssistedScan){
-            cout << "Let's walk you through a scan ... \n";
-            
-            // send to ScanAddress slow scan function
-            this->settingsAssisted(userAnswer, settings);
-            
-            // exit this settings menu
-            continue;
-        }
-        else if(settings == NoobCodes::exitRequest){
-            cout << "Exiting settings ... \n";
-            settings = NoobCodes::exitRequest;
-            break;
-        }
-        
-        // otherwise, output the correct options for the user to use
-        else{
-            // output other settings options for user to retry
-            cout << "Invalid settings choice. Please select from the following:\n"
-            << setw(11) << left << "\tassist" << "\t-\tcreate a step by step scan for 1 port\n"
-            << setw(11) << left << "\tdelay" << "\t-\tset delay between ports to scan\n"
-            << setw(11) << left << "\tdictionary" << "\t-\tadd terms to dictionary\n"
-            << setw(11) << left << "\tfeedback" << "\t-\toutput additional text to console during command response\n"
-            << setw(11) << left << "\tgroups" << "\t-\tview and change scan groups\n"
-            << setw(11) << left << "\trecorder" << "\t-\tenable or disable the recorder\n"
-            << setw(11) << left << "\tscan" << "\t-\tcreate an assisted scan\n"
-            << setw(11) << left << "\ttimeout" << "\t-\tset timeout length when waiting for server to respond\n" << endl;
-            displaySettingsResult = NoobCodes::fail;
-            break;
-        }
+
+// processes scan type and acts accordingly
+NoobCodes NoobScan::checkScanType(){
+    string ourScanType = parsedCommand[1];
+    if(ourScanType=="tcp"){
+        outputFeedback("You're requesting a TCP scan\n");
+        return NoobCodes::tcp;
     }
-    //return NoobCodes::restart;
-    return displaySettingsResult;
+    else if(ourScanType=="udp"){
+        outputFeedback("You're requesting a UDP scan\n");
+        return NoobCodes::udp;
+    }
+    else if(ourScanType=="syn"){
+        outputFeedback("You're requesting a SYN scan\n");
+        return NoobCodes::syn;
+    }
+    else if(ourScanType=="fin"){
+        outputFeedback("You're requesting a FIN scan\n");
+        return NoobCodes::fin;
+    }
+    else{
+        outputFeedback("Something went wrong ... \n");
+        return NoobCodes::fail;
+    }
 }
+/*NoobCodes checkScanType();*/
+
 
 // turn on and off feedback
 void NoobScan::setSystemFeedback(bool isOn){
     this->systemFeedback=isOn;
 }
+/*void setSystemFeedback(bool isOn);*/
 
 // turn on and off root indicator
 void NoobScan::setRoot(bool rootStatus){
     this->isRoot=rootStatus;
 }
+/*void setRoot(bool rootStatus);*/
 
 // turn on and off admin indicator
 void NoobScan::setAdmin(bool adminStatus){
     this->isAdmin=adminStatus;
 }
+/*void setAdmin(bool adminStatus);*/
 
 // turn on and off variable scan indicator
 void NoobScan::setVariableScan(bool isOn){
     this->variableTime=isOn;
 }
+/*void setVariableScan(bool isOn);*/
 
 // check if variable scan is on
 bool NoobScan::getVariableScanStatus(){
     return this->variableTime;
 }
+/*bool getVariableScanStatus();*/
 
 // check if feedback is on
 bool NoobScan::getSystemFeedback(){
     return this->systemFeedback;
 }
+/*bool getSystemFeedback();*/
 
 bool NoobScan::getIsRoot(){
     return this->isRoot;
 }
+/*bool getIsRoot();*/
 
 bool NoobScan::getIsAdmin(){
     return this->isAdmin;
 }
+/*bool getIsAdmin();*/
 
 // clears the user commands between requests
 void NoobScan::clearCommandVectors(){
@@ -1435,6 +1476,7 @@ void NoobScan::clearCommandVectors(){
     this->siteToScan.clear();
     return;
 }
+/*void clearCommandVectors();*/
 
 void NoobScan::displayUserCommands(){
     cout << "\tCommands input:\t";
@@ -1444,6 +1486,7 @@ void NoobScan::displayUserCommands(){
     cout << endl;
     return;
 }
+/*void displayUserCommands();*/
 
 void NoobScan::displayUserPortRequests(){
     cout << "\tPorts requested:\t";
@@ -1458,7 +1501,7 @@ void NoobScan::displayUserPortRequests(){
     cout << endl;
     return;
 }
-
+/*void displayUserPortRequests();*/
 
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){

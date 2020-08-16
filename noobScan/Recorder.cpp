@@ -13,10 +13,12 @@
 Recorder::Recorder(){
     this->isRecorderOn=true;
 }
+/*Recorder();*/
 
 Recorder::Recorder(bool isOn){
     this->isRecorderOn=isOn;
 }
+/*Recorder(bool isOn);*/
 
 void Recorder::categorizeOutcome(string userRequest, char outcome, char category){
     // add request and outcome to map, by category
@@ -36,6 +38,7 @@ void Recorder::categorizeOutcome(string userRequest, char outcome, char category
         outcomeMap['a'].emplace_back(make_pair(userRequest, outcome));
     }
 }
+/*void categorizeOutcome(string userRequest, char outcome, char category='x');*/
 
 // tally the request types received
 void Recorder::tallyUpdate(char category){
@@ -44,6 +47,7 @@ void Recorder::tallyUpdate(char category){
     //cout << "\t\tnew tally for " << category << " is " <<tallyMap[category] << endl;
     return;
 }
+/*void tallyUpdate(char category);*/
 
 // retrieve the count of tallies based on type
 string Recorder::tallyRetrieval(char category){
@@ -69,12 +73,14 @@ string Recorder::tallyRetrieval(char category){
     
     return tallyString;
 }
+/*string tallyRetrieval(char category);*/
 
 // purges history fully
 void Recorder::clearHistory(){
     this->outcomeMap.clear();
     return;
 }
+/*void clearHistory();*/
 
 // shows user history
 void Recorder::showHistory(char historyType){
@@ -92,6 +98,7 @@ void Recorder::showHistory(char historyType){
         cout << "No such history exists.\n";
     }
 }
+/*void showHistory(char historyType='a');*/
 
 // writes history to a file by type
 string Recorder::writeHistoryByType(char historyType){
@@ -111,6 +118,7 @@ string Recorder::writeHistoryByType(char historyType){
     outPut = ourStream.str();
     return outPut;
 }
+/*string writeHistoryByType(char historyType='a');*/
 
 // copy all commands to file (class controls file)
 void Recorder::moveHistoryToFile(){
@@ -190,14 +198,17 @@ void Recorder::moveHistoryToFile(){
     // close the file
     historyFile.close();
 }
+/*void moveHistoryToFile();*/
 
 // set the recorder on/off status
 void Recorder::setRecorderStatus(bool recorderStatus){
     this->isRecorderOn = recorderStatus;
     return;
 }
+/*void setRecorderStatus(bool recorderStatus);*/
 
 // returns if the recorder is on or off
 bool Recorder::getRecorderStatus(){
     return this->isRecorderOn;
 }
+/*bool getRecorderStatus();*/
