@@ -10,6 +10,37 @@
 #include "UDPScanner.h"
 #define MAXRETURN 1024
 
+/**/
+/*
+[paste function here without anything in parantheticals]
+
+NAME
+
+        [function name w/o parantheticals and brief descriptions on one line]
+
+SYNOPSIS
+
+        [full function name with parantheticals filled in]
+        [breakdown of what each variable in the parantheticals does]
+
+DESCRIPTION
+
+        [full description here - as long as makes sense]
+
+RETURNS
+
+        [obvious]
+
+AUTHOR
+
+        John Atti
+
+DATE
+
+        6:00 PM 8/16/2020
+
+*/
+/**/
 UDPScanner::UDPScanner(){
     this->sleepTimer=getSleepTimer();
     this->variableScanTime=false;
@@ -17,6 +48,24 @@ UDPScanner::UDPScanner(){
 }
 /*UDPScanner();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 UDPScanner::UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan){
     this->sleepTimer=newSleepTimer;
     this->timeoutTimer=newTimeoutTimer;
@@ -25,6 +74,24 @@ UDPScanner::UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer,
 }
 /*UDPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes UDPScanner::runScan(int portNum, bool isRoot, string IPToScan){
     
     // UDP is typically more targeted scan, due to the time it takes
@@ -229,6 +296,24 @@ NoobCodes UDPScanner::runScan(int portNum, bool isRoot, string IPToScan){
 }
 /*NoobCodes runScan(int portNum, bool isRoot, string IPToScan="127.0.0.1");*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes UDPScanner::runMultiScan(vector<unsigned> portNumbers, bool isRoot, string IPToScan){
     
     // holder for recvfrom packets
@@ -476,6 +561,24 @@ bool UDPScanner::sendCheck(ssize_t ourSocket, int ourPort){
 }
 /*bool sendCheck(ssize_t ourSocket, int ourPort);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // check ICMP status to determine port outcome
 bool UDPScanner::ICMPCheck(struct icmp* checkICMP, unsigned int nextPort){
     bool possibleOpen = false;
@@ -496,18 +599,72 @@ bool UDPScanner::ICMPCheck(struct icmp* checkICMP, unsigned int nextPort){
 }
 /*bool ICMPCheck(struct icmp* checkICMP, unsigned int nextPort);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // get sleep time
 unsigned int UDPScanner::getSleepTimer(){
     return this->sleepTimer;
 }
 /*unsigned int getSleepTimer();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // get timeout time
 unsigned int UDPScanner::getTimeoutTimer(){
     return this->timeoutTimer;
 }
 /*unsigned int getTimeoutTimer();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 bool UDPScanner::getVariableScanStatus(){
     return this->variableScanTime;
 }

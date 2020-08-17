@@ -8,18 +8,84 @@
 
 #include "Recorder.h"
 
+/**/
+/*
+[paste function here without anything in parantheticals]
 
+NAME
+
+        [function name w/o parantheticals and brief descriptions on one line]
+
+SYNOPSIS
+
+        [full function name with parantheticals filled in]
+        [breakdown of what each variable in the parantheticals does]
+
+DESCRIPTION
+
+        [full description here - as long as makes sense]
+
+RETURNS
+
+        [obvious]
+
+AUTHOR
+
+        John Atti
+
+DATE
+
+        6:00 PM 8/16/2020
+
+*/
+/**/
 // class initialization
 Recorder::Recorder(){
     this->isRecorderOn=true;
 }
 /*Recorder();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 Recorder::Recorder(bool isOn){
     this->isRecorderOn=isOn;
 }
 /*Recorder(bool isOn);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void Recorder::categorizeOutcome(string userRequest, char outcome, char category){
     // add request and outcome to map, by category
     outcomeMap[category].emplace_back(make_pair(userRequest,outcome));
@@ -40,6 +106,24 @@ void Recorder::categorizeOutcome(string userRequest, char outcome, char category
 }
 /*void categorizeOutcome(string userRequest, char outcome, char category='x');*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // tally the request types received
 void Recorder::tallyUpdate(char category){
     // add request to the map, and increment as needed
@@ -49,6 +133,24 @@ void Recorder::tallyUpdate(char category){
 }
 /*void tallyUpdate(char category);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // retrieve the count of tallies based on type
 string Recorder::tallyRetrieval(char category){
     stringstream ourStream;
@@ -75,6 +177,24 @@ string Recorder::tallyRetrieval(char category){
 }
 /*string tallyRetrieval(char category);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // purges history fully
 void Recorder::clearHistory(){
     this->outcomeMap.clear();
@@ -82,6 +202,24 @@ void Recorder::clearHistory(){
 }
 /*void clearHistory();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // shows user history
 void Recorder::showHistory(char historyType){
 
@@ -100,6 +238,24 @@ void Recorder::showHistory(char historyType){
 }
 /*void showHistory(char historyType='a');*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // writes history to a file by type
 string Recorder::writeHistoryByType(char historyType){
     stringstream ourStream;
@@ -120,6 +276,24 @@ string Recorder::writeHistoryByType(char historyType){
 }
 /*string writeHistoryByType(char historyType='a');*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // copy all commands to file (class controls file)
 void Recorder::moveHistoryToFile(){
     
@@ -200,6 +374,24 @@ void Recorder::moveHistoryToFile(){
 }
 /*void moveHistoryToFile();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // set the recorder on/off status
 void Recorder::setRecorderStatus(bool recorderStatus){
     this->isRecorderOn = recorderStatus;
@@ -207,6 +399,24 @@ void Recorder::setRecorderStatus(bool recorderStatus){
 }
 /*void setRecorderStatus(bool recorderStatus);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // returns if the recorder is on or off
 bool Recorder::getRecorderStatus(){
     return this->isRecorderOn;

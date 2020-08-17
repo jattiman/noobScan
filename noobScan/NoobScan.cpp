@@ -9,6 +9,37 @@
 
 #include "NoobScan.h"
 
+/**/
+/*
+[paste function here without anything in parantheticals]
+
+NAME
+
+        [function name w/o parantheticals and brief descriptions on one line]
+
+SYNOPSIS
+
+        [full function name with parantheticals filled in]
+        [breakdown of what each variable in the parantheticals does]
+
+DESCRIPTION
+
+        [full description here - as long as makes sense]
+
+RETURNS
+
+        [obvious]
+
+AUTHOR
+
+        John Atti
+
+DATE
+
+        6:00 PM 8/16/2020
+
+*/
+/**/
 NoobScan::NoobScan(){
     // instantiate member objects where appropriate
     this->ourHelper = new HelpModule();
@@ -21,6 +52,24 @@ NoobScan::NoobScan(){
 }
 /*NoobScan();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 int NoobScan::getValidInput(int minNum, int maxNum){
     int userInput;
     cout << "#: ";
@@ -33,6 +82,24 @@ int NoobScan::getValidInput(int minNum, int maxNum){
 }
 /*int getValidInput(int minNum=0, int maxNum=65535);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::outputFeedback(string feedback){
     if(this->systemFeedback){
         cout << feedback << endl;
@@ -41,6 +108,24 @@ void NoobScan::outputFeedback(string feedback){
 }
 /*void outputFeedback(string feedback);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // output logo
 // http://patorjk.com/software/taag/#p=display&f=Ogre&t=NoobScan
 void NoobScan::printLogo(){
@@ -56,6 +141,24 @@ void NoobScan::printLogo(){
 }
 /*void printLogo();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // give user the welcome text
 void NoobScan::welcomeText(){
     cout << "Welcome to NoobScan, the newbie port scanner!\n"
@@ -64,7 +167,24 @@ void NoobScan::welcomeText(){
 }
 /*void welcomeText();*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 //initial user prompt (only shown at startup)
 void NoobScan::initialPrompt(){
     // print our logo
@@ -84,6 +204,24 @@ void NoobScan::initialPrompt(){
 }
 /*void initialPrompt();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::systemCheck(){
     cout << "Before we get started, let's make sure you won't run into any trouble ... ";
     
@@ -101,6 +239,24 @@ void NoobScan::systemCheck(){
 }
 /*void systemCheck();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // check user operating system to ensure it's the right one for this program
 void NoobScan::opCheck(){
     cout << "Checking operating system...\n\n";
@@ -123,6 +279,24 @@ void NoobScan::opCheck(){
 }
 /*void opCheck();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::adminCheck(){
     
     // store getuid to eventually determine root
@@ -169,6 +343,24 @@ void NoobScan::adminCheck(){
 }
 /*void adminCheck();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // confirm user host IP is retrievable
 void NoobScan::hostIPCheck(){
     cout << "Retrieving your IP address ... \n";
@@ -201,6 +393,24 @@ void NoobScan::hostIPCheck(){
 }
 /*void hostIPCheck();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // prompt user
 string NoobScan::promptUser(bool sign){
     // prompt user for their command
@@ -213,6 +423,24 @@ string NoobScan::promptUser(bool sign){
 }
 /*string promptUser(bool sign=true);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // intakes all commands from user - main function of this class
 void NoobScan::intakeCommands(){
     
@@ -255,6 +483,24 @@ void NoobScan::intakeCommands(){
 }
 /*void intakeCommands();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // respond to user commands by initiating the appropriate functions
 NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category){
     
@@ -274,6 +520,24 @@ NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category){
 }
 /*NoobCodes commandResponse(string userCommand, NoobCodes & category);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::inspectArgs(string userCommand, NoobCodes & category){
     NoobCodes userRequest;
     
@@ -304,6 +568,24 @@ NoobCodes NoobScan::inspectArgs(string userCommand, NoobCodes & category){
 }
 /*NoobCodes inspectArgs(string userCommand, NoobCodes & category);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::parseUserArgument(string userCommand){
     
     // string holding feedback to the user, when feedback text is on
@@ -428,6 +710,24 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
 }
 /*NoobCodes parseUserArgument(string userCommand);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::reviewPrimaryCommand(){
     
     // if feedback is on, print user commands and ports selected
@@ -475,7 +775,24 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
 }
 /*NoobCodes reviewPrimaryCommand();*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
     switch (commandType) {
         case NoobCodes::helpRequest:
@@ -507,6 +824,24 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
 }
 /*NoobCodes reviewSecondaryCommands(NoobCodes commandType);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // report errors to user screen
 void NoobScan::reportError(NoobCodes programError){
     cout << "\n\t";
@@ -562,6 +897,24 @@ void NoobScan::reportError(NoobCodes programError){
 }
 /*void reportError(NoobCodes programError);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::IPRequestCheck(){
     NoobCodes IPOutcome = NoobCodes::success;
     // set up temporary strings to hold the user URL, and the returning IP address
@@ -604,6 +957,24 @@ NoobCodes NoobScan::IPRequestCheck(){
 }
 /*NoobCodes IPRequestCheck();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::helpRequestCheck(){
     NoobCodes helpOutcome = NoobCodes::success;
     
@@ -658,7 +1029,24 @@ NoobCodes NoobScan::helpRequestCheck(){
 }
 /*NoobCodes helpRequestCheck();*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::scanRequestCheck(){
     outputFeedback("Scan request registered\n");
     
@@ -748,6 +1136,24 @@ NoobCodes NoobScan::scanRequestCheck(){
 }
 /*NoobCodes scanRequestCheck();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::settingsRequestCheck(){
     outputFeedback("Settings request registered\n");
     
@@ -795,6 +1201,24 @@ NoobCodes NoobScan::settingsRequestCheck(){
 }
 /*NoobCodes settingsRequestCheck();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // interprets userRequest to display appropriate settings menu
 NoobCodes NoobScan::findSettingsRequestType(string userRequest){
     if(userRequest=="delay"){
@@ -824,6 +1248,24 @@ NoobCodes NoobScan::findSettingsRequestType(string userRequest){
 }
 /*NoobCodes findSettingsRequestType(string userRequest);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 NoobCodes NoobScan::displaySettings(NoobCodes settings){
     NoobCodes displaySettingsResult = NoobCodes::success;
     int userAnswer = 0;
@@ -924,6 +1366,24 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
 }
 /*NoobCodes displaySettings(NoobCodes settings=NoobCodes::settingsRequest);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
     // display default menu and get input
     cout << "\nPlease select from the following options:\n"
@@ -966,6 +1426,24 @@ void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
 }
 /*void settingsOptions(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
     int portToScan=1;
     
@@ -1075,6 +1553,24 @@ void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
 }
 /*void settingsAssisted(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){
     cout << "Would you like to add to the dictionary, or view an entry?\n"
         << "\t1. add\n"
@@ -1105,6 +1601,24 @@ void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){
 }
 /*void settingsDictionary(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
     // display delay time options (variable, or enter specific number)
     cout << "Your current delay time between ports is "
@@ -1162,6 +1676,24 @@ void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
 }
 /*void settingsDelay(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
     // display recorder on/off status
     cout << "The recorder is currently ";
@@ -1209,6 +1741,24 @@ void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
 }
 /*void settingsRecorder(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // displays the timeouts options
 void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings){
     cout << "The current timeout limit for server response is: " << this->ourScanner->getTimeoutTimer() << " seconds.\n";
@@ -1226,6 +1776,24 @@ void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings){
 }
 /*void settingsTimeouts(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // displays the debug options
 void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings){
     // display debug text on/off status
@@ -1262,6 +1830,24 @@ void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings){
 }
 /*void settingsDebug(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // displays scan groups options
 void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
 
@@ -1317,6 +1903,24 @@ void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
 }
 /*void settingsGroups(int & userAnswer, NoobCodes & settings);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // pull all numbers from a string, and place them into a vector
 void NoobScan::getNums(vector<unsigned> & ourNums){
     // set up variables to capture numbers from string
@@ -1376,6 +1980,24 @@ void NoobScan::getNums(vector<unsigned> & ourNums){
 }
 /*void getNums(vector<unsigned> & ourNums);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // split input to strings
 void NoobScan::splitString(string originString, vector<string> & splitString){
     
@@ -1394,7 +2016,24 @@ void NoobScan::splitString(string originString, vector<string> & splitString){
 }
 /*void splitString(string originString, vector<string> & splitString);*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // processes scan type and acts accordingly
 NoobCodes NoobScan::checkScanType(){
     string ourScanType = parsedCommand[1];
@@ -1421,53 +2060,214 @@ NoobCodes NoobScan::checkScanType(){
 }
 /*NoobCodes checkScanType();*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // turn on and off feedback
 void NoobScan::setSystemFeedback(bool isOn){
     this->systemFeedback=isOn;
 }
 /*void setSystemFeedback(bool isOn);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // turn on and off root indicator
 void NoobScan::setRoot(bool rootStatus){
     this->isRoot=rootStatus;
 }
 /*void setRoot(bool rootStatus);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // turn on and off admin indicator
 void NoobScan::setAdmin(bool adminStatus){
     this->isAdmin=adminStatus;
 }
 /*void setAdmin(bool adminStatus);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // turn on and off variable scan indicator
 void NoobScan::setVariableScan(bool isOn){
     this->variableTime=isOn;
 }
 /*void setVariableScan(bool isOn);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // check if variable scan is on
 bool NoobScan::getVariableScanStatus(){
     return this->variableTime;
 }
 /*bool getVariableScanStatus();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // check if feedback is on
 bool NoobScan::getSystemFeedback(){
     return this->systemFeedback;
 }
 /*bool getSystemFeedback();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 bool NoobScan::getIsRoot(){
     return this->isRoot;
 }
 /*bool getIsRoot();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 bool NoobScan::getIsAdmin(){
     return this->isAdmin;
 }
 /*bool getIsAdmin();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // clears the user commands between requests
 void NoobScan::clearCommandVectors(){
     this->parsedCommand.clear();
@@ -1478,6 +2278,24 @@ void NoobScan::clearCommandVectors(){
 }
 /*void clearCommandVectors();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::displayUserCommands(){
     cout << "\tCommands input:\t";
     for(const auto & i: this->parsedCommand){
@@ -1488,6 +2306,24 @@ void NoobScan::displayUserCommands(){
 }
 /*void displayUserCommands();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void NoobScan::displayUserPortRequests(){
     cout << "\tPorts requested:\t";
     if(portsToScan.empty()){
@@ -1503,35 +2339,11 @@ void NoobScan::displayUserPortRequests(){
 }
 /*void displayUserPortRequests();*/
 
+
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
 
     userRecorder->showHistory();
     userRecorder->moveHistoryToFile();
-
-/*
-    string testOne = "sc4an -udp 20a 4a0 50a";
-    string testTwo = "scan5 udp_ 127.0.0 20 40 50";
-    string testThree = "6scan    t_cp 127.00.1 20 40 50";
-    string testFour = "scan    TC-P   http://balls.dhusfdsiuh.com/ 20 40 50";
-    
-    cout << testOne << ": " << endl;
-    this->parseUserArgument(testOne);
-    
-    cout << testTwo << ": " << endl;
-    this->parseUserArgument(testTwo);
-    
-    cout << testThree << ": " << endl;
-    this->parseUserArgument(testThree);
-    
-    cout << testFour << ": " << endl;
-    this->parseUserArgument(testFour);
-    
-    
-    
-    
-    // other porthunter option
-//    regex rx(R"((?:^|\s)([+-]?[[:digit:]]+(?:\.[[:digit:]]+)?)(?=$|\s))");
-*/
 
 }

@@ -8,6 +8,37 @@
 
 #include "ScanAddress.h"
 
+/**/
+/*
+[paste function here without anything in parantheticals]
+
+NAME
+
+        [function name w/o parantheticals and brief descriptions on one line]
+
+SYNOPSIS
+
+        [full function name with parantheticals filled in]
+        [breakdown of what each variable in the parantheticals does]
+
+DESCRIPTION
+
+        [full description here - as long as makes sense]
+
+RETURNS
+
+        [obvious]
+
+AUTHOR
+
+        John Atti
+
+DATE
+
+        6:00 PM 8/16/2020
+
+*/
+/**/
 ScanAddress::ScanAddress(){
     this->sleepTimer=0;
     this->timeOut=1;
@@ -16,6 +47,24 @@ ScanAddress::ScanAddress(){
 }
 /*ScanAddress();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // confirm user input is valid
 int ScanAddress::getValidInput(int minNum, int maxNum){
     int userInput;
@@ -29,12 +78,48 @@ int ScanAddress::getValidInput(int minNum, int maxNum){
 }
 /*int getValidInput(int minNum=0, int maxNum=65535);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // confirm the scan type being requested
 char ScanAddress::checkScanType(std::string scanCommand){
     return 'a';
 }
 /*char checkScanType(string scanCommand);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // initiate scan, report results and output to screen
 string ScanAddress::initiateScan(char ourScanType){
     switch (ourScanType) {
@@ -49,6 +134,24 @@ string ScanAddress::initiateScan(char ourScanType){
 }
 /*string initiateScan(char ourScanType);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // resolve host name to IP address
 string ScanAddress::getTargetIP(string targetHost){
     
@@ -74,6 +177,24 @@ string ScanAddress::getTargetIP(string targetHost){
 }
 /*string getTargetIP(string targetHost);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // retrieve our IP address
 string ScanAddress::getHostIP(string ifaNamePreference){
     // create address structure for IP
@@ -110,6 +231,24 @@ string ScanAddress::getHostIP(string ifaNamePreference){
 }
 /*string getHostIP(string ifaNamePreference = "en0");*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // add a port to the port list
 void ScanAddress::addPortList(int newPortNumber, vector<int> portVector){
     portVector.emplace_back(newPortNumber);
@@ -117,6 +256,24 @@ void ScanAddress::addPortList(int newPortNumber, vector<int> portVector){
 }
 /*void addPortList(int newPortNumber, vector<int> portVector);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // list ports being scanned
 void ScanAddress::getPortList(){
     
@@ -142,6 +299,24 @@ void ScanAddress::getPortList(){
 }
 /*void getPortList();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // check port number validity
 NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
     if(portNumToCheck < 0 || portNumToCheck > 65535){
@@ -151,17 +326,71 @@ NoobCodes ScanAddress::portValidityCheck(int portNumToCheck){
 }
 /*NoobCodes portValidityCheck(int portNumToCheck);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 unsigned int ScanAddress::getSleepTimer(){
     return sleepTimer;
 }
 /*unsigned int getSleepTimer();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // get timeout wait time
 unsigned int ScanAddress::getTimeoutTimer(){
     return this->timeOut;
 }
 /*unsigned int getTimeoutTimer();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 string ScanAddress::getHostMac(string ifaNamePreference){
     
     // define structures
@@ -214,40 +443,166 @@ string ScanAddress::getHostMac(string ifaNamePreference){
 }
 /*string getHostMac(string ifaNamePreference = "en0");*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // get the number of times the port will be retried
 int ScanAddress::getRetries(){
     return this->retries;
 }
 /*int getRetries();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 string ScanAddress::getInterface(){
     return this->ourInterface;
 }
 /*string getInterface();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // variable delay status
 bool ScanAddress::getVariableDelayStatus(){
     return this->variableDelay;
 }
 /*bool getVariableDelayStatus();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void ScanAddress::setCustomList(vector<unsigned int> newList){
     this->customList.clear();
     this->customList = newList;
 }
 /*void setCustomList(vector<unsigned> newList);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void ScanAddress::setSleepTimer(unsigned int newSleepTime){
     this->sleepTimer=newSleepTime;
     return;
 }
 /*void setSleepTimer(unsigned int newSleepTime);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void ScanAddress::setTimeoutTimer(unsigned int newTimeout){
     this->timeOut = newTimeout;
 }
 /*void setTimeoutTimer(unsigned int newTimeout);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // set the number of times the port will be retried
 void ScanAddress::setRetries(int newRetryAmount){
     this->retries = newRetryAmount;
@@ -255,6 +610,24 @@ void ScanAddress::setRetries(int newRetryAmount){
 }
 /*void setRetries(int newRetryAmount);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // set the user interface
 void ScanAddress::setInterface(string ifType){
     
@@ -266,12 +639,48 @@ void ScanAddress::setInterface(string ifType){
 }
 /*void setInterface(string ifType);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void ScanAddress::setVariableDelayStatus(bool variableDelayStatus){
     this->variableDelay = variableDelayStatus;
     return;
 }
 /*void setVariableDelayStatus(bool variableDelayStatus);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // training wheels scan to prompt user step by step
 NoobCodes ScanAddress::assistedScan(){
     int userAnswer=0;
@@ -302,6 +711,24 @@ NoobCodes ScanAddress::assistedScan(){
 }
 /*NoobCodes assistedScan();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 vector<unsigned> ScanAddress::returnPortGroup(string portGroup){
     if(portGroup=="chat"){
         return this->chatPorts;
@@ -331,6 +758,24 @@ vector<unsigned> ScanAddress::returnPortGroup(string portGroup){
 }
 /*vector<unsigned> returnPortGroup(string portGroup);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // set seed with random number
 unsigned ScanAddress::generateNewSeed(){
     // pull the time since epoch, and then mod it by 10000 (variable time up to 1 second)
@@ -339,6 +784,24 @@ unsigned ScanAddress::generateNewSeed(){
 }
 /*unsigned generateNewSeed();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // translate NoobCode to char
 char ScanAddress::translateNoob(NoobCodes ourCode){
     char noobCategory = 'x';
@@ -408,6 +871,24 @@ char ScanAddress::translateNoob(NoobCodes ourCode){
 }
 /*char translateNoob(NoobCodes ourCode);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void ScanAddress::debug(){
     return;
 }

@@ -8,12 +8,61 @@
 
 #include "TCPScanner.h"
 
+/**/
+/*
+[paste function here without anything in parantheticals]
+
+NAME
+
+        [function name w/o parantheticals and brief descriptions on one line]
+
+SYNOPSIS
+
+        [full function name with parantheticals filled in]
+        [breakdown of what each variable in the parantheticals does]
+
+DESCRIPTION
+
+        [full description here - as long as makes sense]
+
+RETURNS
+
+        [obvious]
+
+AUTHOR
+
+        John Atti
+
+DATE
+
+        6:00 PM 8/16/2020
+
+*/
+/**/
 TCPScanner::TCPScanner(){
     this->openPorts.reserve(1000);
     this->variableScanTime = false;
 }
 /*TCPScanner();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 TCPScanner::TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan){
     this->openPorts.reserve(1000);
     this->sleepTimer=newSleepTimer;
@@ -22,24 +71,96 @@ TCPScanner::TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer,
 }
 /*TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void TCPScanner::addOpenPorts(int newOpenPort){
     this->openPorts.emplace_back(newOpenPort);
     return;
 }
 /*void addOpenPorts(int newOpenPort);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void TCPScanner::addClosedPorts(int newClosedPort){
     this->closedPorts.emplace_back(newClosedPort);
     return;
 }
 /*void addClosedPorts(int newClosedPort);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // return vector of open ports
 vector<int> TCPScanner::getOpenPorts(){
     return this->openPorts;
 }
 /*vector<int> getOpenPorts();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // output the open ports
 void TCPScanner::printOpenPorts(){
     if(!this->openPorts.empty()){
@@ -52,6 +173,24 @@ void TCPScanner::printOpenPorts(){
 }
 /*void printOpenPorts();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // runs a TCP scan on a single port
 NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     
@@ -97,6 +236,24 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
 }
 /*NoobCodes runScan(int portNum, string IPToScan);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // runs TCP scan on multiple ports 
 NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPToScan){
     
@@ -188,6 +345,24 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
 }
 /*NoobCodes runMultiScan(vector<unsigned> portNumbers, string IPToScan);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // check if connection was successful
 void TCPScanner::connectCheck(int checkNum, unsigned int nextPort){
     
@@ -227,19 +402,72 @@ void TCPScanner::connectCheck(int checkNum, unsigned int nextPort){
 }
 /*void connectCheck(int checkNum, unsigned int nextPort);*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // get sleep time
 unsigned int TCPScanner::getSleepTimer(){
     return this->sleepTimer;
 }
 /*unsigned int getSleepTimer();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // get timeout time
 unsigned int TCPScanner::getTimeoutTimer(){
     return this->timeoutTimer;
 }
 /*unsigned int getTimeoutTimer();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // retrieve whether or not variable scanning is on
 bool TCPScanner::getVariableScanStatus(){
     return this->variableScanTime;

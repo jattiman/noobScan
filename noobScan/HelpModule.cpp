@@ -8,6 +8,37 @@
 
 #include "HelpModule.h"
 
+/**/
+/*
+[paste function here without anything in parantheticals]
+
+NAME
+
+        [function name w/o parantheticals and brief descriptions on one line]
+
+SYNOPSIS
+
+        [full function name with parantheticals filled in]
+        [breakdown of what each variable in the parantheticals does]
+
+DESCRIPTION
+
+        [full description here - as long as makes sense]
+
+RETURNS
+
+        [obvious]
+
+AUTHOR
+
+        John Atti
+
+DATE
+
+        6:00 PM 8/16/2020
+
+*/
+/**/
 HelpModule::HelpModule(){
     // populate the directory
     populateDirectory();
@@ -15,6 +46,24 @@ HelpModule::HelpModule(){
 }
 /*HelpModule();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 int HelpModule::getValidInput(int minNum, int maxNum){
     int userInput;
     cout << ">: ";
@@ -27,6 +76,24 @@ int HelpModule::getValidInput(int minNum, int maxNum){
 }
 /*int getValidInput(int minNum=0, int maxNum=65535);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void HelpModule::outputFeedback(string feedback){
     if(this->systemFeedback){
         cout << feedback << endl;
@@ -35,6 +102,24 @@ void HelpModule::outputFeedback(string feedback){
 }
 /*void outputFeedback(string feedback);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // displays opening prompt for the user to select info for
 void HelpModule::displayDirections(){
     cout << "Type your command, or\n"
@@ -46,6 +131,24 @@ void HelpModule::displayDirections(){
 }
 /*void displayDirections();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // tells the user everything they can say
 void HelpModule::displayOptions(){
     
@@ -73,6 +176,24 @@ void HelpModule::displayOptions(){
 }
 /*void displayOptions();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // returns help results based on the user request
 void HelpModule::returnInfo(string userString){
     
@@ -105,6 +226,24 @@ void HelpModule::returnInfo(string userString){
 }
 /*void returnInfo(string userString);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // returns help results based on the user request
 void HelpModule::returnInfo(int userNum){
     // create placeholder string for int conversion
@@ -128,6 +267,24 @@ void HelpModule::returnInfo(int userNum){
 }
 /*void returnInfo(int userNum);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // make string lowercase
 void HelpModule::convertToLowerCase(string & ourString){
     // TODO: account for non-english character keyboards
@@ -138,6 +295,24 @@ void HelpModule::convertToLowerCase(string & ourString){
 }
 /*void convertToLowerCase(string & ourString);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void HelpModule::populateDirectory(){
     
     // holds each line of the file (once we get to it)
@@ -181,6 +356,24 @@ void HelpModule::populateDirectory(){
 }
 /*void populateDirectory();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // prints the full dictionary
 void HelpModule::printFullDirectory(){
     // iterate through entire map
@@ -192,6 +385,24 @@ void HelpModule::printFullDirectory(){
 }
 /*void printFullDirectory();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void HelpModule::promptToAdd(){
     char userChoice;
     cout << "Would you like to add a term to the dictionary? (y/n) \n\n";
@@ -203,6 +414,24 @@ void HelpModule::promptToAdd(){
 }
 /*void promptToAdd();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void HelpModule::addToDictionary(){
     // create holders for new word entry
     string ourEntry;
@@ -242,12 +471,48 @@ void HelpModule::addToDictionary(){
 }
 /*void addToDictionary();*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // add individual entry to help directory
 void HelpModule::addToHelpDirectory(string word, string definition){
     this->helpDirectory[word] = definition;
 }
 /*void addToHelpDirectory(string word, string definition);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // gets a new dictionary term from user
 string HelpModule::getNewEntry(){
     cin.ignore(256,'\n');
@@ -305,21 +570,72 @@ string HelpModule::getNewEntry(){
 }
 /*string getNewEntry();*/
 
+/**/
+/*
 
 
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 void HelpModule::helpWarning(){
     cout << "We noticed you're asking for help for more than 1 term. We'll only help out with 1 term at a time, so please ask for each term individually. When multiple terms are requested, word-based terms (non-ports) are favored." << endl;
     return;
 }
 /*void helpWarning();*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // turn on and off feedback
 void HelpModule::setSystemFeedback(bool isOn){
     this->systemFeedback=isOn;
 }
 /*void setSystemFeedback(bool isOn);*/
 
+/**/
+/*
+
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // check if feedback is on
 bool HelpModule::getSystemFeedback(){
     return this->systemFeedback;
