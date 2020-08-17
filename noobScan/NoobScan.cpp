@@ -901,16 +901,16 @@ void NoobScan::reportError(NoobCodes programError){
 
 /**/
 /*
-
+NoobScan::IPRequestCheck() NoobScan::IPRequestCheck()
 
 NAME
-
+        NoobScan::IPRequestCheck - translates user provided URL to IP address
 SYNOPSIS
- 
+        NoobCodes NoobScan::IPRequestCheck();
 DESCRIPTION
- 
+        Function prompts the user to provide a URL, then attempts to retrieve an IP address for it. If no IP is associated with the address (network issue/URL incorrect/etc), the program will return an error code. Otherwise, the function will output the IP and return success.
 RETURNS
-
+        NoobCodes enum signifying if the function was successful
 AUTHOR
         John Atti
 DATE
@@ -961,16 +961,16 @@ NoobCodes NoobScan::IPRequestCheck(){
 
 /**/
 /*
-
+NoobScan::helpRequestCheck() NoobScan::helpRequestCheck()
 
 NAME
-
+        NoobScan::helpRequestCheck - follows through with the help function
 SYNOPSIS
- 
+        NoobCodes NoobScan::helpRequestCheck();
 DESCRIPTION
- 
+        This function will attempt to access the help tools of the program. Prior functions indicate that a help request was entered. This function will then inspect the port and command vectors to see if the user has requested help on a specific topic. If those vectors are not filled, the user will be given general help information. If one of the vectors has 1 entry, the user will get the definition for that entry (if it exists). If multiple entries are given, only the first will be output, and the user will be warned about using the prompt correctly.
 RETURNS
-
+        NoobCodes enum noting if the process was queried correctly.
 AUTHOR
         John Atti
 DATE
@@ -1033,16 +1033,16 @@ NoobCodes NoobScan::helpRequestCheck(){
 
 /**/
 /*
-
+NoobScan::scanRequestCheck() NoobScan::scanRequestCheck()
 
 NAME
-
+        NoobScan::scanRequestCheck - acts on request to scan
 SYNOPSIS
- 
+        NoobCodes NoobScan::scanRequestCheck();
 DESCRIPTION
- 
+        This function will confirm that the correct number of commands have been entered. Once this is confirmed, the appropriate scan will be run, based on the NoobCode returned by checkScanType()
 RETURNS
-
+        NoobCodes enum indicating if the process failed or succeeded.
 AUTHOR
         John Atti
 DATE
@@ -1067,6 +1067,8 @@ NoobCodes NoobScan::scanRequestCheck(){
     
     // if 3 arguments (scan [scan type] [destination]), the command is most likely sufficiently formed. Remember: ports are not part of the parsedCommand.
     if(parsedCount == 3){
+        // TODO: catch if user has not entered any ports (right now the program will pass it through)
+        
         // check scan type
         scanType=checkScanType();
         
@@ -1140,16 +1142,16 @@ NoobCodes NoobScan::scanRequestCheck(){
 
 /**/
 /*
-
+NoobScan::settingsRequestCheck() NoobScan::settingsRequestCheck()
 
 NAME
-
+        NoobScan::settingsRequestCheck - act on user request for settings
 SYNOPSIS
- 
+        NoobCodes NoobScan::settingsRequestCheck();
 DESCRIPTION
- 
+        This function will run the settings command based on user input. The user will either be taken to the correct window (if topic entered), dropped to the general settings menu (if no topic entered), or brought back to make a new command (if an incorrect settings request was entered).
 RETURNS
-
+        NoobCodes enum indicating if they formatted the settings correctly.
 AUTHOR
         John Atti
 DATE
@@ -1205,23 +1207,23 @@ NoobCodes NoobScan::settingsRequestCheck(){
 
 /**/
 /*
-
+NoobScan::findSettingsRequestType() NoobScan::findSettingsRequestType()
 
 NAME
-
+        NoobScan::findSettingsRequestType - interprets userRequest to display appropriate settings menu
 SYNOPSIS
- 
+        NoobCodes NoobScan::findSettingsRequestType(string userRequest);
+            userRequest --> String to interpret a supplementary settings request
 DESCRIPTION
- 
+        This function will intake a secondary settings command to drop the user off directly to the settings sub-menu of their choice. If they enter an incorrect term, the system will return a fail signal.
 RETURNS
-
+        NoobCodes enum indicating if the user formatted their second command correctly. If correct, the enum will indicate which sub-page they're choosing. If incorrect, it'll simply be a fail indicator.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// interprets userRequest to display appropriate settings menu
 NoobCodes NoobScan::findSettingsRequestType(string userRequest){
     if(userRequest=="delay"){
         return NoobCodes::settingsForDelay;
@@ -1252,16 +1254,17 @@ NoobCodes NoobScan::findSettingsRequestType(string userRequest){
 
 /**/
 /*
-
+NoobScan::displaySettings() NoobScan::displaySettings()
 
 NAME
-
+        NoobScan::displaySettings - displays all settings pages and subpages, based on input
 SYNOPSIS
- 
+        NoobCodes NoobScan::displaySettings(NoobCodes settings);
+            settings --> the settings page the user is asking for
 DESCRIPTION
- 
+        This function will intake a NoobCodes enum and return the settings page corresponding to it. If no subpage is indicated, a general settings page information will be output, and the user will be put back out to the
 RETURNS
-
+        NoobCodes indicating if the correct settings menu was reached.
 AUTHOR
         John Atti
 DATE
@@ -1370,16 +1373,18 @@ NoobCodes NoobScan::displaySettings(NoobCodes settings){
 
 /**/
 /*
-
+NoobScan::settingsOptions() NoobScan::settingsOptions()
 
 NAME
-
+        NoobScan::settingsOptions
 SYNOPSIS
- 
+        void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings);
+            userAnswer  --> the int holding the user answer choice
+            settings    --> settings request type
 DESCRIPTION
- 
+        This function outputs the settings menu, and prompts the user to select the desired option. Variables are passed in by reference, since this function is called within others (helps avoid redundancy). Settings will update based on the result of the sub-menu called.
 RETURNS
-
+        Void - no return type.
 AUTHOR
         John Atti
 DATE
@@ -1430,16 +1435,20 @@ void NoobScan::settingsOptions(int & userAnswer, NoobCodes & settings){
 
 /**/
 /*
-
+NoobScan::settingsAssisted() NoobScan::settingsAssisted()
 
 NAME
-
+        NoobScan::settingsAssisted - helps user with assisted scan
 SYNOPSIS
- 
+        void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings);
+            userAnswer  --> integer holding user answer choice
+            settings    --> settings choice of the user
 DESCRIPTION
- 
+        This function will guide the user through making a scan, step by step, and was made for users that were a little unsure of how scans work.
+        It will prompt the user to enter the type of scan, then whether they want to target based on URL or IP, then a single port, before running the scan.
+        The function will also convert a URL to the appropriate IP address, if not known by user, before running the command.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -1557,16 +1566,18 @@ void NoobScan::settingsAssisted(int &userAnswer, NoobCodes &settings){
 
 /**/
 /*
-
+NoobScan::settingsDictionary() NoobScan::settingsDictionary()
 
 NAME
-
+        NoobScan::settingsDictionary - allows user to add or view an entry
 SYNOPSIS
- 
+        void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings);
+            userAnswer  --> holds user choice
+            settings    --> holds settings result
 DESCRIPTION
- 
+        This function will prompt the user to view or add dictionary terms. It will utilize the HelpModule class to do the heavy lifting, here. The settings result is passed by reference, and will return whether or not the settings are to restart.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -1605,16 +1616,18 @@ void NoobScan::settingsDictionary(int & userAnswer, NoobCodes & settings){
 
 /**/
 /*
-
+NoobScan::settingsDelay() NoobScan::settingsDelay()
 
 NAME
-
+        NoobScan::settingsDelay
 SYNOPSIS
- 
+        void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings);
+            userAnswer  --> holds user choice
+            settings    --> holds settings result
 DESCRIPTION
- 
+        This function will allow the user to adjust the delay between scanning ports, as well as the variable scan time (enable/disable). The settings result is passed by reference, and will return whether or not the settings are to restart.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -1680,16 +1693,18 @@ void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
 
 /**/
 /*
-
+NoobScan::settingsRecorder() NoobScan::settingsRecorder()
 
 NAME
-
+        NoobScan::settingsRecorder - reviews recorder settings
 SYNOPSIS
- 
+        void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings);
+            userAnswer  --> int holding user option
+            settings    --> settings result enum
 DESCRIPTION
- 
+        This function will allow the user to modify the recording class (turn on/off, output recording to screen or file, and more to come post-graduation). When the settings variable is updated, it will go back to the prior menu to restart the settings screen.
 RETURNS
-
+        Void - no return info.
 AUTHOR
         John Atti
 DATE
@@ -1745,23 +1760,24 @@ void NoobScan::settingsRecorder(int & userAnswer, NoobCodes & settings){
 
 /**/
 /*
-
+NoobScan::settingsTimeouts() NoobScan::settingsTimeouts()
 
 NAME
-
+        NoobScan::settingsTimeouts - displays the timeouts options
 SYNOPSIS
- 
+        void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings);
+            userAnswer  --> int holding user option
+            settings    --> settings result enum
 DESCRIPTION
- 
+        This function will allow the user to modify the timeout time (controlling the amount of time we wait before abandoning a connection/receive attempt). When the settings variable is updated, it will go back to the prior menu to restart the settings screen.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// displays the timeouts options
 void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings){
     cout << "The current timeout limit for server response is: " << this->ourScanner->getTimeoutTimer() << " seconds.\n";
     cout << "Please enter your new time (between 1 and 10 seconds): " << endl;
@@ -1780,16 +1796,18 @@ void NoobScan::settingsTimeouts(int & userAnswer, NoobCodes & settings){
 
 /**/
 /*
-
+NoobScan::settingsDebug() NoobScan::settingsDebug()
 
 NAME
-
+        NoobScan::settingsDebug
 SYNOPSIS
- 
+        void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings);
+            userAnswer  --> int holding user option
+            settings    --> settings result enum
 DESCRIPTION
- 
+        This function allows the user to turn on and off feedback to the screen. This will make the screen a little less wordy between commands.
 RETURNS
-
+        Void - no return info.
 AUTHOR
         John Atti
 DATE
@@ -1834,23 +1852,24 @@ void NoobScan::settingsDebug(int & userAnswer, NoobCodes & settings){
 
 /**/
 /*
-
+NoobScan::settingsGroups() NoobScan::settingsGroups()
 
 NAME
-
+        NoobScan::settingsGroups - displays scan groups options
 SYNOPSIS
- 
+        void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings);
+            userAnswer  --> int holding user option
+            settings    --> settings result enum
 DESCRIPTION
- 
+        This allows the user to view all port groups that they can scan with. It also allows the user to create a custom group with their own ports, which can save time if they want to scan the same ports with different scan types or different timeouts in the future.
 RETURNS
-
+        Void - no return info.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// displays scan groups options
 void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
 
     // display scan groups
@@ -1907,23 +1926,23 @@ void NoobScan::settingsGroups(int & userAnswer, NoobCodes & settings){
 
 /**/
 /*
-
+NoobScan::getNums() NoobScan::getNums()
 
 NAME
-
+        NoobScan::getNums - pull all numbers from a string, and place them into a vector
 SYNOPSIS
- 
+        void NoobScan::getNums(vector<unsigned> & ourNums);
+            ourNums --> vector holding port numbers that the user will be updating
 DESCRIPTION
- 
+        This function asks the user to enter a string of numbers to be scanned, parses the string, and adds it into the custom scanning group vector. The string is parsed with the help of a very simple regex. Fun fact: I used a ternary operator in this function. Throughout my entire CS career at RCNJ, I've only seem my professors do this, and wanted to use this project as an excuse to try it myself.
 RETURNS
-
+        Void - no return info.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// pull all numbers from a string, and place them into a vector
 void NoobScan::getNums(vector<unsigned> & ourNums){
     // set up variables to capture numbers from string
     vector<string> splitString;
@@ -1984,16 +2003,18 @@ void NoobScan::getNums(vector<unsigned> & ourNums){
 
 /**/
 /*
-
+NoobScan::splitString() NoobScan::splitString()
 
 NAME
-
+        NoobScan::splitString - splits input into strings
 SYNOPSIS
- 
+        void NoobScan::splitString(string originString, vector<string> & splitString);
+            originString    --> holds the original string input
+            splitString     --> vector holding the split string result
 DESCRIPTION
- 
+        This function will take a user string and split it based on the space as a token. It's helpful when splitting the user input, which can later be inspected with a regex.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -2020,23 +2041,22 @@ void NoobScan::splitString(string originString, vector<string> & splitString){
 
 /**/
 /*
-
+NoobScan::checkScanType() NoobScan::checkScanType()
 
 NAME
-
+        NoobScan::checkScanType - processes scan type and acts accordingly
 SYNOPSIS
- 
+        NoobCodes NoobScan::checkScanType();
 DESCRIPTION
- 
+        This reviews the user commands to determine which scan they're requesting.
 RETURNS
-
+        NoobCodes indicating the type of scan being requested.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// processes scan type and acts accordingly
 NoobCodes NoobScan::checkScanType(){
     string ourScanType = parsedCommand[1];
     if(ourScanType=="tcp"){
@@ -2064,16 +2084,17 @@ NoobCodes NoobScan::checkScanType(){
 
 /**/
 /*
-
+NoobScan::setSystemFeedback() NoobScan::setSystemFeedback()
 
 NAME
-
+        NoobScan::setSystemFeedback - setter for system feedback
 SYNOPSIS
- 
+        void NoobScan::setSystemFeedback(bool isOn);
+            isOn --> bool representing if feedback is to be turned on or off
 DESCRIPTION
- 
+        Setter function to turn system feedback on or off.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -2088,16 +2109,17 @@ void NoobScan::setSystemFeedback(bool isOn){
 
 /**/
 /*
-
+NoobScan::setRoot() NoobScan::setRoot()
 
 NAME
-
+        NoobScan::setRoot - turn on/off root indicator
 SYNOPSIS
- 
+        void NoobScan::setRoot(bool rootStatus);
+            rootStatus --> bool holding if root status is on/off
 DESCRIPTION
- 
+        This function will turn on/off the indicator that the user has root privileges.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -2112,16 +2134,17 @@ void NoobScan::setRoot(bool rootStatus){
 
 /**/
 /*
-
+NoobScan::setAdmin() NoobScan::setAdmin()
 
 NAME
-
+        NoobScan::setAdmin - turn on/off admin indicator
 SYNOPSIS
- 
+        void NoobScan::setAdmin(bool adminStatus);
+            adminStatus --> bool indicating if admin privileges are on or off
 DESCRIPTION
- 
+        This function will turn on/off the indicator that the user has admin privileges.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -2136,23 +2159,23 @@ void NoobScan::setAdmin(bool adminStatus){
 
 /**/
 /*
-
+NoobScan::setVariableScan() NoobScan::setVariableScan()
 
 NAME
-
+        NoobScan::setVariableScan - turn on/off variable scn
 SYNOPSIS
- 
+        void NoobScan::setVariableScan(bool isOn);
+            isOn --> bool indicating if variable scan is on or off
 DESCRIPTION
- 
+        Function sets whether or not variable scanning is on.
 RETURNS
-
+        Void - no return variable.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// turn on and off variable scan indicator
 void NoobScan::setVariableScan(bool isOn){
     this->variableTime=isOn;
 }
@@ -2160,23 +2183,22 @@ void NoobScan::setVariableScan(bool isOn){
 
 /**/
 /*
-
+NoobScan::getVariableScanStatus() NoobScan::getVariableScanStatus()
 
 NAME
-
+        NoobScan::getVariableScanStatus - check if variable scan is on
 SYNOPSIS
- 
+        void NoobScan::getVariableScanStatus();
 DESCRIPTION
- 
+        Function gets whether or not variable scanning is on.
 RETURNS
-
+        bool - variable scan status
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// check if variable scan is on
 bool NoobScan::getVariableScanStatus(){
     return this->variableTime;
 }
@@ -2184,23 +2206,22 @@ bool NoobScan::getVariableScanStatus(){
 
 /**/
 /*
-
+NoobScan::getSystemFeedback() NoobScan::getSystemFeedback()
 
 NAME
-
+        NoobScan::getSystemFeedback - check if feedback is on
 SYNOPSIS
- 
+        void NoobScan::getSystemFeedback();
 DESCRIPTION
- 
+        Function gets whether or not system feedback is on.
 RETURNS
-
+        bool representing if system feedback status is on/off
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// check if feedback is on
 bool NoobScan::getSystemFeedback(){
     return this->systemFeedback;
 }
@@ -2208,16 +2229,16 @@ bool NoobScan::getSystemFeedback(){
 
 /**/
 /*
-
+NoobScan::getIsRoot() NoobScan::getIsRoot()
 
 NAME
-
+        NoobScan::getIsRoot - return if user is root
 SYNOPSIS
- 
+        void NoobScan::getIsRoot();
 DESCRIPTION
- 
+        Function gets whether or not root status is indicated
 RETURNS
-
+        bool representing if user root status is true or false
 AUTHOR
         John Atti
 DATE
@@ -2231,16 +2252,16 @@ bool NoobScan::getIsRoot(){
 
 /**/
 /*
-
+NoobScan::getIsAdmin() NoobScan::getIsAdmin()
 
 NAME
-
+        NoobScan::getIsAdmin - return if user is admin
 SYNOPSIS
- 
+        void NoobScan::getIsAdmin();
 DESCRIPTION
- 
+        Function gets whether or not admin status is indicated
 RETURNS
-
+        bool representing if user admin status is true or false
 AUTHOR
         John Atti
 DATE
@@ -2254,16 +2275,16 @@ bool NoobScan::getIsAdmin(){
 
 /**/
 /*
-
+NoobScan::clearCommandVectors() NoobScan::clearCommandVectors()
 
 NAME
-
+        NoobScan::clearCommandVectors - cleard vectors for next pass
 SYNOPSIS
- 
+        void NoobScan::clearCommandVectors();
 DESCRIPTION
- 
+        This clears all of the command vectors for the next pass.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -2282,16 +2303,16 @@ void NoobScan::clearCommandVectors(){
 
 /**/
 /*
-
+NoobScan::displayUserCommands() NoobScan::displayUserCommands()
 
 NAME
-
+        NoobScan::displayUserCommands - displays user commands
 SYNOPSIS
- 
+        void NoobScan::displayUserCommands();
 DESCRIPTION
- 
+        Prints user word-commands to screen
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -2310,16 +2331,16 @@ void NoobScan::displayUserCommands(){
 
 /**/
 /*
-
+NoobScan::displayUserPortRequests() NoobScan::displayUserPortRequests()
 
 NAME
-
+        NoobScan::displayUserPortRequests
 SYNOPSIS
- 
+        void NoobScan::displayUserPortRequests();
 DESCRIPTION
- 
+        This will display user port commands requested to the screen.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
@@ -2343,16 +2364,17 @@ void NoobScan::displayUserPortRequests(){
 
 /**/
 /*
-
+NoobScan::debug() NoobScan::debug()
 
 NAME
-
+        NoobScan::debug
 SYNOPSIS
- 
+        void NoobScan::debug(int debugPort);
+            debugPort --> int variable used to debug ports
 DESCRIPTION
- 
+        This is a function on my end for when I want to test out certain programmatic interactions without going through the menu. I'm leaving this in because I intend to work on this program further after I graduate.
 RETURNS
-
+        Void - no return. 
 AUTHOR
         John Atti
 DATE
