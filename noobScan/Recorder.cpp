@@ -10,36 +10,22 @@
 
 /**/
 /*
-[paste function here without anything in parantheticals]
-
+Recorder::Recorder() Recorder::Recorder()
+ 
 NAME
-
-        [function name w/o parantheticals and brief descriptions on one line]
-
+        Recorder::Recorder - class constructor
 SYNOPSIS
-
-        [full function name with parantheticals filled in]
-        [breakdown of what each variable in the parantheticals does]
-
+        Recorder::Recorder();
 DESCRIPTION
-
-        [full description here - as long as makes sense]
-
+        Class constructor. Sets the recorder to be on by default.
 RETURNS
-
-        [obvious]
-
+       Recorder class object.
 AUTHOR
-
         John Atti
-
 DATE
-
         6:00 PM 8/16/2020
-
 */
 /**/
-// class initialization
 Recorder::Recorder(){
     this->isRecorderOn=true;
 }
@@ -47,16 +33,17 @@ Recorder::Recorder(){
 
 /**/
 /*
-
+Recorder::Recorder() Recorder::Recorder()
 
 NAME
-
+        Recorder::Recorder - class constructor
 SYNOPSIS
- 
+        Recorder::Recorder(bool isOn);
+            isOn --> bool value to initialize recorder as on or off
 DESCRIPTION
- 
+        Additional class constructor to toggle recorder settings
 RETURNS
-
+        Recorder class object.
 AUTHOR
         John Atti
 DATE
@@ -70,16 +57,20 @@ Recorder::Recorder(bool isOn){
 
 /**/
 /*
-
+Recorder::categorizeOutcome() Recorder::categorizeOutcome()
 
 NAME
-
+        Recorder::categorizeOutcome - categorizes user input, type, and outcome
 SYNOPSIS
- 
+        void Recorder::categorizeOutcome(string userRequest, char outcome, char category);
+            userRequest --> String that the user put in as their command
+            outcome     --> Outcome of the request (good, fail)
+            category    --> Category of their request (scan, help, settings, etc)
 DESCRIPTION
- 
+        This function will record the commands of the user and categorize them while the recorder is on.
+        Although I would have liked to utilize SQL integrations into C++, I did not have the time to learn that language or how to integrate it. Instead, this information is placed into various unordered maps containing integers, vectors, and pairs (depending on the map). Prior to this project, I had never worked with pairs, or unordered_maps. It was a fun learning experience.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -108,50 +99,49 @@ void Recorder::categorizeOutcome(string userRequest, char outcome, char category
 
 /**/
 /*
-
+Recorder::tallyUpdate() Recorder::tallyUpdate()
 
 NAME
-
+        Recorder::tallyUpdate - tally the request types received
 SYNOPSIS
- 
+        void Recorder::tallyUpdate(char category);
+            category --> The category of the map to be incremented
 DESCRIPTION
- 
+        When a new user command comes in and is categorized, this function will increment the number of times the user utilized that category in their commands. These stats are used later.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// tally the request types received
 void Recorder::tallyUpdate(char category){
     // add request to the map, and increment as needed
     tallyMap[category]+=1;
-    //cout << "\t\tnew tally for " << category << " is " <<tallyMap[category] << endl;
     return;
 }
 /*void tallyUpdate(char category);*/
 
 /**/
 /*
-
+Recorder::tallyRetrieval() Recorder::tallyRetrieval()
 
 NAME
-
+        Recorder::tallyRetrieval - retrieve the count of tallies based on type
 SYNOPSIS
- 
+        string Recorder::tallyRetrieval(char category)
+            category --> the category of the tallies that will be retrieved
 DESCRIPTION
- 
+        This retrieves the number of times that a user attempted to utilize a category of the program (help, settings, scan, etc). It uses a stringstream variable to convert the number to a string easily, and then returns this value as a string.
 RETURNS
-
+        String representing the tally.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// retrieve the count of tallies based on type
 string Recorder::tallyRetrieval(char category){
     stringstream ourStream;
     string tallyString;
@@ -179,16 +169,16 @@ string Recorder::tallyRetrieval(char category){
 
 /**/
 /*
-
+Recorder::clearHistory() Recorder::clearHistory()
 
 NAME
-
+        Recorder::clearHistory - clears the history of the user fully.
 SYNOPSIS
- 
+        void Recorder::clearHistory();
 DESCRIPTION
- 
+        This function clears the user's history fully, essentially negating the recorder, if needed.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -204,23 +194,25 @@ void Recorder::clearHistory(){
 
 /**/
 /*
-
+Recorder::showHistory() Recorder::showHistory()
 
 NAME
-
+        Recorder::showHistory - shows user history
 SYNOPSIS
- 
+        void Recorder::showHistory(char historyType);
+            historyType --> history type we're looking up
 DESCRIPTION
- 
+        This function will pull up the user's command history.
+        The function intakes a character denoting the history type we're looking up (default value is 'a' for all history), and then the information is output to the screen. Iomanip is also used here to help format it to the screen a bit better.
+        Interesting note with this function, related to Xcode: C++17 is not turned on by default, so the auto iterator loop below currently gives me a warning that the formatting is a C++17 extension. I wanted to try out some C++17 standards in this program, and it seems to run without issue, so I'm keeping it in.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// shows user history
 void Recorder::showHistory(char historyType){
 
     // look for the type of history that the user wants to print (default is all history). Using C++17 for if initialization, here.
@@ -240,16 +232,17 @@ void Recorder::showHistory(char historyType){
 
 /**/
 /*
-
+writeHistoryByType() writeHistoryByType()
 
 NAME
-
+        Recorder::writeHistoryByType - assists in writing the history to the file
 SYNOPSIS
- 
+        string Recorder::writeHistoryByType(char historyType);
+            historyType --> char representing the history type being looked for
 DESCRIPTION
- 
+        This function uses a stringstream to format the outcome of the command map into a string, which is returned to be placed into a file. It uses iomanip to format it a bit differently than normal output, and iterates through a map to collect the needed output. C++17 standards used to access the map. If the string is not populated by history (no history of that category present), placeholder text will instead be copied to the string.
 RETURNS
-
+        String holding the map output.
 AUTHOR
         John Atti
 DATE
@@ -278,23 +271,24 @@ string Recorder::writeHistoryByType(char historyType){
 
 /**/
 /*
-
-
+Recorder::moveHistoryToFile() Recorder::moveHistoryToFile()
+ 
 NAME
-
+        Recorder::moveHistoryToFile - copy all commands to file (class controls file)
 SYNOPSIS
- 
+        void Recorder::moveHistoryToFile();
 DESCRIPTION
- 
+        This function adds all commands to a file for the user to review. It starts by giving the user the option of having the file save on their desktop, but also allows the user to dictate where the file will save.
+        Once a file destination is chosen, it will create a file, retrieve the appropriate command history and stats, then add this information to the file.
+        To ensure that the user knows this is the most updated file, the system time will be formatted and output to the top of the file.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// copy all commands to file (class controls file)
 void Recorder::moveHistoryToFile(){
     
     // int variable holding user selection choice, for prompts
@@ -319,7 +313,6 @@ void Recorder::moveHistoryToFile(){
         ourFilePath = getenv("HOME");
         
         if(ourFilePath.empty()){
-            // TODO: allow the user to write their own string
             cout << "Error retrieving home environment. Abandonining file creation.\n";
             return;
         }
@@ -376,23 +369,23 @@ void Recorder::moveHistoryToFile(){
 
 /**/
 /*
-
+Recorder::setRecorderStatus() Recorder::setRecorderStatus()
 
 NAME
-
+        Recorder::setRecorderStatus - set the recorder on/off status
 SYNOPSIS
- 
+        void Recorder::setRecorderStatus(bool recorderStatus);
+            recorderStatus --> bool signifying if the recorder is to be turned on or off
 DESCRIPTION
- 
+        This function will set the recorder to be on or off.
 RETURNS
-
+        Void - nothing returned.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// set the recorder on/off status
 void Recorder::setRecorderStatus(bool recorderStatus){
     this->isRecorderOn = recorderStatus;
     return;
@@ -401,23 +394,22 @@ void Recorder::setRecorderStatus(bool recorderStatus){
 
 /**/
 /*
-
+Recorder::getRecorderStatus() Recorder::getRecorderStatus()
 
 NAME
-
+        Recorder::getRecorderStatus - returns if the recorder is on or off
 SYNOPSIS
- 
+        bool Recorder::getRecorderStatus();
 DESCRIPTION
- 
+        Returns bool variable indicating if the recorder is on or off
 RETURNS
-
+        A bool variable indicating if the recorder is on or off.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// returns if the recorder is on or off
 bool Recorder::getRecorderStatus(){
     return this->isRecorderOn;
 }

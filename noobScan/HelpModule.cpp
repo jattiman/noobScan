@@ -10,33 +10,20 @@
 
 /**/
 /*
-[paste function here without anything in parantheticals]
-
+HelpModule::HelpModule() HelpModule::HelpModule()
+ 
 NAME
-
-        [function name w/o parantheticals and brief descriptions on one line]
-
+        HelpModule::HelpModule - class constructor
 SYNOPSIS
-
-        [full function name with parantheticals filled in]
-        [breakdown of what each variable in the parantheticals does]
-
+        HelpModule::HelpModule();
 DESCRIPTION
-
-        [full description here - as long as makes sense]
-
+        Constructs the help module class, and populates the dictionary based on the loaded file.
 RETURNS
-
-        [obvious]
-
+        HelpModule class object.
 AUTHOR
-
         John Atti
-
 DATE
-
         6:00 PM 8/16/2020
-
 */
 /**/
 HelpModule::HelpModule(){
@@ -48,16 +35,18 @@ HelpModule::HelpModule(){
 
 /**/
 /*
-
+HelpModule::getValidInput() HelpModule::getValidInput()
 
 NAME
-
+        HelpModule::getValidInput - confirm user input is valid
 SYNOPSIS
- 
+        int HelpModule::getValidInput(int minNum, int maxNum)
+            int minNum --> minimum acceptable number
+            int maxNum --> maximum acceptable number
 DESCRIPTION
- 
+        Function prompts the user for a integer input, handles improperly formatted input, and ensure the integer accepted is sufficient for the prompt given to the user elsewhere in the program. User will be continually prompted until a valid input is entered.
 RETURNS
-
+        Integer with confirmed, appropriate user choice.
 AUTHOR
         John Atti
 DATE
@@ -78,16 +67,17 @@ int HelpModule::getValidInput(int minNum, int maxNum){
 
 /**/
 /*
-
+HelpModule::outputFeedback() HelpModule::outputFeedback()
 
 NAME
-
+        HelpModule::outputFeedback - outputs user feedback
 SYNOPSIS
- 
+        void HelpModule::outputFeedback(string feedback);
+            feedback --> string holding user feedback
 DESCRIPTION
- 
+        This function checks to ensure that the user has toggled feedback on. If so, it will output the string to the screen. This saves a few lines of code setting up if statements elsewhere in the program.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
@@ -104,23 +94,22 @@ void HelpModule::outputFeedback(string feedback){
 
 /**/
 /*
-
+HelpModule::displayDirections() HelpModule::displayDirections()
 
 NAME
-
+        HelpModule::displayDirections - displays opening directions for what the user can do
 SYNOPSIS
- 
+        void HelpModule::displayDirections();
 DESCRIPTION
- 
+        This will simply output the opening directions to the user.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// displays opening prompt for the user to select info for
 void HelpModule::displayDirections(){
     cout << "Type your command, or\n"
         << "\t'help' for directions\n"
@@ -133,16 +122,16 @@ void HelpModule::displayDirections(){
 
 /**/
 /*
-
+HelpModule::displayOptions() HelpModule::displayOptions()
 
 NAME
-
+        HelpModule::displayOptions
 SYNOPSIS
- 
+        void HelpModule::displayOptions();
 DESCRIPTION
- 
+        This displays more detailed information about what the user can input and how formatting works.
 RETURNS
-
+        Void - no return
 AUTHOR
         John Atti
 DATE
@@ -178,23 +167,23 @@ void HelpModule::displayOptions(){
 
 /**/
 /*
-
+HelpModule::returnInfo() HelpModule::returnInfo()
 
 NAME
-
+        HelpModule::returnInfo - returns help results based on the user request
 SYNOPSIS
- 
+        void HelpModule::returnInfo(string userString);
+            userString --> string containig word that user is looking for
 DESCRIPTION
- 
+        This function will take in a user string and attempt to find any terms associated with it. It will convert the string to lowercase, then attempt to find it in the help directory map file. If found, it will retrieve the information from the map and output it to the user's screen. If not found, it will inform the user that the term is not defined, and give them information about how they can later define terms in the dictionary, if they'd like.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// returns help results based on the user request
 void HelpModule::returnInfo(string userString){
     
     // ensure the string is lowercase to minimize errors
@@ -228,14 +217,15 @@ void HelpModule::returnInfo(string userString){
 
 /**/
 /*
-
+HelpModule::returnInfo() HelpModule::returnInfo()
 
 NAME
-
+        HelpModule::returnInfo - returns help results based on the user request
 SYNOPSIS
- 
+        void HelpModule::returnInfo(int userNum);
+            userNum --> integer holding number to look up
 DESCRIPTION
- 
+        This function retrieves dictionary information about port numbers. It coverts the number to a string, then searches the map for the term. If found, the term will output to the screen. If not found, the user will be informed about how to define the term. It will also talk about ports, in general, to give the user information about port ranges.
 RETURNS
 
 AUTHOR
@@ -244,7 +234,6 @@ DATE
         6:00 PM 8/16/2020
 */
 /**/
-// returns help results based on the user request
 void HelpModule::returnInfo(int userNum){
     // create placeholder string for int conversion
     string userString = to_string(userNum);
@@ -269,23 +258,23 @@ void HelpModule::returnInfo(int userNum){
 
 /**/
 /*
-
+HelpModule::convertToLowerCase() HelpModule::convertToLowerCase()
 
 NAME
-
+        HelpModule::convertToLowerCase - make string lowercase
 SYNOPSIS
- 
+        void HelpModule::convertToLowerCase(string & ourString);
+            ourString --> string input by user as command. Passed in by reference to be updated.
 DESCRIPTION
- 
+        This function will take in a user string, convert it to lower case, and return it. C++ does not seem to have a to_lower function like some of the other languages do (natively), so we unfortunately must iterate through the string and make it all lower case, letter by letter.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// make string lowercase
 void HelpModule::convertToLowerCase(string & ourString){
     // TODO: account for non-english character keyboards
     for(auto & alpha: ourString){
@@ -297,16 +286,16 @@ void HelpModule::convertToLowerCase(string & ourString){
 
 /**/
 /*
-
+HelpModule::populateDirectory() HelpModule::populateDirectory()
 
 NAME
-
+        HelpModule::populateDirectory - creates the dictionary for the program
 SYNOPSIS
- 
+        void HelpModule::populateDirectory();
 DESCRIPTION
- 
+        This function uses file manipulation to retrieve the file of terminology and populate a map (for quick future lookups) with all terminology that the program relies upon. This file can be updated, as can the map itself, throughout the program (although doing this would be rare, and relates to a differne function).
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -358,23 +347,22 @@ void HelpModule::populateDirectory(){
 
 /**/
 /*
-
+HelpModule::printFullDirectory() HelpModule::printFullDirectory()
 
 NAME
-
+        HelpModule::printFullDirectory - prints the full dictionary
 SYNOPSIS
- 
+        void HelpModule::printFullDirectory();
 DESCRIPTION
- 
+        This function will print all items in the dictionary. Best if the user wishes to load their own smaller dictionaries.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// prints the full dictionary
 void HelpModule::printFullDirectory(){
     // iterate through entire map
     for(auto terms : helpDirectory){
@@ -387,16 +375,16 @@ void HelpModule::printFullDirectory(){
 
 /**/
 /*
-
+HelpModule::promptToAdd() HelpModule::promptToAdd()
 
 NAME
-
+        HelpModule::promptToAdd - prompts user to add to dictionary
 SYNOPSIS
- 
+        void HelpModule::promptToAdd();
 DESCRIPTION
- 
+        This function prompts a user to see if they want to add an item to the dictionary. If they say yes, they are walked through how to add an item to the dictionary. Otherwise, the function returns.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -416,16 +404,17 @@ void HelpModule::promptToAdd(){
 
 /**/
 /*
-
+HelpModule::addToDictionary() HelpModule::addToDictionary()
 
 NAME
-
+        HelpModule::addToDictionary - adds item to dictionary
 SYNOPSIS
- 
+        void HelpModule::addToDictionary();
 DESCRIPTION
- 
+        This function is actuated if the user indicates they want to add a term to the dictionary.
+        The function gets the new word from the user (or allows them to cancel), allows the user to define the word, then appends it to the dictionary file and map.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -473,23 +462,24 @@ void HelpModule::addToDictionary(){
 
 /**/
 /*
-
+HelpModule::addToHelpDirectory() HelpModule::addToHelpDirectory()
 
 NAME
-
+        HelpModule::addToHelpDirectory - add individual entry to help directory
 SYNOPSIS
- 
+        void HelpModule::addToHelpDirectory(string word, string definition);
+            word        --> string holding user word
+            definition  --> string holding definition for word
 DESCRIPTION
- 
+        This function updates the directory map with a word/definition of the user's choosing
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// add individual entry to help directory
 void HelpModule::addToHelpDirectory(string word, string definition){
     this->helpDirectory[word] = definition;
 }
@@ -497,23 +487,22 @@ void HelpModule::addToHelpDirectory(string word, string definition){
 
 /**/
 /*
-
+HelpModule::getNewEntry() HelpModule::getNewEntry()
 
 NAME
-
+        HelpModule::getNewEntry - gets a new dictionary term from user
 SYNOPSIS
- 
+        string HelpModule::getNewEntry();
 DESCRIPTION
- 
+        This function retrieves a word and definition from the user, and reports back. The user may cancel by entering "cancel" as their word, or by selecting the cancel option after they have a chance to view their entry.
 RETURNS
-
+        String concatenating the user's word and definition, to be added to the dictionary for the user to later view.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// gets a new dictionary term from user
 string HelpModule::getNewEntry(){
     cin.ignore(256,'\n');
     
@@ -572,16 +561,16 @@ string HelpModule::getNewEntry(){
 
 /**/
 /*
-
+HelpModule::helpWarning() HelpModule::helpWarning()
 
 NAME
-
+        HelpModule::helpWarning - outputs a warning for when the help function is used incorrectly
 SYNOPSIS
- 
+        void HelpModule::helpWarning();
 DESCRIPTION
- 
+        This function outputs a warning for when the help function is used incorrectly.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -596,23 +585,23 @@ void HelpModule::helpWarning(){
 
 /**/
 /*
-
+HelpModule::setSystemFeedback() HelpModule::setSystemFeedback()
 
 NAME
-
+        HelpModule::setSystemFeedback - turn on and off feedback
 SYNOPSIS
- 
+        void HelpModule::setSystemFeedback(bool isOn);
+            isOn --> bool indicating if feedback is on or off
 DESCRIPTION
- 
+        Setter function to turn the request for feedback on or off
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// turn on and off feedback
 void HelpModule::setSystemFeedback(bool isOn){
     this->systemFeedback=isOn;
 }
@@ -620,23 +609,22 @@ void HelpModule::setSystemFeedback(bool isOn){
 
 /**/
 /*
-
+HelpModule::getSystemFeedback() HelpModule::getSystemFeedback()
 
 NAME
-
+        HelpModule::getSystemFeedback - get system feedback status
 SYNOPSIS
- 
+        bool HelpModule::getSystemFeedback();
 DESCRIPTION
- 
+        Returns the systemFeedback class variable.
 RETURNS
-
+        Bool indicating if the system feedback is on or off.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// check if feedback is on
 bool HelpModule::getSystemFeedback(){
     return this->systemFeedback;
 }

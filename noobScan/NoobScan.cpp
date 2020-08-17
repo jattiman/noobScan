@@ -2339,7 +2339,24 @@ void NoobScan::displayUserPortRequests(){
 }
 /*void displayUserPortRequests();*/
 
+/**/
+/*
 
+
+NAME
+
+SYNOPSIS
+ 
+DESCRIPTION
+ 
+RETURNS
+
+AUTHOR
+        John Atti
+DATE
+        6:00 PM 8/16/2020
+*/
+/**/
 // code I'm experimenting with, or have thrown away
 void NoobScan::debug(int debugPort){
 

@@ -10,33 +10,20 @@
 
 /**/
 /*
-[paste function here without anything in parantheticals]
+TCPScanner::TCPScanner() TCPScanner::TCPScanner()
 
 NAME
-
-        [function name w/o parantheticals and brief descriptions on one line]
-
+        TCPScanner::TCPScanner - class constructor
 SYNOPSIS
-
-        [full function name with parantheticals filled in]
-        [breakdown of what each variable in the parantheticals does]
-
+        TCPScanner::TCPScanner()
 DESCRIPTION
-
-        [full description here - as long as makes sense]
-
+        This is the class constructor for TCPScanner.
 RETURNS
-
-        [obvious]
-
+        TCPScanner object.
 AUTHOR
-
         John Atti
-
 DATE
-
         6:00 PM 8/16/2020
-
 */
 /**/
 TCPScanner::TCPScanner(){
@@ -47,16 +34,19 @@ TCPScanner::TCPScanner(){
 
 /**/
 /*
-
+TCPScanner::TCPScanner() TCPScanner::TCPScanner()
 
 NAME
-
+        TCPScanner::TCPScanner - class constructor
 SYNOPSIS
- 
+        TCPScanner::TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer, bool variableScan);
+            newSleepTimer   --> sleep timer variable
+            newTimeoutTimer --> timeout timer variable
+            variableScan    --> bool determining if variable scan is on
 DESCRIPTION
- 
+        This will instantiate a TCPScanner object with sleep, timeout, and variable scanning preferences recorded.
 RETURNS
-
+        TCPScanner object.
 AUTHOR
         John Atti
 DATE
@@ -73,16 +63,17 @@ TCPScanner::TCPScanner(unsigned int newSleepTimer, unsigned int newTimeoutTimer,
 
 /**/
 /*
-
+TCPScanner::addOpenPorts() TCPScanner::addOpenPorts()
 
 NAME
-
+        TCPScanner::addOpenPorts - adds port to open ports list
 SYNOPSIS
- 
+        void TCPScanner::addOpenPorts(int newOpenPort);
+            newOpenPort --> int holding new port number to add
 DESCRIPTION
- 
+        This function takes in a new port number, and adds it to the open port list.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -97,16 +88,17 @@ void TCPScanner::addOpenPorts(int newOpenPort){
 
 /**/
 /*
-
+TCPScanner::addClosedPorts() TCPScanner::addClosedPorts()
 
 NAME
-
+        TCPScanner::addClosedPorts - adds to closed ports list
 SYNOPSIS
- 
+        void TCPScanner::addClosedPorts(int newClosedPort);
+            newClosedPort --> int to add to closed port list
 DESCRIPTION
- 
+        This function adds a port to the closed ports list vector
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -121,23 +113,22 @@ void TCPScanner::addClosedPorts(int newClosedPort){
 
 /**/
 /*
-
+TCPScanner::getOpenPorts() TCPScanner::getOpenPorts()
 
 NAME
-
+        TCPScanner::getOpenPorts - return vector of open ports
 SYNOPSIS
- 
+        vector<int> TCPScanner::getOpenPorts();
 DESCRIPTION
- 
+        This function returns a vector of open ports
 RETURNS
-
+        A vector<int> representing recorded open ports is returned.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// return vector of open ports
 vector<int> TCPScanner::getOpenPorts(){
     return this->openPorts;
 }
@@ -145,16 +136,16 @@ vector<int> TCPScanner::getOpenPorts(){
 
 /**/
 /*
-
+TCPScanner::printOpenPorts() TCPScanner::printOpenPorts()
 
 NAME
-
+        TCPScanner::printOpenPorts - prints all open ports
 SYNOPSIS
- 
+        void TCPScanner::printOpenPorts();
 DESCRIPTION
- 
+        Pending open ports have been found, this prints all of the open ports to the screen.
 RETURNS
-
+        Void - no return values.
 AUTHOR
         John Atti
 DATE
@@ -175,23 +166,28 @@ void TCPScanner::printOpenPorts(){
 
 /**/
 /*
-
+TCPScanner::runScan() TCPScanner::runScan()
 
 NAME
-
+        TCPScanner::runScan - runs a TCP scan on a single port
 SYNOPSIS
- 
+        NoobCodes TCPScanner::runScan(int portNum, string IPToScan);
+            portNum     --> number of the port to be scanned
+            IPToScan    --> IP address to be scanned
 DESCRIPTION
- 
+        This function will scan a single port of a given IP address, output whether or not the port is open, and return the result.
+        A socket must be created to send the packets, as well as one that represents the receiving socket (with the port we're sending it to).
+        Once the sockets are created, we attempt to connect to the port, and review how this connection went.
+        As this is a single port scan, we do not worry about time outs. The single port scan is being left into this program for educational purposes, as it shows the more straightforward steps to making a single scan. The multiscan (coming up next) is a little bit fancier.
+        Structures and functions of note that are used, here: sockets (sockaddr_in) to store socket info, and inet_pton to bind with IP and port.
 RETURNS
-
+        NoobCodes enum stating if the scan was successful or not.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// runs a TCP scan on a single port
 NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
     
     // make a socket to scan ports
@@ -238,14 +234,19 @@ NoobCodes TCPScanner::runScan(int portNum, std::string IPToScan){
 
 /**/
 /*
-
+TCPScanner::runMultiScan() TCPScanner::runMultiScan()
 
 NAME
-
+        TCPScanner::runMultiScan - runs TCP scan on multiple ports. Centerpiece of this class.
 SYNOPSIS
- 
+        NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, string IPToScan);
+            portNumbers     --> vector holding port numbers to be scanned
+            IPToScan        --> string holding Ip to be scanned
 DESCRIPTION
- 
+        This function scans a group of ports to determine if they are open and closed, like runScan.
+        Unlike runScan, it must account for timeouts and lining up multiple ports.
+        To manage multiple ports, we use an auto-iterator loop that goes through the port vector given to the function.
+        To manage timeouts, we utilize the select call, as well as fd_set type functions to organize the ports and cancel review of them if they don't get back to us in time. The timeout used in select is thanks to the timeval struct, which we use to indicate seconds and microseconds for the timer. With the select call, we also use getsockopt, which will return the status of the socket once it's ready to be acted on select (including if the timer is up).
 RETURNS
 
 AUTHOR
@@ -347,27 +348,27 @@ NoobCodes TCPScanner::runMultiScan(vector<unsigned> portNumbers, std::string IPT
 
 /**/
 /*
-
+TCPScanner::connectCheck() TCPScanner::connectCheck()
 
 NAME
-
+        TCPScanner::connectCheck - review if connection was successful, and respond accordingly
 SYNOPSIS
- 
+        void TCPScanner::connectCheck(int checkNum, unsigned int nextPort);
+            checkNum --> this is the status of the connect call from the TCP socket
+            nextPort --> this is the port number the socket is currently working on
 DESCRIPTION
- 
+        This function reviews the connection outcome, and outputs to the user if it was successful or not. If the connection was successful, we add it to open ports. If the connection was not successful, we output why by reading the error response (timeout, busy, refused connection, etc).
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// check if connection was successful
 void TCPScanner::connectCheck(int checkNum, unsigned int nextPort){
     
     // if connection denied, return that info
-//    if(checkNum==-1){
     if(checkNum<0){
         addClosedPorts(nextPort);
         switch (errno) {
@@ -404,23 +405,22 @@ void TCPScanner::connectCheck(int checkNum, unsigned int nextPort){
 
 /**/
 /*
-
+TCPScanner::getSleepTimer() TCPScanner::getSleepTimer()
 
 NAME
-
+        TCPScanner::getSleepTimer - retrieves sleep timer
 SYNOPSIS
- 
+        unsigned int TCPScanner::getSleepTimer();
 DESCRIPTION
- 
+        This function retrieves the member variable sleepTimer, which represents the sleep timer.
 RETURNS
-
+        Unsigned int representing sleep timer.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// get sleep time
 unsigned int TCPScanner::getSleepTimer(){
     return this->sleepTimer;
 }
@@ -428,23 +428,22 @@ unsigned int TCPScanner::getSleepTimer(){
 
 /**/
 /*
-
+TCPScanner::getTimeoutTimer() TCPScanner::getTimeoutTimer()
 
 NAME
-
+        TCPScanner::getTimeoutTimer - get timeout timer
 SYNOPSIS
- 
+        unsigned int TCPScanner::getTimeoutTimer();
 DESCRIPTION
- 
+        This function retrieves the timeout timer variable.
 RETURNS
-
+        Unsigned int reflecting the timeout time.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// get timeout time
 unsigned int TCPScanner::getTimeoutTimer(){
     return this->timeoutTimer;
 }
@@ -452,23 +451,22 @@ unsigned int TCPScanner::getTimeoutTimer(){
 
 /**/
 /*
-
+TCPScanner::getVariableScanStatus() TCPScanner::getVariableScanStatus()
 
 NAME
-
+        TCPScanner::getVariableScanStatus - retrieve whether or not variable scanning is on
 SYNOPSIS
- 
+        bool TCPScanner::getVariableScanStatus();
 DESCRIPTION
- 
+        This function retrieves whether or not the variable scan time option is on.
 RETURNS
-
+        A bool variable representing the variable scan time status (on/off as true/false).
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// retrieve whether or not variable scanning is on
 bool TCPScanner::getVariableScanStatus(){
     return this->variableScanTime;
 }

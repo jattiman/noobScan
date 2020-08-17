@@ -109,9 +109,6 @@ public:
     // set variable delay
     void setVariableDelayStatus(bool variableDelayStatus);
     
-    // training wheels scan to prompt user step by step
-    NoobCodes assistedScan();
-    
     // gets port group based on prompt
     vector<unsigned> returnPortGroup(string portGroup);
     
