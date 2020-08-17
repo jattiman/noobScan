@@ -11,33 +11,21 @@
 
 /**/
 /*
-[paste function here without anything in parantheticals]
-
+NoobScan::NoobScan() NoobScan::NoobScan()
+ 
 NAME
-
-        [function name w/o parantheticals and brief descriptions on one line]
-
+        NoobScan::NoobScan - class constructor
 SYNOPSIS
-
-        [full function name with parantheticals filled in]
-        [breakdown of what each variable in the parantheticals does]
-
+        NoobScan::NoobScan()
 DESCRIPTION
-
-        [full description here - as long as makes sense]
-
+        Instantiates the NoobScan object with default variables.
 RETURNS
-
-        [obvious]
+        NoobScan class object.
 
 AUTHOR
-
         John Atti
-
 DATE
-
         6:00 PM 8/16/2020
-
 */
 /**/
 NoobScan::NoobScan(){
@@ -54,16 +42,19 @@ NoobScan::NoobScan(){
 
 /**/
 /*
-
+NoobScan::getValidInput() ScanAddress::getValidInput()
 
 NAME
-
+        NoobScan::getValidInput - confirm user input is valid
 SYNOPSIS
- 
+        int NoobScan::getValidInput(int minNum, int maxNum)
+            int minNum --> minimum acceptable number
+            int maxNum --> maximum acceptable number
 DESCRIPTION
- 
+        Function prompts the user for a integer input, handles improperly formatted input, and ensure the integer accepted is sufficient for the prompt given to the user elsewhere in the program. User will be continually prompted until a valid input is entered.
+        Note: you will see that this function is in place throughout additional class structures as well. When I work on this program post-graduation, I intend on simplifying this, although I am resolved not to make it a global function.
 RETURNS
-
+        Integer with confirmed, appropriate user choice.
 AUTHOR
         John Atti
 DATE
@@ -84,16 +75,17 @@ int NoobScan::getValidInput(int minNum, int maxNum){
 
 /**/
 /*
-
+NoobScan::outputFeedback() NoobScan::outputFeedback()
 
 NAME
-
+        NoobScan::outputFeedback - outputs user feedback
 SYNOPSIS
- 
+        void NoobScan::outputFeedback(string feedback);
+            feedback --> string holding user feedback
 DESCRIPTION
- 
+        This function checks to ensure that the user has toggled feedback on. If so, it will output the string to the screen. This saves a few lines of code setting up if statements elsewhere in the program.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
@@ -110,16 +102,16 @@ void NoobScan::outputFeedback(string feedback){
 
 /**/
 /*
-
+NoobScan::printLogo() NoobScan::printLogo()
 
 NAME
-
+        NoobScan::printLogo - prints the program logo
 SYNOPSIS
- 
+        void NoobScan::printLogo();
 DESCRIPTION
- 
+        This local was made possible by the folks at http://patorjk.com/software/taag/#p=display&f=Ogre&t=NoobScan. I had to tinker with a few of the spacing pieces to make it display appropriately when written in C++, but overall I think the logo makes it look fun, and is a good introduction to the program.
 RETURNS
-
+        Void - no return
 AUTHOR
         John Atti
 DATE
@@ -127,7 +119,7 @@ DATE
 */
 /**/
 // output logo
-// http://patorjk.com/software/taag/#p=display&f=Ogre&t=NoobScan
+//
 void NoobScan::printLogo(){
     cout<< endl
         << "     __            _     __                 \n"
@@ -143,16 +135,16 @@ void NoobScan::printLogo(){
 
 /**/
 /*
-
+NoobScan::welcomeText() NoobScan::welcomeText()
 
 NAME
-
+        NoobScan::welcomeText - welcomes the user to NoobScan.
 SYNOPSIS
- 
+        void NoobScan::welcomeText();
 DESCRIPTION
- 
+        Outputs welcome text to the user.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
@@ -169,16 +161,16 @@ void NoobScan::welcomeText(){
 
 /**/
 /*
-
+NoobScan::initialPrompt() NoobScan::initialPrompt()
 
 NAME
-
+        NoobScan::initialPrompt - initial user prompt comes through here, which also outputs the user's status on their machine
 SYNOPSIS
- 
+        void NoobScan::initialPrompt()
 DESCRIPTION
- 
+        This function displays all opening information to the user, utilizing separate functions in the class. It is my attempt at trying to minimize the amount of code in any function.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -206,16 +198,16 @@ void NoobScan::initialPrompt(){
 
 /**/
 /*
-
+NoobScan::systemCheck() NoobScan::systemCheck()
 
 NAME
-
+        NoobScan::systemCheck - checks and helps output system stats (admin/OS/IP/etc)
 SYNOPSIS
- 
+        void NoobScan::systemCheck()
 DESCRIPTION
- 
+        This function checks and helps output system stats for the user by calling separate functions.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -225,7 +217,7 @@ DATE
 void NoobScan::systemCheck(){
     cout << "Before we get started, let's make sure you won't run into any trouble ... ";
     
-    // confirm user has admin rights
+    // confirm user has admin/root rights
     this->adminCheck();
     
     // check user operating system for compatibility
@@ -241,16 +233,16 @@ void NoobScan::systemCheck(){
 
 /**/
 /*
-
+NoobScan::opCheck() NoobScan::opCheck()
 
 NAME
-
+        NoobScan::opCheck - checks user OS and responds accordingly
 SYNOPSIS
- 
+        void NoobScan::opCheck()
 DESCRIPTION
- 
+        This function will review the user's operating system to ensure it is running something compatible. As this program is only made for macOS systems, we simply warn any user brave enough to try running it on a non macOS machine that it may not behave appropriately. We check the OS with system macros.
 RETURNS
-
+        Void - no return value.
 AUTHOR
         John Atti
 DATE
@@ -281,16 +273,19 @@ void NoobScan::opCheck(){
 
 /**/
 /*
-
+NoobScan::adminCheck() NoobScan::adminCheck()
 
 NAME
-
+        NoobScan::adminCheck - checks admin/root privileges
 SYNOPSIS
- 
+        void NoobScan::adminCheck()
 DESCRIPTION
- 
+        This function will check the user's administrator and root privileges, according to macOS environments. Some of these functions might work on other unix/linux variants, but it is not meant to.
+        Function will rely on the passwd and group structures to get the ID information for the user's system.
+        After it completes its check and updates the root and admin status of the class, it will output the information to the user so they know what their privilege level is.
+        As an added fun bonus, it also pulls the user's login and user name, to greet them during this process. If they are root, it would be generic. Otherwise, it should be the name/username that they set for themselves.
 RETURNS
-
+        Void - no return
 AUTHOR
         John Atti
 DATE
@@ -345,16 +340,17 @@ void NoobScan::adminCheck(){
 
 /**/
 /*
-
+NoobScan::hostIPCheck() NoobScan::hostIPCheck()
 
 NAME
-
+        NoobScan::hostIPCheck - confirm user host IP is retrievable
 SYNOPSIS
- 
+        void NoobScan::hostIPCheck();
 DESCRIPTION
- 
+        This looks to see if the host IP address is able to be pulled. It checks through the default interface name ('en0'), and if not found, checks another common name ('eth0') before informing the user that the IP can't be found.
+        If the IP is found on another port interface, the scanner's IP address adjusts based on this as the default interface, which will be used for future lookups.
 RETURNS
-
+        Void - no return.
 AUTHOR
         John Atti
 DATE
@@ -376,7 +372,6 @@ void NoobScan::hostIPCheck(){
             cout << "\tWe're having problems retrieving your IP address, which means the scans may have some issues.\n\tPerhaps you aren't connected to the internet, or perhaps we aren't trying the correct interface name.\n\tThink you know what interface you're connecting under? Try entering it in the settings. Typically we check for en0 and eth0.\n\n";
             
             // TODO: (stretch) prompt user to enter in additional IP interface
-            
             return;
         }
         else{
@@ -395,16 +390,17 @@ void NoobScan::hostIPCheck(){
 
 /**/
 /*
-
+NoobScan::promptUser() NoobScan::promptUser()
 
 NAME
-
+        NoobScan::promptUser - prompt user for input
 SYNOPSIS
- 
+        string NoobScan::promptUser(bool sign);
+            sign --> bool telling function to output prompt indicator to screen
 DESCRIPTION
- 
+        This is an interesting function. I was running into issues with user input based on stream buffering, and created this function, along with a secondary check function, to purify the input in the event that the user input was not being read by the system correctly. Saved me a big headache, and still not sure how to otherwise handle the i/o issue without these functions.
 RETURNS
-
+        String indicating what the user's command is.
 AUTHOR
         John Atti
 DATE
@@ -425,23 +421,23 @@ string NoobScan::promptUser(bool sign){
 
 /**/
 /*
-
+NoobScan::intakeCommands() NoobScan::intakeCommands()
 
 NAME
-
+        NoobScan::intakeCommands - intakes all commands from user - main function of this class
 SYNOPSIS
- 
+        void NoobScan::intakeCommands();
 DESCRIPTION
- 
+        This is the main loop of the class, and therefore of the program. It will prompt the user for their command, ensure it is received correctly (no i/o errors), and then begin to act on the command.
+        It is also in charge of ensuring that the recorder, when turned on, records the information appropriately.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// intakes all commands from user - main function of this class
 void NoobScan::intakeCommands(){
     
     NoobCodes category;
@@ -469,8 +465,6 @@ void NoobScan::intakeCommands(){
         
         // if Recorder is on
         if(userRecorder->getRecorderStatus()){
-        
-            //cout << "\t\t" << this->ourCommand << "\tcode: " << ourScanner->translateNoob(resultCode) <<"\t: cat: " << ourScanner->translateNoob(category) << endl;
             
             // categorize the request and result
             userRecorder->categorizeOutcome(this->ourCommand, ourScanner->translateNoob(resultCode), ourScanner->translateNoob(category));
@@ -485,23 +479,24 @@ void NoobScan::intakeCommands(){
 
 /**/
 /*
-
+NoobScan::commandResponse() NoobScan::commandResponse()
 
 NAME
-
+        NoobScan::commandResponse - respond to user commands by initiating the appropriate functions
 SYNOPSIS
- 
+        NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category);
+            userCommand --> string holding command from user
+            category    --> enum holding the category being updated based on the command category, once categorized
 DESCRIPTION
- 
+        This function will clear the command buffer, intake the user command, then call the appropriate function to inspect/act on it. That function wil return the outcome (good or failing command), and also update the category of the function.
 RETURNS
-
+        NoobCodes enum indicating if the command succeeded in being processed without issue.
 AUTHOR
         John Atti
 DATE
         6:00 PM 8/16/2020
 */
 /**/
-// respond to user commands by initiating the appropriate functions
 NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category){
     
     // create a code to hold the final outcome result of the request
@@ -522,16 +517,18 @@ NoobCodes NoobScan::commandResponse(string userCommand, NoobCodes & category){
 
 /**/
 /*
-
+NoobScan::inspectArgs() NoobScan::inspectArgs()
 
 NAME
-
+        NoobScan::inspectArgs - organizes the inspection and action on user commands.
 SYNOPSIS
- 
+        NoobCodes NoobScan::inspectArgs(string userCommand, NoobCodes & category);
+            userCommand --> string holding user's desired command
+            category    --> category of the command being asked
 DESCRIPTION
- 
+        This function will parse the user command into individual items, and then inspect those items to ensure that the command is properly formatted. It does this by reviewing the primary command (main type of request from the user), and then seeing if the secondary commands match with it.
 RETURNS
-
+        NoobCodes value telling if the command was ultimately successfully formed (good) or failed based on layout (bad).
 AUTHOR
         John Atti
 DATE
@@ -570,16 +567,19 @@ NoobCodes NoobScan::inspectArgs(string userCommand, NoobCodes & category){
 
 /**/
 /*
-
+NoobScan::parseUserArgument() NoobScan::parseUserArgument()
 
 NAME
-
+        NoobScan::parseUserArgument - parses user command string
 SYNOPSIS
- 
+        NoobCodes NoobScan::parseUserArgument(string userCommand);
+            userCommand --> command initially input by the user
 DESCRIPTION
- 
+        This function will take the user's command string and break it into it's individual pieces. Originally, this was not used when creating this program , and we relied entirely on regex to parse the user command. After some tinkering, I decided that it would be more efficient to parse and then act on the string. Parsing will also allow me to set up future regexes that may provide for additional functionality.
+        The function breaks the string into a vector of strings, which it then pushes into the appropriate class command vectors that the program will act on (vectors for URLs, command text, and port numbers).
+        The unfortunate thing about this function is that, once I decided to parse the arguments, I had to part ways with my more advanced regexes, as simpler ones would do the trick without guesswork. I'm leaving the old ones in there because I think you'll appreciate taking a look at them (or maybe just because I was proud to have worked them out after a lot of trial and error). Had I known that I would not need those original regexes, I would have finished this project at least a week earlier, and probably with additional features. Really went down the rabbit hole on this one.
 RETURNS
-
+        NoobCode indicating the success of the overall command.
 AUTHOR
         John Atti
 DATE
@@ -712,16 +712,16 @@ NoobCodes NoobScan::parseUserArgument(string userCommand){
 
 /**/
 /*
-
+NoobScan::reviewPrimaryCommand() NoobScan::reviewPrimaryCommand()
 
 NAME
-
+        NoobScan::reviewPrimaryCommand - reviews the initial command of the user
 SYNOPSIS
- 
+        NoobCodes NoobScan::reviewPrimaryCommand()
 DESCRIPTION
- 
+        This function reviews the initial command of the user, and returns the general command type that they're asking for. For instance, if "scan" is recognized, we know the user is asking for a scan command.
 RETURNS
-
+        NoobCodes enum indicating if the command failed, or what type of command is being asked.
 AUTHOR
         John Atti
 DATE
@@ -777,16 +777,17 @@ NoobCodes NoobScan::reviewPrimaryCommand(){
 
 /**/
 /*
-
+NoobScan::reviewSecondaryCommands() NoobScan::reviewSecondaryCommands()
 
 NAME
-
+        NoobScan::reviewSecondaryCommands - reviews the secondary commands of the user
 SYNOPSIS
- 
+        NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType);
+            commandType --> indicates the type of command originally requested
 DESCRIPTION
- 
+        This function will review the command type originally requested, and act on it. If it's a request to exit, the program will simply begin exiting. If it's a request for anything else, further functions will be called that will check to ensure that genre of command is executed properly.
 RETURNS
-
+        NoobCodes indicating whether or not the commend executed successfully.
 AUTHOR
         John Atti
 DATE
@@ -826,16 +827,17 @@ NoobCodes NoobScan::reviewSecondaryCommands(NoobCodes commandType){
 
 /**/
 /*
-
+NoobScan::reportError() NoobScan::reportError()
 
 NAME
-
+        NoobScan::reportError - reports errors to user screen
 SYNOPSIS
- 
+        void NoobScan::reportError(NoobCodes programError);
+            programError --> NoobCodes enum indicating the type of error
 DESCRIPTION
- 
+        This function will receive a NoobCodes error, and translate it in english for the user to read, so they know what kind of error they've run into. I was on the cusp of learning how to do this through I/O overloading, but was not able to learn it in time. I will work to relocate this functionality post-graduation.
 RETURNS
-
+        void - no return
 AUTHOR
         John Atti
 DATE
