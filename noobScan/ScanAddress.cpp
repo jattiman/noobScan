@@ -419,7 +419,7 @@ string ScanAddress::getHostMac(string ifaNamePreference){
                     // use sprintf (instead of sstream) to copy address
                     sprintf(ourMac, "%02x:%02x:%02x:%02x:%02x:%02x",rawMac[0], rawMac[1], rawMac[2], rawMac[3], rawMac[4], rawMac[5]);
                     
-                    // to make things easier on return, topy readable mac to string
+                    // to make things easier on return, copy readable mac to string
                     finalMac = ourMac;
                 }
             }

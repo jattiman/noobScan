@@ -466,6 +466,8 @@ void NoobScan::intakeCommands(){
         // if Recorder is on
         if(userRecorder->getRecorderStatus()){
             
+            string recorderFeedback = "Command: " + this->ourCommand + "\tresult: " + ourScanner->translateNoob(resultCode) + "\tcategory: " + ourScanner->translateNoob(category) + '\n';
+            outputFeedback(recorderFeedback);
             // categorize the request and result
             userRecorder->categorizeOutcome(this->ourCommand, ourScanner->translateNoob(resultCode), ourScanner->translateNoob(category));
         }
@@ -1636,7 +1638,14 @@ DATE
 /**/
 void NoobScan::settingsDelay(int &userAnswer, NoobCodes &settings){
     // display delay time options (variable, or enter specific number)
-    cout << "Your current delay time between ports is "
+    cout << "Variable scanning is ";
+    if(ourScanner->getVariableDelayStatus()){
+        cout << "on";
+    }
+    else{
+        cout << "off";
+    }
+    cout << "\nYour current delay time between ports is "
         << this->ourScanner->getSleepTimer() << endl << endl;
     cout << "\t1. Set specific delay time\n"
         << "\t2. Enable variable delay time between scans.\n"

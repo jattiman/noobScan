@@ -64,8 +64,10 @@ public:
     // give a warning to the user if they're asking too much of the help function
     void helpWarning();
     
+    // set system feedback status
     void setSystemFeedback(bool isOn);
     
+    // get system feedback status
     bool getSystemFeedback();
 
     

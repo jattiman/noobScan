@@ -345,20 +345,25 @@ void Recorder::moveHistoryToFile(){
     
     // output info to file
     historyFile << "Outputting history on " << 1 + readableTime->tm_mon << "/" << readableTime->tm_mday << "/" << 1900 + readableTime->tm_year << ", at " << readableTime->tm_hour << ":" << readableTime->tm_min << "\n";
-    historyFile << "\n\nSCAN commands:\n";
+    historyFile << "\n\n***SCAN commands***:\n";
     historyFile << writeHistoryByType('s');
     historyFile << "\nTotal scan commands: " << tallyRetrieval('s');
-    historyFile << "\n\nSETTINGS commands:\n";
+    historyFile << "\n\n***SETTINGS commands***:\n";
     historyFile << writeHistoryByType('v');
     historyFile << "\nTotal settings commands: " << tallyRetrieval('v');
-    historyFile << "\n\nHELP commands:\n";
+    historyFile << "\n\n***HELP commands:***\n";
     historyFile << writeHistoryByType('h');
     historyFile << "\nTotal help commands: " << tallyRetrieval('h');
-    historyFile << "\n\nIP CHECK commands:\n";
+    historyFile << "\n\n***IP CHECK commands***:\n";
     historyFile << writeHistoryByType('i');
     historyFile << "\nTotal IP Check commands: " << tallyRetrieval('i');
-    historyFile << "\n\nALL commands in order:\n";
-    historyFile << writeHistoryByType();
+    // added output failed commands
+    historyFile << "\n\n***FAILED commands***:\n";
+    historyFile << writeHistoryByType('f');
+    historyFile << "\n\nTotal failed commands: " << tallyRetrieval('f');
+    historyFile << "\n\n***ALL commands in order***:\n";
+    // changed to a, was blank
+    historyFile << writeHistoryByType('a');
     historyFile << "\nTotal successful commands: " << tallyRetrieval('g') << "\n";
     historyFile << "\nTotal failed and partially failed commands: " << tallyRetrieval('f') << "\n";
     
